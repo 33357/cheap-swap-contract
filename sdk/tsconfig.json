@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "incremental": true,
+    "target": "es2020" ,
+    "module": "commonjs" ,
+    "declaration": true,
+    "sourceMap": true ,
+    "outDir": "./dist" ,
+    "removeComments": true,
+    "strict": true,
+    "baseUrl": "./",
+    "types": ["mocha"],
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true ,
+    "experimentalDecorators": true, 
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true ,
+    "resolveJsonModule": true,
+  },
+  "include": ["src/**/*.ts", "src/typechain/*d.ts"]
+}

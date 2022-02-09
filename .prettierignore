@@ -1,0 +1,12 @@
+export/
+deployments/
+artifacts/
+cache/
+coverage/
+node_modules/
+package.json
+typechain/
+sdk/
+docs/
+.history/
+soljson-v0.8.2+commit.661d1103.js

@@ -1,0 +1,31 @@
+{
+  "name": "web3door-sdk",
+  "version": "0.2.0",
+  "main": "dist/index.js",
+  "author": "33357 <43600005+33357@users.noreply.github.com>",
+  "license": "MIT",
+  "scripts": {
+    "prebuild": "cd .. && cp ./deployment/deployment.json ./sdk/src/config/ && cd sdk",
+    "build:clean": "rm -rf dist && rm -f tsconfig.tsbuildinfo",
+    "build": "yarn build:clean && yarn prebuild && yarn tsc && yarn cpy ./src/typechain/ ./dist/typechain/",
+    "format:fix": "yarn prettier --write \"**/*.{ts,js}\""
+  },
+  "devDependencies": {
+    "@types/mocha": "^8.2.2",
+    "cpy": "^8.1.2",
+    "cpy-cli": "^3.1.1",
+    "eslint": "^7.27.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.3",
+    "ethers": "^5.4.5",
+    "lint": "^0.7.0",
+    "mocha": "^8.4.0",
+    "nyc": "^15.1.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.2"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  }
+}

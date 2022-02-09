@@ -1,0 +1,15 @@
+node_modules
+
+#Hardhat files
+cache/
+artifacts/
+.history/
+test.js
+yarn-error.log
+typechain/
+.openzeppelin/
+coverage/
+sdk/tsconfig.tsbuildinfo
+sdk/dist/
+logs/
+envs/
