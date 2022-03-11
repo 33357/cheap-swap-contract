@@ -10,11 +10,13 @@ import 'solidity-coverage';
 import '@nomiclabs/hardhat-etherscan';
 import dotenv from 'dotenv';
 import fs from 'fs';
-
+import { setGlobalDispatcher, ProxyAgent } from 'undici';
 if (fs.existsSync('./sdk/src/typechain')) {
   import('./tasks');
 }
 
+const proxyAgent = new ProxyAgent('http://192.168.196.1:1081')
+setGlobalDispatcher(proxyAgent)
 dotenv.config();
 const privateKey = process.env.PRIVATE_KEY;
 const gasPrice = process.env.GAS_PRICE || 1;
