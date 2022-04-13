@@ -32,6 +32,7 @@ export class EtherExampleClient implements ExampleClient {
       address = DeploymentInfo[network.chainId].Example.proxyAddress;
     }
     this._contract = Example__factory.connect(address, provider);
+    this._provider = provider;
     if (waitConfirmations) {
       this._waitConfirmations = waitConfirmations;
     }

@@ -37,6 +37,7 @@ export class EtherExampleUpgradeableClient implements ExampleUpgradeableClient {
       address = DeploymentInfo[network.chainId].ExampleUpgradeable.proxyAddress;
     }
     this._upgradeable = ExampleUpgradeable__factory.connect(address, provider);
+    this._provider = provider;
     if (waitConfirmations) {
       this._waitConfirmations = waitConfirmations;
     }
