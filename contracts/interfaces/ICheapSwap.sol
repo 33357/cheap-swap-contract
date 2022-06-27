@@ -1,16 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 
-interface IExample {
+interface ICheapSwap {
     /* ================ EVENTS ================ */
 
     /* ================ VIEW FUNCTIONS ================ */
 
-    function viewIt() external pure returns (uint256);
-
     /* ================ TRANSACTION FUNCTIONS ================ */
 
-    function transaction() external;
-
     /* ================ ADMIN FUNCTIONS ================ */
+
+    function setPath(bytes calldata _path) external;
+
+    function setAmountOutMin(uint256 _amountInOneETH_amountOutMin) external;
+
+    function setPathAndAmountOutMin(bytes calldata _path, uint256 _amountInOneETH_amountOutMin) external;
 }
