@@ -80,7 +80,7 @@ const config: HardhatUserConfig = {
         .toNumber(),
     },
     97: {
-      url: `https://data-seed-prebsc-1-s1.binance.org:8545`,
+      url: `https://data-seed-prebsc-1-s1.binance.org:8545/`,
       accounts,
       timeout: 60000,
       gasPrice: BigNumber.from(gasPrice)

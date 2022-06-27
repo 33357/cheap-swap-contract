@@ -3,7 +3,7 @@ import {task} from 'hardhat/config';
 import {HardhatRuntimeEnvironment} from 'hardhat/types';
 import * as utils from '../utils';
 
-const contract = 'Example';
+const contract = 'CheapSwapFactory';
 const taskName = `${contract}:verify`;
 
 task(taskName, `verify ${contract}`).setAction(
