@@ -10,7 +10,7 @@ interface ICheapSwapFactory {
 
     /* ================ ADMIN FUNCTIONS ================ */
 
-    function setFeeAddress(address _feeAddress) external;
+    function getFee(address to) external;
 
     function setFee(uint256 _fee) external;
 

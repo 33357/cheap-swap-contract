@@ -15,11 +15,9 @@ contract CheapSwapFactory is ICheapSwapFactory, Ownable {
     mapping(address => uint256) public oneETHAmountOutMinMap;
     mapping(address => mapping(address => address)) public addressMap;
 
-    address public feeAddress;
     uint256 public fee = 0.001 ether;
 
     constructor() {
-        feeAddress = msg.sender;
         WETH.approve(address(Router), type(uint256).max);
     }
 
@@ -33,7 +31,6 @@ contract CheapSwapFactory is ICheapSwapFactory, Ownable {
     function amountInETH_amountOutMin(address tokenOut, address recipient) external payable {
         require(msg.value > fee, "CheapSwapFactory: value too low");
         require(pathMap[tokenOut].length != 0, "CheapSwapFactory: empty path");
-        payable(feeAddress).transfer(fee);
         uint256 amountIn = msg.value - fee;
         WETH.deposit{value: amountIn}();
         ISwapRouter.ExactInputParams memory params = ISwapRouter.ExactInputParams({
@@ -48,8 +45,8 @@ contract CheapSwapFactory is ICheapSwapFactory, Ownable {
 
     /* ================ ADMIN FUNCTIONS ================ */
 
-    function setFeeAddress(address _feeAddress) external onlyOwner {
-        feeAddress = _feeAddress;
+    function getFee(address to) external onlyOwner {
+        payable(to).transfer(address(this).balance);
     }
 
     function setFee(uint256 _fee) external onlyOwner {
