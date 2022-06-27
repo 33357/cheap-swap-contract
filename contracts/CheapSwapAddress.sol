@@ -1,10 +1,9 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.12;
 
-import "./interfaces/ICheapSwapAddress.sol";
 import "./interfaces/ICheapSwapFactory.sol";
 
-contract CheapSwapAddress is ICheapSwapAddress {
+contract CheapSwapAddress {
     address public recipient;
     address public tokenOut;
     ICheapSwapFactory public cheapSwapFactory;
