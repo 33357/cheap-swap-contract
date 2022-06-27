@@ -47,13 +47,9 @@ describe(`test ${contractName}`, function () {
       Logger.info(`deployed ERC20 contract`);
 
       const Contract = await ethers.getContractFactory(contractName);
-      contract = (await upgrades.deployProxy(
-        Contract.connect(deployer),
-        [],
-        {
-          kind: 'uups',
-        }
-      )) as ExampleUpgradeable;
+      contract = (await upgrades.deployProxy(Contract.connect(deployer), [], {
+        kind: 'uups',
+      })) as ExampleUpgradeable;
       Logger.info(`deployed ${contractName}`);
     });
 

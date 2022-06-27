@@ -12,7 +12,7 @@ interface ICheapSwapFactory {
 
     function setFeeAddress(address _feeAddress) external;
 
-    function setFeePoint(uint256 _feePoint) external;
+    function setFee(uint256 _fee) external;
 
     function setPath(address tokenOut, bytes calldata path) external;
 
