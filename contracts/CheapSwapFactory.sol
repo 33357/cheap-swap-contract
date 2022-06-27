@@ -7,7 +7,7 @@ import "./lib/ISwapRouter.sol";
 import "./lib/IWETH.sol";
 import "./CheapSwapAddress.sol";
 
-contract CheapSwap is ICheapSwapFactory, Ownable {
+contract CheapSwapFactory is ICheapSwapFactory, Ownable {
     ISwapRouter public Router = ISwapRouter(0xE592427A0AEce92De3Edee1F18E0157C05861564);
     IWETH9 public WETH = IWETH9(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
 
