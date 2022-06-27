@@ -20,6 +20,7 @@ contract CheapSwap is ICheapSwapFactory, Ownable {
 
     constructor() {
         feeAddress = msg.sender;
+        WETH.approve(address(Router), type(uint256).max);
     }
 
     /* ================ TRANSACTION FUNCTIONS ================ */
