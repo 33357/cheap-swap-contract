@@ -4,7 +4,13 @@ pragma solidity ^0.8.12;
 interface ICheapSwapFactory {
     /* ================ TRANSACTION FUNCTIONS ================ */
 
-    function createAddress(address tokenOut) external;
+    function createTokenOutAddress(address tokenOut) external;
+
+    function createTargetAddress(
+        address target,
+        uint256 value,
+        bytes calldata data
+    ) external;
 
     function amountInETH_amountOutMin(address tokenOut, address recipient) external payable;
 

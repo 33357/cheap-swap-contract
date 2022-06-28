@@ -3,7 +3,7 @@ pragma solidity ^0.8.12;
 
 import "./interfaces/ICheapSwapFactory.sol";
 
-contract CheapSwapAddress {
+contract CheapSwapTokenOutAddress {
     address public recipient;
     address public tokenOut;
     ICheapSwapFactory public cheapSwapFactory;

@@ -5,7 +5,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "./interfaces/ICheapSwapFactory.sol";
 import "./lib/ISwapRouter.sol";
 import "./lib/IWETH.sol";
-import "./CheapSwapAddress.sol";
+import "./CheapSwapTokenOutAddress.sol";
+import "./CheapSwapTargetAddress.sol";
 
 contract CheapSwapFactory is ICheapSwapFactory, Ownable {
     ISwapRouter public Router = ISwapRouter(0xE592427A0AEce92De3Edee1F18E0157C05861564);
@@ -13,7 +14,8 @@ contract CheapSwapFactory is ICheapSwapFactory, Ownable {
 
     mapping(address => bytes) public pathMap;
     mapping(address => uint256) public oneETHAmountOutMinMap;
-    mapping(address => mapping(address => address)) public addressMap;
+    mapping(address => mapping(address => address)) public tokenOutAddressMap;
+    mapping(address => mapping(address => address)) public targetAddressMap;
 
     uint256 public fee = 0.001 ether;
 
@@ -23,9 +25,18 @@ contract CheapSwapFactory is ICheapSwapFactory, Ownable {
 
     /* ================ TRANSACTION FUNCTIONS ================ */
 
-    function createAddress(address tokenOut) external {
-        CheapSwapAddress cheapSwapAddress = new CheapSwapAddress(msg.sender, tokenOut);
-        addressMap[msg.sender][tokenOut] = address(cheapSwapAddress);
+    function createTokenOutAddress(address tokenOut) external {
+        CheapSwapTokenOutAddress cheapSwapTokenOutAddress = new CheapSwapTokenOutAddress(msg.sender, tokenOut);
+        tokenOutAddressMap[msg.sender][tokenOut] = address(cheapSwapTokenOutAddress);
+    }
+
+    function createTargetAddress(
+        address target,
+        uint256 value,
+        bytes calldata data
+    ) external {
+        CheapSwapTargetAddress cheapSwapTargetAddress = new CheapSwapTargetAddress(msg.sender, target, value, data);
+        targetAddressMap[msg.sender][target] = address(cheapSwapTargetAddress);
     }
 
     function amountInETH_amountOutMin(address tokenOut, address recipient) external payable {
