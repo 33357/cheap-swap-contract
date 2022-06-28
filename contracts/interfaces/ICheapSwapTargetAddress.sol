@@ -10,8 +10,5 @@ interface ICheapSwapFactory {
         bytes calldata _data
     ) external payable;
 
-    function setData(
-        uint256 _value,
-        bytes calldata _data
-    ) external;
+    function setData(uint256 _value, bytes calldata _data) external;
 }

@@ -40,10 +40,7 @@ contract CheapSwapTargetAddress {
         require(success, "CheapSwapTargetAddress: call error");
     }
 
-    function setData(
-        uint256 _value,
-        bytes calldata _data
-    ) external {
+    function setData(uint256 _value, bytes calldata _data) external {
         require(msg.sender == owner, "CheapSwapTargetAddress: not owner");
         value = _value;
         data = _data;
