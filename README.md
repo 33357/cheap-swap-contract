@@ -65,4 +65,6 @@ yarn run env-cmd -f $ENV_FILE yarn run hardhat CheapSwapFactory:deploy --gas-pri
 #### verify contract
 ```bash
 yarn run env-cmd -f $ENV_FILE yarn run hardhat CheapSwapFactory:verify --network $NETWORK_ID
+
+yarn run env-cmd -f $ENV_FILE yarn run hardhat CheapSwapTokenOutAddress:verify --network $NETWORK_ID
 ```
