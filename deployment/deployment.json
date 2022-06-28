@@ -7,6 +7,14 @@
             "contract": "CheapSwapFactory",
             "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
             "fromBlock": 15037390
+        },
+        "CheapSwapTokenOutAddress": {
+            "proxyAddress": "0xf2BC0A71F39D057FE1d92A2E24f0B7a2e25943B1",
+            "implAddress": "0xf2BC0A71F39D057FE1d92A2E24f0B7a2e25943B1",
+            "version": "1.0.0",
+            "contract": "CheapSwapTokenOutAddress",
+            "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
+            "fromBlock": 15037390
         }
     }
 }
