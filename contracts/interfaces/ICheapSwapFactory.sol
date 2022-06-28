@@ -8,7 +8,6 @@ interface ICheapSwapFactory {
 
     function createTargetAddress(
         address target,
-        uint256 value,
         bytes calldata data
     ) external;
 

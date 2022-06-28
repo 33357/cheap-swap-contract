@@ -32,10 +32,9 @@ contract CheapSwapFactory is ICheapSwapFactory, Ownable {
 
     function createTargetAddress(
         address target,
-        uint256 value,
         bytes calldata data
     ) external {
-        CheapSwapTargetAddress cheapSwapTargetAddress = new CheapSwapTargetAddress(msg.sender, target, value, data);
+        CheapSwapTargetAddress cheapSwapTargetAddress = new CheapSwapTargetAddress(msg.sender, target, data);
         targetAddressMap[msg.sender][target] = address(cheapSwapTargetAddress);
     }
 
