@@ -52,7 +52,7 @@ task(taskName, `Deploy ${contract}`)
 
     const deployment = await getDeployment(chainId);
 
-    deployment.Example = {
+    deployment[contract] = {
       proxyAddress: contractProxyAddress,
       implAddress: contractImplAddress,
       version: contractVersion,
