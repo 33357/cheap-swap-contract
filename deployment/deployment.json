@@ -1,1 +1,10 @@
-{}
+{
+    "CheapSwapFactory": {
+        "proxyAddress": "0xb5852e69Be43f4f71Fe656144485d2B2675bdb7A",
+        "implAddress": "0xb5852e69Be43f4f71Fe656144485d2B2675bdb7A",
+        "version": "1.0.0",
+        "contract": "CheapSwapFactory",
+        "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
+        "fromBlock": 15037390
+    }
+}
