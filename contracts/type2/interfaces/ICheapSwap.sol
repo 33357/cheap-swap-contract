@@ -6,12 +6,14 @@ interface ICheapSwap {
 
     function exactInput(
         bytes calldata path,
+        uint256 deadline,
         uint256 amountIn,
         uint256 amountOutMin
     ) external;
 
     function exactOutput(
         bytes calldata path,
+        uint256 deadline,
         uint256 amountOut,
         uint256 amountInMax
     ) external;
