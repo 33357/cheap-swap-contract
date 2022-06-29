@@ -2,7 +2,7 @@
 pragma solidity ^0.8.12;
 
 interface ICheapSwapAddress {
-    /* ================ ADMIN FUNCTIONS ================ */
+    /* ===================== ADMIN FUNCTIONS ==================== */
 
     function callData(address _target, bytes calldata data) external payable;
 

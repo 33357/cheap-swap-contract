@@ -25,7 +25,7 @@ contract CheapSwapFactory is ICheapSwapFactory, Ownable {
         addressMap[msg.sender][target] = address(cheapSwapAddress);
     }
 
-    /* ================ ADMIN FUNCTIONS ================ */
+    /* =================== ADMIN FUNCTIONS =================== */
 
     function setFeeAddress(address _feeAddress) external onlyOwner {
         feeAddress = _feeAddress;

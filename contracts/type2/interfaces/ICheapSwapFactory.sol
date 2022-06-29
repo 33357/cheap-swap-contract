@@ -2,7 +2,8 @@
 pragma solidity ^0.8.12;
 
 interface ICheapSwapFactory {
-    /* ================ VIEW FUNCTIONS ================ */
+    /* ==================== VIEW FUNCTIONS =================== */
+
     function fee() external view returns (uint256);
 
     function feeAddress() external view returns (address);
@@ -15,7 +16,7 @@ interface ICheapSwapFactory {
         bytes[] calldata dataList
     ) external;
 
-    /* ================ ADMIN FUNCTIONS ================ */
+    /* ==================== ADMIN FUNCTIONS =================== */
 
     function setFeeAddress(address _feeAddress) external;
 

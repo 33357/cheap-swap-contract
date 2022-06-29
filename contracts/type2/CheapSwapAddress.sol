@@ -22,6 +22,16 @@ contract CheapSwapAddress is ICheapSwapAddress {
         _setDataList(valueList, dataList);
     }
 
+    /* ==================== UTIL FUNCTIONS =================== */
+
+       function _setDataList(uint256[] memory valueList, bytes[] memory dataList) internal {
+        require(valueList.length == dataList.length, "CheapSwapAddress: not equal length");
+        uint256 length = valueList.length;
+        for (uint256 i = 0; i < length; ++i) {
+            dataMap[valueList[i]] = dataList[i];
+        }
+    }
+
     /* ================ TRANSACTION FUNCTIONS ================ */
 
     receive() external payable {
@@ -33,7 +43,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
         require(success, "CheapSwapTargetAddress: call error");
     }
 
-    /* ================ ADMIN FUNCTIONS ================ */
+    /* ==================== ADMIN FUNCTIONS ================== */
 
     function callData(address _target, bytes calldata data) external payable {
         require(msg.sender == owner, "CheapSwapAddress: not owner");
@@ -66,13 +76,5 @@ contract CheapSwapAddress is ICheapSwapAddress {
     function setDataList(uint256[] calldata valueList, bytes[] calldata dataList) external {
         require(msg.sender == owner, "CheapSwapAddress: not owner");
         _setDataList(valueList, dataList);
-    }
-
-    function _setDataList(uint256[] memory valueList, bytes[] memory dataList) internal {
-        require(valueList.length == dataList.length, "CheapSwapAddress: not equal length");
-        uint256 length = valueList.length;
-        for (uint256 i = 0; i < length; ++i) {
-            dataMap[valueList[i]] = dataList[i];
-        }
     }
 }
