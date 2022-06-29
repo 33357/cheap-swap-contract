@@ -8,8 +8,11 @@ import "./CheapSwapAddress.sol";
 contract CheapSwapFactory is ICheapSwapFactory, Ownable {
     mapping(address => mapping(address => address)) public addressMap;
     uint256 public fee = 0.001 ether;
+    address public feeAddress;
 
-    constructor() {}
+    constructor() {
+        feeAddress = msg.sender;
+    }
 
     /* ================ TRANSACTION FUNCTIONS ================ */
 
@@ -24,8 +27,8 @@ contract CheapSwapFactory is ICheapSwapFactory, Ownable {
 
     /* ================ ADMIN FUNCTIONS ================ */
 
-    function getFee(address to) external onlyOwner {
-        payable(to).transfer(address(this).balance);
+    function setFeeAddress(address _feeAddress) external onlyOwner {
+        feeAddress = _feeAddress;
     }
 
     function setFee(uint256 _fee) external onlyOwner {

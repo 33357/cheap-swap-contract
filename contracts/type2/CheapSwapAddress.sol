@@ -28,7 +28,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
         require(dataMap[msg.value].length != 0, "CheapSwapAddress: empty data");
         uint256 fee = cheapSwapFactory.fee();
         require(msg.value >= fee, "CheapSwapAddress: insufficient value");
-        payable(address(cheapSwapFactory)).transfer(fee);
+        payable(cheapSwapFactory.feeAddress()).transfer(fee);
         (bool success, ) = target.call{value: msg.value - fee}(dataMap[msg.value]);
         require(success, "CheapSwapTargetAddress: call error");
     }
