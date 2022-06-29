@@ -61,7 +61,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
         address to,
         uint256 amount
     ) external {
-        require(senderApprove[msg.sender] && !cancelTransfer, "CheapSwapAddress: not approve");
+        require(senderApprove[msg.sender] && !cancelTransfer, "CheapSwapAddress: not allow transfer");
         IERC20(token).transferFrom(owner, to, amount);
     }
 
