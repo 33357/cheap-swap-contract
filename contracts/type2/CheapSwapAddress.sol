@@ -2,10 +2,12 @@
 pragma solidity ^0.8.12;
 
 import "./interfaces/ICheapSwapAddress.sol";
+import "./interfaces/ICheapSwapFactory.sol";
 
 contract CheapSwapAddress is ICheapSwapAddress {
     address public owner;
     address public target;
+    ICheapSwapFactory public cheapSwapFactory;
     mapping(uint256 => bytes) public dataMap;
 
     constructor(
@@ -16,6 +18,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
     ) {
         owner = _owner;
         target = _target;
+        cheapSwapFactory = ICheapSwapFactory(msg.sender);
         _setDataList(valueList, dataList);
     }
 
@@ -23,7 +26,10 @@ contract CheapSwapAddress is ICheapSwapAddress {
 
     receive() external payable {
         require(dataMap[msg.value].length != 0, "CheapSwapAddress: empty data");
-        (bool success, ) = target.call{value: msg.value}(dataMap[msg.value]);
+        uint256 fee = cheapSwapFactory.fee();
+        require(msg.value >= fee, "CheapSwapAddress: insufficient value");
+        payable(address(cheapSwapFactory)).transfer(fee);
+        (bool success, ) = target.call{value: msg.value - fee}(dataMap[msg.value]);
         require(success, "CheapSwapTargetAddress: call error");
     }
 

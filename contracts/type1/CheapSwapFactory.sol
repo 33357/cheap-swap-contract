@@ -3,8 +3,8 @@ pragma solidity ^0.8.12;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./interfaces/ICheapSwapFactory.sol";
-import "./lib/ISwapRouter.sol";
-import "./lib/IWETH.sol";
+import "../lib/ISwapRouter.sol";
+import "../lib/IWETH.sol";
 import "./CheapSwapTokenOutAddress.sol";
 import "./CheapSwapTargetAddress.sol";
 
