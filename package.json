@@ -1,8 +1,8 @@
 {
-  "name": "hardhat-contract-example",
+  "name": "cheap-swap-contract",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/33357/hardhat-contract-example.git",
+  "repository": "https://github.com/33357/cheap-swap-contract.git",
   "author": "33357 <43600005+33357@users.noreply.github.com>",
   "license": "MIT",
   "scripts": {

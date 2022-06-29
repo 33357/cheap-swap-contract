@@ -2,10 +2,10 @@
 pragma solidity ^0.8.12;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./interfaces/ICheapSwapFactory.sol";
+import "./interfaces/ICheapSwapFactory2.sol";
 import "./CheapSwapAddress.sol";
 
-contract CheapSwapFactory is ICheapSwapFactory, Ownable {
+contract CheapSwapFactory2 is ICheapSwapFactory2, Ownable {
     mapping(address => mapping(address => address)) public addressMap;
     uint256 public fee = 0.001 ether;
     address public feeAddress;

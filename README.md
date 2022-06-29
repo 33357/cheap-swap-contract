@@ -1,4 +1,4 @@
-# uniswap-v2-contract
+# cheap-swap-contract
 
 ## Sample Scripts
 ### Install dependencies

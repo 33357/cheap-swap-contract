@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 
-interface ICheapSwapFactory {
+interface ICheapSwapFactory2 {
     /* ==================== VIEW FUNCTIONS =================== */
 
     function fee() external view returns (uint256);
