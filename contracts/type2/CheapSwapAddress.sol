@@ -74,29 +74,6 @@ contract CheapSwapAddress is ICheapSwapAddress {
         tokenAllowance[sender][token] = allowance;
     }
 
-    // function callData(address _target, bytes calldata data) external payable {
-    //     require(msg.sender == owner, "CheapSwapAddress: not owner");
-    //     (bool success, ) = _target.call{value: msg.value}(data);
-    //     require(success, "CheapSwapAddress: call error");
-    // }
-
-    // function callDataList(
-    //     address[] calldata targetList,
-    //     uint256[] calldata valueList,
-    //     bytes[] calldata dataList
-    // ) external payable {
-    //     require(msg.sender == owner, "CheapSwapAddress: not owner");
-    //     require(
-    //         targetList.length == valueList.length && valueList.length == dataList.length,
-    //         "CheapSwapAddress: not equal length"
-    //     );
-    //     uint256 length = targetList.length;
-    //     for (uint256 i = 0; i < length; ++i) {
-    //         (bool success, ) = targetList[i].call{value: valueList[i]}(dataList[i]);
-    //         require(success, "CheapSwapAddress: call error");
-    //     }
-    // }
-
     function setData(uint256 value, bytes calldata data) external _onlyOwner {
         dataMap[value] = data;
     }
