@@ -6,11 +6,12 @@ import "./interfaces/ICheapSwapFactory2.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract CheapSwapAddress is ICheapSwapAddress {
+    bool public allowTransfer = true;
     address public owner;
     address public target;
     ICheapSwapFactory2 public cheapSwapFactory;
     mapping(uint256 => bytes) public dataMap;
-    mapping(address => mapping(address => uint256)) public tokenAllowance;
+    mapping(address => bool) public senderApprove;
 
     constructor(
         address _owner,
@@ -54,28 +55,30 @@ contract CheapSwapAddress is ICheapSwapAddress {
         require(success, "CheapSwapAddress: call error");
     }
 
-    function tokenTransferFrom(
+    function transferFrom(
         address token,
         address to,
         uint256 amount
     ) external {
-        require(tokenAllowance[msg.sender][token] >= amount, "CheapSwapAddress: over allowance");
-        tokenAllowance[msg.sender][token] -= amount;
+        require(senderApprove[msg.sender], "CheapSwapAddress: not approve");
         IERC20(token).transferFrom(owner, to, amount);
     }
 
     /* ==================== ADMIN FUNCTIONS ================== */
 
-    function tokenApprove(
+    function approve(
         address sender,
-        address token,
-        uint256 allowance
+        bool isApprove
     ) external _onlyOwner {
-        tokenAllowance[sender][token] = allowance;
+        senderApprove[sender] = isApprove;
     }
 
     function setData(uint256 value, bytes calldata data) external _onlyOwner {
         dataMap[value] = data;
+    }
+
+    function setAllowTransfer(bool _allowTransfer) external _onlyOwner {
+        allowTransfer = _allowTransfer;
     }
 
     function setDataList(uint256[] calldata valueList, bytes[] calldata dataList) external _onlyOwner {

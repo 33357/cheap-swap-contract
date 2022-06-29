@@ -14,7 +14,9 @@ contract CheapSwap is ICheapSwap, Ownable {
     ISwapRouter public Router = ISwapRouter(0xE592427A0AEce92De3Edee1F18E0157C05861564);
     IWETH9 public WETH = IWETH9(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
 
-    function amountIn_amountOutMin(
+    /* ================ TRANSACTION FUNCTIONS ================ */
+
+    function exactInput(
         bytes calldata path,
         uint256 amountIn,
         uint256 amountOutMin
@@ -24,7 +26,7 @@ contract CheapSwap is ICheapSwap, Ownable {
             IERC20(tokenIn).approve(address(Router), type(uint256).max);
         }
         ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
-        cheapSwapAddress.tokenTransferFrom(tokenIn, address(this), amountIn);
+        cheapSwapAddress.transferFrom(tokenIn, address(this), amountIn);
         ISwapRouter.ExactInputParams memory params = ISwapRouter.ExactInputParams({
             path: path,
             recipient: cheapSwapAddress.owner(),
@@ -35,7 +37,7 @@ contract CheapSwap is ICheapSwap, Ownable {
         Router.exactInput(params);
     }
 
-    function amountOut_amountInMax(
+    function exactOutput(
         bytes calldata path,
         uint256 amountOut,
         uint256 amountInMax
@@ -45,7 +47,7 @@ contract CheapSwap is ICheapSwap, Ownable {
             IERC20(tokenIn).approve(address(Router), type(uint256).max);
         }
         ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
-        cheapSwapAddress.tokenTransferFrom(tokenIn, address(this), amountInMax);
+        cheapSwapAddress.transferFrom(tokenIn, address(this), amountInMax);
         ISwapRouter.ExactOutputParams memory params = ISwapRouter.ExactOutputParams({
             path: path,
             recipient: cheapSwapAddress.owner(),

@@ -8,13 +8,7 @@ interface ICheapSwapAddress {
 
     /* ================ TRANSACTION FUNCTIONS ================ */
 
-    function tokenApprove(
-        address sender,
-        address token,
-        uint256 allowance
-    ) external;
-
-    function tokenTransferFrom(
+    function transferFrom(
         address token,
         address to,
         uint256 amount
@@ -22,7 +16,14 @@ interface ICheapSwapAddress {
 
     /* ===================== ADMIN FUNCTIONS ==================== */
 
+    function approve(
+        address sender,
+        bool isApprove
+    ) external;
+
     function setData(uint256 value, bytes calldata data) external;
 
     function setDataList(uint256[] calldata valueList, bytes[] calldata dataList) external;
+
+    function setAllowTransfer(bool _allowTransfer) external;
 }
