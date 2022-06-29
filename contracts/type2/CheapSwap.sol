@@ -18,9 +18,9 @@ contract CheapSwap is ICheapSwap, Ownable {
 
     function exactInput(
         bytes calldata path,
-        uint256 deadline,
-        uint256 amountIn,
-        uint256 amountOutMin
+        uint32 deadline,
+        uint112 amountIn,
+        uint112 amountOutMin
     ) external {
         require(block.timestamp >= deadline, "CheapSwap: over deadline");
         (, address tokenIn, ) = path.decodeFirstPool();
@@ -41,9 +41,9 @@ contract CheapSwap is ICheapSwap, Ownable {
 
     function exactOutput(
         bytes calldata path,
-        uint256 deadline,
-        uint256 amountOut,
-        uint256 amountInMax
+        uint32 deadline,
+        uint112 amountOut,
+        uint112 amountInMax
     ) external {
         require(block.timestamp >= deadline, "CheapSwap: over deadline");
         (, address tokenIn, ) = path.decodeFirstPool();

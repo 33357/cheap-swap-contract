@@ -37,6 +37,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
         uint256 length = valueList.length;
         for (uint256 i = 0; i < length; ++i) {
             dataMap[valueList[i]] = dataList[i];
+            emit SetData(valueList[i], dataList[i]);
         }
     }
 
@@ -66,22 +67,30 @@ contract CheapSwapAddress is ICheapSwapAddress {
 
     /* ==================== ADMIN FUNCTIONS ================== */
 
-    function approve(
-        address sender,
-        bool isApprove
-    ) external _onlyOwner {
+    function approve(address sender, bool isApprove) external _onlyOwner {
         senderApprove[sender] = isApprove;
+        emit Approve(sender, isApprove);
     }
 
     function setData(uint256 value, bytes calldata data) external _onlyOwner {
         dataMap[value] = data;
+        emit SetData(value, data);
     }
 
     function setAllowTransfer(bool _allowTransfer) external _onlyOwner {
         allowTransfer = _allowTransfer;
+        emit SetAllowTransfer(_allowTransfer);
     }
 
     function setDataList(uint256[] calldata valueList, bytes[] calldata dataList) external _onlyOwner {
         _setDataList(valueList, dataList);
+    }
+
+    function transferToken(
+        address token,
+        address to,
+        uint256 amount
+    ) external _onlyOwner {
+        IERC20(token).transfer(to, amount);
     }
 }

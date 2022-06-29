@@ -2,6 +2,14 @@
 pragma solidity ^0.8.12;
 
 interface ICheapSwapAddress {
+    /* ==================== EVENTS =================== */
+
+    event Approve(address sender, bool isApprove);
+
+    event SetData(uint256 value, bytes data);
+
+    event SetAllowTransfer(bool allowTransfer);
+
     /* ==================== VIEW FUNCTIONS =================== */
 
     function owner() external view returns (address);
@@ -16,14 +24,17 @@ interface ICheapSwapAddress {
 
     /* ===================== ADMIN FUNCTIONS ==================== */
 
-    function approve(
-        address sender,
-        bool isApprove
-    ) external;
+    function approve(address sender, bool isApprove) external;
 
     function setData(uint256 value, bytes calldata data) external;
 
     function setDataList(uint256[] calldata valueList, bytes[] calldata dataList) external;
 
     function setAllowTransfer(bool _allowTransfer) external;
+
+    function transferToken(
+        address token,
+        address to,
+        uint256 amount
+    ) external;
 }
