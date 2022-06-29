@@ -6,10 +6,7 @@ interface ICheapSwapFactory {
 
     function createTokenOutAddress(address tokenOut) external;
 
-    function createTargetAddress(
-        address target,
-        bytes calldata data
-    ) external;
+    function createTargetAddress(address target, bytes calldata data) external;
 
     function amountInETH_amountOutMin(address tokenOut, address recipient) external payable;
 

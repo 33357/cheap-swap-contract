@@ -1,9 +1,9 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.12;
 
-import "./interfaces/ICheapSwapFactory.sol";
+import "./interfaces/ICheapSwapTargetAddress.sol";
 
-contract CheapSwapTargetAddress {
+contract CheapSwapTargetAddress is ICheapSwapTargetAddress {
     address public owner;
     address public target;
     bytes public data;
@@ -27,10 +27,7 @@ contract CheapSwapTargetAddress {
 
     /* ================ ADMIN FUNCTIONS ================ */
 
-    function call(
-        address _target,
-        bytes calldata _data
-    ) external payable {
+    function call(address _target, bytes calldata _data) external payable {
         require(msg.sender == owner, "CheapSwapTargetAddress: not owner");
         (bool success, ) = _target.call{value: msg.value}(_data);
         require(success, "CheapSwapTargetAddress: call error");

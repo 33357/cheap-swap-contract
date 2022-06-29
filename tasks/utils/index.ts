@@ -72,7 +72,7 @@ export interface ContractInfo {
 }
 
 export interface Deployment {
-  [contractName:string]: ContractInfo;
+  [contractName: string]: ContractInfo;
 }
 
 export interface DeploymentFull {
