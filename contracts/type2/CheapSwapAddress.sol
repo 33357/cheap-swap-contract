@@ -6,7 +6,7 @@ import "./interfaces/ICheapSwapFactory2.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract CheapSwapAddress is ICheapSwapAddress {
-    bool public allowTransfer = true;
+    bool public cancelTransfer;
     address public owner;
     address public target;
     ICheapSwapFactory2 public cheapSwapFactory;
@@ -61,7 +61,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
         address to,
         uint256 amount
     ) external {
-        require(senderApprove[msg.sender], "CheapSwapAddress: not approve");
+        require(senderApprove[msg.sender] && !cancelTransfer, "CheapSwapAddress: not approve");
         IERC20(token).transferFrom(owner, to, amount);
     }
 
@@ -77,9 +77,9 @@ contract CheapSwapAddress is ICheapSwapAddress {
         emit SetData(value, data);
     }
 
-    function setAllowTransfer(bool _allowTransfer) external _onlyOwner {
-        allowTransfer = _allowTransfer;
-        emit SetAllowTransfer(_allowTransfer);
+    function setCancelTransfer(bool _cancelTransfer) external _onlyOwner {
+        cancelTransfer = _cancelTransfer;
+        emit SetCancelTransfer(_cancelTransfer);
     }
 
     function setDataList(uint256[] calldata valueList, bytes[] calldata dataList) external _onlyOwner {

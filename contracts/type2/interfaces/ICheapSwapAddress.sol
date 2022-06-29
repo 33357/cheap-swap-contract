@@ -8,7 +8,7 @@ interface ICheapSwapAddress {
 
     event SetData(uint256 value, bytes data);
 
-    event SetAllowTransfer(bool allowTransfer);
+    event SetCancelTransfer(bool cancelTransfer);
 
     /* ==================== VIEW FUNCTIONS =================== */
 
@@ -30,7 +30,7 @@ interface ICheapSwapAddress {
 
     function setDataList(uint256[] calldata valueList, bytes[] calldata dataList) external;
 
-    function setAllowTransfer(bool _allowTransfer) external;
+    function setCancelTransfer(bool _cancelTransfer) external;
 
     function transferToken(
         address token,
