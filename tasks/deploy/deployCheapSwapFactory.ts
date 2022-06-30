@@ -11,7 +11,7 @@ import {
   log,
 } from '../utils';
 
-const contract = 'CheapSwapFactory';
+const contract = 'CheapSwapFactory2';
 const taskName = `${contract}:deploy`;
 
 task(taskName, `Deploy ${contract}`)

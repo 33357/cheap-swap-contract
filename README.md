@@ -59,12 +59,12 @@ export GAS_PRICE=30
 
 #### deploy script
 ```bash
-yarn run env-cmd -f $ENV_FILE yarn run hardhat CheapSwapFactory:deploy --gas-price $GAS_PRICE --wait-num $WAIT_NUM --network $NETWORK_ID
+yarn run env-cmd -f $ENV_FILE yarn run hardhat CheapSwapFactory2:deploy --gas-price $GAS_PRICE --wait-num $WAIT_NUM --network $NETWORK_ID
 ```
 
 #### verify contract
 ```bash
-yarn run env-cmd -f $ENV_FILE yarn run hardhat CheapSwapFactory:verify --network $NETWORK_ID
+yarn run env-cmd -f $ENV_FILE yarn run hardhat CheapSwapFactory2:verify --network $NETWORK_ID
 
 yarn run env-cmd -f $ENV_FILE yarn run hardhat CheapSwapTokenOutAddress:verify --network $NETWORK_ID
 ```
