@@ -17,7 +17,7 @@ task(taskName, `verify ${contract}`).setAction(
     );
     await hre.run('verify:verify', {
       address: deployment[contract].implAddress,
-      constructorArguments: [],
+      constructorArguments: [deployment[contract].operator],
     });
   }
 );
