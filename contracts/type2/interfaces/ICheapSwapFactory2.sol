@@ -2,6 +2,10 @@
 pragma solidity ^0.8.12;
 
 interface ICheapSwapFactory2 {
+    /* ==================== EVENTS =================== */
+
+    event CreateAddress(address owner, address chatSwapAddress);
+
     /* ==================== VIEW FUNCTIONS =================== */
 
     function fee() external view returns (uint256);
