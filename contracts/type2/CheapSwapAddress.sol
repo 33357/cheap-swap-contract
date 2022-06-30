@@ -75,25 +75,17 @@ contract CheapSwapAddress is ICheapSwapAddress {
         emit ApproveCall(sender, callApprove[sender]);
     }
 
-    function setTargetData(uint256 value, bytes calldata targetData) external _onlyOwner {
-        targetDataMap[value] = targetData;
-        emit SetTargetData(value, targetData);
-    }
-
     function pauseCall() external _onlyOwner {
         callPause = !callPause;
         emit PauseCall(callPause);
     }
 
-    function setTargetDataList(uint256[] calldata valueList, bytes[] calldata targetDataList) external _onlyOwner {
-        _setDataList(valueList, targetDataList);
+    function setTargetData(uint256 value, bytes calldata targetData) external _onlyOwner {
+        targetDataMap[value] = targetData;
+        emit SetTargetData(value, targetData);
     }
 
-    function transferToken(
-        address token,
-        address to,
-        uint256 amount
-    ) external _onlyOwner {
-        IERC20(token).transfer(to, amount);
+    function setTargetDataList(uint256[] calldata valueList, bytes[] calldata targetDataList) external _onlyOwner {
+        _setDataList(valueList, targetDataList);
     }
 }

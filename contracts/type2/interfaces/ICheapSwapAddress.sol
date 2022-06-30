@@ -22,15 +22,9 @@ interface ICheapSwapAddress {
 
     function approveCall(address sender) external;
 
+    function pauseCall() external;
+
     function setTargetData(uint256 value, bytes calldata targetData) external;
 
     function setTargetDataList(uint256[] calldata valueList, bytes[] calldata targetDataList) external;
-
-    function pauseCall() external;
-
-    function transferToken(
-        address token,
-        address to,
-        uint256 amount
-    ) external;
 }
