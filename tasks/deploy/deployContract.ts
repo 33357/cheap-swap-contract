@@ -11,10 +11,8 @@ import {
   log,
 } from '../utils';
 
-const contract = 'CheapSwapFactory2';
-const taskName = `${contract}:deploy`;
-
-task(taskName, `Deploy ${contract}`)
+task(`contract:deploy`, `Deploy contract`)
+  .addOptionalParam('contract', 'The contract name')
   .addOptionalParam('waitNum', 'The waitNum to transaction')
   .addOptionalParam('gasPrice', 'The gasPrice to transaction')
   .setAction(async (args, hre: HardhatRuntimeEnvironment) => {
@@ -23,8 +21,9 @@ task(taskName, `Deploy ${contract}`)
       ? hre.ethers.utils.parseUnits(args['gasPrice'], 'gwei')
       : undefined;
     const waitNum = args['waitNum'] ? parseInt(args['waitNum']) : 1;
+    const contract = args['contract'];
     const ethersExecutionManager = new EthersExecutionManager(
-      `${LOCK_DIR}/${taskName}.lock`,
+      `${LOCK_DIR}/contract:deploy ${contract}.lock`,
       RETRY_NUMBER,
       waitNum
     );
