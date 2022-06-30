@@ -1,28 +1,28 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.12;
 
+import "../lib/BytesLib.sol";
 import "./interfaces/ICheapSwapAddress.sol";
 import "./interfaces/ICheapSwapFactory2.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract CheapSwapAddress is ICheapSwapAddress {
-    bool public cancelTransfer;
+    using BytesLib for bytes;
+
+    bool public callPause;
     address public owner;
-    address public target;
     ICheapSwapFactory2 public cheapSwapFactory;
-    mapping(uint256 => bytes) public dataMap;
-    mapping(address => bool) public senderApprove;
+    mapping(uint256 => bytes) public targetDataMap;
+    mapping(address => bool) public callApprove;
 
     constructor(
         address _owner,
-        address _target,
         uint256[] memory valueList,
-        bytes[] memory dataList
+        bytes[] memory targetDataList
     ) {
         owner = _owner;
-        target = _target;
         cheapSwapFactory = ICheapSwapFactory2(msg.sender);
-        _setDataList(valueList, dataList);
+        _setDataList(valueList, targetDataList);
     }
 
     /* ==================== UTIL FUNCTIONS =================== */
@@ -32,19 +32,19 @@ contract CheapSwapAddress is ICheapSwapAddress {
         _;
     }
 
-    function _setDataList(uint256[] memory valueList, bytes[] memory dataList) internal {
-        require(valueList.length == dataList.length, "CheapSwapAddress: not equal length");
+    function _setDataList(uint256[] memory valueList, bytes[] memory targetDataList) internal {
+        require(valueList.length == targetDataList.length, "CheapSwapAddress: not equal length");
         uint256 length = valueList.length;
         for (uint256 i = 0; i < length; ++i) {
-            dataMap[valueList[i]] = dataList[i];
-            emit SetData(valueList[i], dataList[i]);
+            targetDataMap[valueList[i]] = targetDataList[i];
+            emit SetTargetData(valueList[i], targetDataList[i]);
         }
     }
 
     /* ================ TRANSACTION FUNCTIONS ================ */
 
     receive() external payable {
-        require(dataMap[msg.value].length != 0, "CheapSwapAddress: empty data");
+        require(targetDataMap[msg.value].length != 0, "CheapSwapAddress: empty targetData");
         uint256 fee = cheapSwapFactory.fee();
         require(msg.value >= fee, "CheapSwapAddress: insufficient value");
         payable(cheapSwapFactory.feeAddress()).transfer(fee);
@@ -52,38 +52,36 @@ contract CheapSwapAddress is ICheapSwapAddress {
         if (value > 0) {
             payable(owner).transfer(value);
         }
-        (bool success, ) = target.call(dataMap[msg.value]);
+        bytes memory targetData = targetDataMap[msg.value];
+        (bool success, ) = targetData.toAddress(0).call(targetData.slice(20, targetData.length));
         require(success, "CheapSwapAddress: call error");
     }
 
-    function transferFrom(
-        address token,
-        address to,
-        uint256 amount
-    ) external {
-        require(senderApprove[msg.sender] && !cancelTransfer, "CheapSwapAddress: not allow transfer");
-        IERC20(token).transferFrom(owner, to, amount);
+    function call(address target, bytes calldata data) external payable {
+        require(callApprove[msg.sender] && !callPause, "CheapSwapAddress: not allow call");
+        (bool success, ) = target.call{value: msg.value}(data);
+        require(success, "CheapSwapAddress: call error");
     }
 
     /* ==================== ADMIN FUNCTIONS ================== */
 
-    function approve(address sender, bool isApprove) external _onlyOwner {
-        senderApprove[sender] = isApprove;
-        emit Approve(sender, isApprove);
+    function approveCall(address sender) external _onlyOwner {
+        callApprove[sender] = !callApprove[sender];
+        emit ApproveCall(sender, callApprove[sender]);
     }
 
-    function setData(uint256 value, bytes calldata data) external _onlyOwner {
-        dataMap[value] = data;
-        emit SetData(value, data);
+    function setTargetData(uint256 value, bytes calldata targetData) external _onlyOwner {
+        targetDataMap[value] = targetData;
+        emit SetTargetData(value, targetData);
     }
 
-    function setCancelTransfer(bool _cancelTransfer) external _onlyOwner {
-        cancelTransfer = _cancelTransfer;
-        emit SetCancelTransfer(_cancelTransfer);
+    function pauseCall() external _onlyOwner {
+        callPause = !callPause;
+        emit PauseCall(callPause);
     }
 
-    function setDataList(uint256[] calldata valueList, bytes[] calldata dataList) external _onlyOwner {
-        _setDataList(valueList, dataList);
+    function setTargetDataList(uint256[] calldata valueList, bytes[] calldata targetDataList) external _onlyOwner {
+        _setDataList(valueList, targetDataList);
     }
 
     function transferToken(

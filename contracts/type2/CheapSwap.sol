@@ -28,10 +28,19 @@ contract CheapSwap is ICheapSwap, Ownable {
             IERC20(tokenIn).approve(address(Router), type(uint256).max);
         }
         ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
-        cheapSwapAddress.transferFrom(tokenIn, address(this), amountIn);
+        address owner = cheapSwapAddress.owner();
+        cheapSwapAddress.call(
+            tokenIn,
+            abi.encodeWithSignature(
+                "transferFrom(address,address,uint256)",
+                owner,
+                address(this),
+               amountIn
+            )
+        );
         ISwapRouter.ExactInputParams memory params = ISwapRouter.ExactInputParams({
             path: path,
-            recipient: cheapSwapAddress.owner(),
+            recipient: owner,
             deadline: block.timestamp,
             amountIn: amountIn,
             amountOutMinimum: amountOutMin
@@ -51,10 +60,19 @@ contract CheapSwap is ICheapSwap, Ownable {
             IERC20(tokenIn).approve(address(Router), type(uint256).max);
         }
         ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
-        cheapSwapAddress.transferFrom(tokenIn, address(this), amountInMax);
+        address owner = cheapSwapAddress.owner();
+        cheapSwapAddress.call(
+            tokenIn,
+            abi.encodeWithSignature(
+                "transferFrom(address,address,uint256)",
+                owner,
+                address(this),
+                amountInMax
+            )
+        );
         ISwapRouter.ExactOutputParams memory params = ISwapRouter.ExactOutputParams({
             path: path,
-            recipient: cheapSwapAddress.owner(),
+            recipient: owner,
             deadline: block.timestamp,
             amountOut: amountOut,
             amountInMaximum: amountInMax

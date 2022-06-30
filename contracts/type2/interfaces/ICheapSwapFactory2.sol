@@ -10,11 +10,7 @@ interface ICheapSwapFactory2 {
 
     /* ================ TRANSACTION FUNCTIONS ================ */
 
-    function createAddress(
-        address target,
-        uint256[] calldata valueList,
-        bytes[] calldata dataList
-    ) external;
+    function createAddress(uint256[] calldata valueList, bytes[] calldata targetDataList) external;
 
     /* ==================== ADMIN FUNCTIONS =================== */
 

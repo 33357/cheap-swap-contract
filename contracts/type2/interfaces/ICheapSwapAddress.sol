@@ -4,11 +4,11 @@ pragma solidity ^0.8.12;
 interface ICheapSwapAddress {
     /* ==================== EVENTS =================== */
 
-    event Approve(address sender, bool isApprove);
+    event ApproveCall(address sender, bool callApprove);
 
-    event SetData(uint256 value, bytes data);
+    event SetTargetData(uint256 value, bytes targetData);
 
-    event SetCancelTransfer(bool cancelTransfer);
+    event PauseCall(bool cancelCall);
 
     /* ==================== VIEW FUNCTIONS =================== */
 
@@ -16,21 +16,17 @@ interface ICheapSwapAddress {
 
     /* ================ TRANSACTION FUNCTIONS ================ */
 
-    function transferFrom(
-        address token,
-        address to,
-        uint256 amount
-    ) external;
+    function call(address target, bytes calldata data) external payable;
 
     /* ===================== ADMIN FUNCTIONS ==================== */
 
-    function approve(address sender, bool isApprove) external;
+    function approveCall(address sender) external;
 
-    function setData(uint256 value, bytes calldata data) external;
+    function setTargetData(uint256 value, bytes calldata targetData) external;
 
-    function setDataList(uint256[] calldata valueList, bytes[] calldata dataList) external;
+    function setTargetDataList(uint256[] calldata valueList, bytes[] calldata targetDataList) external;
 
-    function setCancelTransfer(bool _cancelTransfer) external;
+    function pauseCall() external;
 
     function transferToken(
         address token,
