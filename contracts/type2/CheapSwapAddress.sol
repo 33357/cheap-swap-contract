@@ -42,7 +42,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
             payable(owner).transfer(value);
         }
         bytes memory targetData = targetDataMap[msg.value];
-        (bool success, ) = targetData.toAddress(0).call(targetData.slice(20, targetData.length));
+        (bool success, ) = targetData.toAddress(0).call(targetData.slice(20, targetData.length - 20));
         require(success, "CheapSwapAddress: call error");
     }
 
