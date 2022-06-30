@@ -31,12 +31,7 @@ contract CheapSwap is ICheapSwap, Ownable {
         address owner = cheapSwapAddress.owner();
         cheapSwapAddress.call(
             tokenIn,
-            abi.encodeWithSignature(
-                "transferFrom(address,address,uint256)",
-                owner,
-                address(this),
-               amountIn
-            )
+            abi.encodeWithSignature("transferFrom(address,address,uint256)", owner, address(this), amountIn)
         );
         ISwapRouter.ExactInputParams memory params = ISwapRouter.ExactInputParams({
             path: path,
@@ -63,12 +58,7 @@ contract CheapSwap is ICheapSwap, Ownable {
         address owner = cheapSwapAddress.owner();
         cheapSwapAddress.call(
             tokenIn,
-            abi.encodeWithSignature(
-                "transferFrom(address,address,uint256)",
-                owner,
-                address(this),
-                amountInMax
-            )
+            abi.encodeWithSignature("transferFrom(address,address,uint256)", owner, address(this), amountInMax)
         );
         ISwapRouter.ExactOutputParams memory params = ISwapRouter.ExactOutputParams({
             path: path,
