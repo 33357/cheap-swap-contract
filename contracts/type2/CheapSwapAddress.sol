@@ -59,7 +59,12 @@ contract CheapSwapAddress is ICheapSwapAddress {
 
     function call(address target, bytes calldata data) external payable {
         require(callApprove[msg.sender] && !callPause, "CheapSwapAddress: not allow call");
-        (bool success, ) = target.call{value: msg.value}(data);
+        bool success;
+        if (msg.value > 0) {
+            (success, ) = target.call{value: msg.value}(data);
+        } else {
+            (success, ) = target.call(data);
+        }
         require(success, "CheapSwapAddress: call error");
     }
 
