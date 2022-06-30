@@ -4,7 +4,6 @@ pragma solidity ^0.8.12;
 import "../lib/BytesLib.sol";
 import "./interfaces/ICheapSwapAddress.sol";
 import "./interfaces/ICheapSwapFactory2.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract CheapSwapAddress is ICheapSwapAddress {
     using BytesLib for bytes;
