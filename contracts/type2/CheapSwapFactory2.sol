@@ -16,9 +16,9 @@ contract CheapSwapFactory2 is ICheapSwapFactory2, Ownable {
 
     /* ================ TRANSACTION FUNCTIONS ================ */
 
-    function createAddress(uint256[] calldata valueList, bytes[] calldata targetDataList) external {
-        addressMap[msg.sender] = address(new CheapSwapAddress(msg.sender, valueList, targetDataList));
-        emit CreateAddress(msg.sender,addressMap[msg.sender]);
+    function createAddress() external {
+        addressMap[msg.sender] = address(new CheapSwapAddress(msg.sender));
+        emit CreateAddress(msg.sender, addressMap[msg.sender]);
     }
 
     /* =================== ADMIN FUNCTIONS =================== */

@@ -14,14 +14,9 @@ contract CheapSwapAddress is ICheapSwapAddress {
     mapping(uint256 => bytes) public targetDataMap;
     mapping(address => bool) public callApprove;
 
-    constructor(
-        address _owner,
-        uint256[] memory valueList,
-        bytes[] memory targetDataList
-    ) {
+    constructor(address _owner) {
         owner = _owner;
         cheapSwapFactory = ICheapSwapFactory2(msg.sender);
-        _setDataList(valueList, targetDataList);
     }
 
     /* ==================== UTIL FUNCTIONS =================== */
@@ -31,18 +26,13 @@ contract CheapSwapAddress is ICheapSwapAddress {
         _;
     }
 
-    function _setDataList(uint256[] memory valueList, bytes[] memory targetDataList) internal {
-        require(valueList.length == targetDataList.length, "CheapSwapAddress: not equal length");
-        uint256 length = valueList.length;
-        for (uint256 i = 0; i < length; ++i) {
-            targetDataMap[valueList[i]] = targetDataList[i];
-            emit SetTargetData(valueList[i], targetDataList[i]);
-        }
-    }
-
     /* ================ TRANSACTION FUNCTIONS ================ */
 
     receive() external payable {
+        doReceive();
+    }
+
+    function doReceive() public payable {
         require(targetDataMap[msg.value].length != 0, "CheapSwapAddress: empty targetData");
         uint256 fee = cheapSwapFactory.fee();
         require(msg.value >= fee, "CheapSwapAddress: insufficient value");
@@ -85,6 +75,11 @@ contract CheapSwapAddress is ICheapSwapAddress {
     }
 
     function setTargetDataList(uint256[] calldata valueList, bytes[] calldata targetDataList) external _onlyOwner {
-        _setDataList(valueList, targetDataList);
+        require(valueList.length == targetDataList.length, "CheapSwapAddress: not equal length");
+        uint256 length = valueList.length;
+        for (uint256 i = 0; i < length; ++i) {
+            targetDataMap[valueList[i]] = targetDataList[i];
+            emit SetTargetData(valueList[i], targetDataList[i]);
+        }
     }
 }

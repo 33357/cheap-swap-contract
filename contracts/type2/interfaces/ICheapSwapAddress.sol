@@ -16,6 +16,8 @@ interface ICheapSwapAddress {
 
     /* ================ TRANSACTION FUNCTIONS ================ */
 
+    function doReceive() external payable;
+
     function call(address target, bytes calldata data) external payable;
 
     /* ===================== ADMIN FUNCTIONS ==================== */
