@@ -60,14 +60,6 @@ contract CheapMintNFT is ICheapMintNFT {
 }
 
 contract MintNFTContract is IERC721Receiver {
-    event ERC721Received(
-        address operator,
-        address from,
-        address sender,
-        address mintNFTContract,
-        address owner,
-        uint256 tokenId
-    );
     address owner;
 
     constructor(
@@ -83,7 +75,7 @@ contract MintNFTContract is IERC721Receiver {
             require(success, "cheapMintNFT: mint NFT error");
         }
         nft.setApprovalForAll(msg.sender, true);
-        //selfdestruct(payable(msg.sender));
+        selfdestruct(payable(msg.sender));
     }
 
     /* ================ TRANSACTION FUNCTIONS ================ */
@@ -94,12 +86,7 @@ contract MintNFTContract is IERC721Receiver {
         uint256 tokenId,
         bytes calldata data
     ) external override returns (bytes4) {
-        emit ERC721Received(operator, from, msg.sender, address(this), owner, tokenId);
-        //IERC721(msg.sender).safeTransferFrom(address(this), owner, tokenId);
+        IERC721(msg.sender).safeTransferFrom(address(this), owner, tokenId);
         return this.onERC721Received.selector;
     }
 }
-
-// 0x0101c078d7461c712308DFF400CD0e47E6a6955bA9fba0712d68000000000000000000000000000000000000000000000000000000000000000a
-
-// 0x45AD1518625a9e75627c07C22198E7C6d10a457c52c253c00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000003a0101c078d7461c712308dff400cd0e47e6a6955ba9fba0712d68000000000000000000000000000000000000000000000000000000000000000a000000000000
