@@ -34,7 +34,7 @@ contract CheapMintNFT {
         uint256[] calldata tokenId
     ) external {
         IERC721 nft = IERC721(target);
-        for (uint256 i = 0; i < contractList.length; i++) {
+        for (uint256 i = 0; i < contractList.length; ++i) {
             nft.transferFrom(contractList[i], msg.sender, tokenId[i]);
         }
     }
@@ -45,7 +45,7 @@ contract CheapMintNFT {
         uint256[] calldata tokenId
     ) external {
         IERC721 nft = IERC721(target);
-        for (uint256 i = 0; i < tokenId.length; i++) {
+        for (uint256 i = 0; i < tokenId.length; ++i) {
             nft.transferFrom(contractAddress, msg.sender, tokenId[i]);
         }
     }
@@ -62,7 +62,7 @@ contract MintNFT is IERC721Receiver {
     ) {
         owner = _owner;
         IERC721 nft = IERC721(target);
-        for (uint8 i = 0; i < perContractMint; i++) {
+        for (uint8 i = 0; i < perContractMint; ++i) {
             (bool success, ) = target.call(mintData);
             require(success, "cheapMintNFT: mint NFT error");
         }
@@ -78,6 +78,7 @@ contract MintNFT is IERC721Receiver {
         uint256 tokenId,
         bytes calldata data
     ) external override returns (bytes4) {
+        IERC721(msg.sender).safeTransferFrom(address(this), owner, tokenId);
         return this.onERC721Received.selector;
     }
 }
