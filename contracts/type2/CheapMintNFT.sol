@@ -14,10 +14,10 @@ contract CheapMintNFT is ICheapMintNFT {
     /* ================ TRANSACTION FUNCTIONS ================ */
 
     function mint(bytes calldata mintNFTData) external {
-        uint8 createAmount = mintNFTData.toUint8(4);
-        uint8 mintAmount = mintNFTData.toUint8(5);
-        uint24 startTokenId = mintNFTData.toUint24(6);
-        address target = mintNFTData.toAddress(9);
+        uint8 createAmount = mintNFTData.toUint8(0);
+        uint8 mintAmount = mintNFTData.toUint8(1);
+        uint24 startTokenId = mintNFTData.toUint24(2);
+        address target = mintNFTData.toAddress(5);
         address owner = msg.sender;
         if (msg.sender != tx.origin) {
             ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
@@ -32,7 +32,7 @@ contract CheapMintNFT is ICheapMintNFT {
             }
         }
         for (uint8 i = 0; i < createAmount; ++i) {
-            new MintNFT(mintAmount, startTokenId, owner, target, mintNFTData.slice(29, mintNFTData.length - 29));
+            new MintNFT(mintAmount, startTokenId, owner, target, mintNFTData.slice(25, mintNFTData.length - 25));
             startTokenId += mintAmount;
         }
     }

@@ -13,10 +13,10 @@ contract CheapMintNFT2 {
     /* ================ TRANSACTION FUNCTIONS ================ */
 
     function mint() external {
-        uint8 createAmount = msg.data.toUint8(0);
-        uint8 mintAmount = msg.data.toUint8(1);
-        uint24 startTokenId = msg.data.toUint24(2);
-        address target = msg.data.toAddress(5);
+        uint8 createAmount = msg.data.toUint8(4);
+        uint8 mintAmount = msg.data.toUint8(5);
+        uint24 startTokenId = msg.data.toUint24(6);
+        address target = msg.data.toAddress(9);
         address owner = msg.sender;
         if (msg.sender != tx.origin) {
             ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
@@ -31,7 +31,7 @@ contract CheapMintNFT2 {
             }
         }
         for (uint8 i = 0; i < createAmount; ++i) {
-            new MintNFT(mintAmount, startTokenId, owner, target, msg.data.slice(25, msg.data.length - 25));
+            new MintNFT(mintAmount, startTokenId, owner, target, msg.data.slice(29, msg.data.length - 29));
             startTokenId += mintAmount;
         }
     }
