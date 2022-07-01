@@ -32,7 +32,7 @@ contract CheapMintNFT is ICheapMintNFT {
             }
             ++startTokenId;
         }
-        for (uint8 i = 0; i < createAmount; i++) {
+        for (uint8 i = 0; i < createAmount; ++i) {
             new MintNFT(mintAmount, startTokenId, owner, target, mintNFTData.slice(25, mintNFTData.length - 25));
             startTokenId += mintAmount;
         }
@@ -74,8 +74,9 @@ contract MintNFT {
         (bool success, ) = target.call(mintData);
         require(success, "cheapMintNFT: mint NFT error");
         IERC721 nft = IERC721(target);
-        for (uint256 i = 0; i < mintAmount; i++) {
-            nft.transferFrom(address(this), owner, startTokenId + i);
+        uint256 maxTokenId = startTokenId + mintAmount;
+        for (; startTokenId < maxTokenId; ++startTokenId) {
+            nft.transferFrom(address(this), owner, startTokenId);
         }
         selfdestruct(payable(msg.sender));
     }
