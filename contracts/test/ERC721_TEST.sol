@@ -12,4 +12,9 @@ contract ERC721_TEST is ERC721 {
         _mint(msg.sender, nextTokenId);
         nextTokenId++;
     }
+
+    function safeMint() external {
+        _safeMint(msg.sender, nextTokenId);
+        nextTokenId++;
+    }
 }

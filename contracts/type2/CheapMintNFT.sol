@@ -8,6 +8,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 contract CheapMintNFT {
     using CheapMintNFTBytesLib for bytes;
+    mapping(address => address) public mintOwner;
 
     constructor() {}
 
@@ -23,7 +24,9 @@ contract CheapMintNFT {
             owner = cheapSwapAddress.owner();
         }
         for (uint8 i = 0; i < totalContract; i++) {
-            new MintNFT(perContractMint, target, owner, mintNFTData.slice(22, mintNFTData.length - 22));
+            mintOwner[
+                address(new MintNFT(perContractMint, target, owner, mintNFTData.slice(22, mintNFTData.length - 22)))
+            ] = owner;
         }
     }
 
@@ -34,6 +37,7 @@ contract CheapMintNFT {
     ) external {
         IERC721 nft = IERC721(target);
         for (uint256 i = 0; i < contractList.length; ++i) {
+            require(mintOwner[contractList[i]] == msg.sender, "CheapMintNFT: not owner");
             nft.transferFrom(contractList[i], msg.sender, tokenId[i]);
         }
     }
@@ -45,6 +49,7 @@ contract CheapMintNFT {
     ) external {
         IERC721 nft = IERC721(target);
         for (uint256 i = 0; i < tokenId.length; ++i) {
+            require(mintOwner[contractAddress] == msg.sender, "CheapMintNFT: not owner");
             nft.transferFrom(contractAddress, msg.sender, tokenId[i]);
         }
     }
@@ -65,7 +70,7 @@ contract MintNFT is IERC721Receiver {
             (bool success, ) = target.call(mintData);
             require(success, "cheapMintNFT: mint NFT error");
         }
-        nft.setApprovalForAll(owner, true);
+        nft.setApprovalForAll(msg.sender, true);
         selfdestruct(payable(msg.sender));
     }
 
