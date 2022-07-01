@@ -9,8 +9,6 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 contract CheapMintNFT is ICheapMintNFT {
     using CheapMintNFTBytesLib for bytes;
 
-    // mapping(address => address) public mintNFTOwner;
-
     constructor() {}
 
     /* ================ TRANSACTION FUNCTIONS ================ */
@@ -38,30 +36,6 @@ contract CheapMintNFT is ICheapMintNFT {
             startTokenId += mintAmount;
         }
     }
-
-    // function getNFTFromContractList(
-    //     address target,
-    //     address[] calldata contractList,
-    //     uint256[] calldata tokenId
-    // ) external {
-    //     IERC721 nft = IERC721(target);
-    //     for (uint256 i = 0; i < contractList.length; ++i) {
-    //         require(mintNFTOwner[contractList[i]] == msg.sender, "CheapMintNFT: not owner");
-    //         nft.transferFrom(contractList[i], msg.sender, tokenId[i]);
-    //     }
-    // }
-
-    // function getNFTFromTokenIdList(
-    //     address target,
-    //     address contractAddress,
-    //     uint256[] calldata tokenId
-    // ) external {
-    //     IERC721 nft = IERC721(target);
-    //     for (uint256 i = 0; i < tokenId.length; ++i) {
-    //         require(mintNFTOwner[contractAddress] == msg.sender, "CheapMintNFT: not owner");
-    //         nft.transferFrom(contractAddress, msg.sender, tokenId[i]);
-    //     }
-    // }
 }
 
 contract MintNFT {
