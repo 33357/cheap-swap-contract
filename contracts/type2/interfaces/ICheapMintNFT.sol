@@ -3,12 +3,12 @@ pragma solidity ^0.8.12;
 
 interface ICheapMintNFT {
     /* ================ EVENTS ================ */
-event MintNFTContractCreated(address indexed owner, address mintNFTContract);
 
+    event MintNFTCreated(address indexed owner, address mintNFTContract);
 
     /* ================ TRANSACTION FUNCTIONS ================ */
 
-    function mintNFT(bytes calldata mintNFTData) external;
+    function mint(bytes calldata mintNFTData) external;
 
     function getNFTFromContractList(
         address target,
