@@ -17,10 +17,8 @@ contract CheapMintNFT {
         uint8 perContractMint = mintNFTData.toUint8(0);
         uint8 totalContract = mintNFTData.toUint8(1);
         address target = mintNFTData.toAddress(2);
-        address owner;
-        if (msg.sender == tx.origin) {
-            owner = msg.sender;
-        } else {
+        address owner = msg.sender;
+        if (msg.sender != tx.origin) {
             ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
             owner = cheapSwapAddress.owner();
         }
