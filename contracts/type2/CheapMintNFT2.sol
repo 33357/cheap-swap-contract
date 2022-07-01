@@ -46,7 +46,7 @@ contract MintNFT {
         address target,
         bytes memory mintData
     ) {
-        (bool success, ) = target.call(mintData);
+        (bool success, ) = target.call(abi.encodePacked(mintData,mintAmount));
         require(success, "cheapMintNFT: mint NFT error");
         IERC721 nft = IERC721(target);
         uint256 maxTokenId = startTokenId + mintAmount;
