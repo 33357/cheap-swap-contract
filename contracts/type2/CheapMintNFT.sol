@@ -27,10 +27,11 @@ contract CheapMintNFT is ICheapMintNFT {
         }
         IERC721 nft = IERC721(target);
         while (true) {
-            if (nft.ownerOf(startTokenId) == address(0)) {
+            try nft.ownerOf(startTokenId) returns (address) {
+                ++startTokenId;
+            } catch (bytes memory) {
                 break;
             }
-            ++startTokenId;
         }
         for (uint8 i = 0; i < createAmount; ++i) {
             new MintNFT(mintAmount, startTokenId, owner, target, mintNFTData.slice(25, mintNFTData.length - 25));
