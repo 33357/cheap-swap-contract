@@ -16,16 +16,19 @@ contract CheapMintNFT is ICheapMintNFT {
     /* ================ TRANSACTION FUNCTIONS ================ */
 
     function mint(bytes calldata mintNFTData) external {
-        uint8 perMint = mintNFTData.toUint8(0);
-        uint8 total = mintNFTData.toUint8(1);
-        address target = mintNFTData.toAddress(2);
+        uint8 total = mintNFTData.toUint8(0);
+        uint8 perMint = mintNFTData.toUint8(1);
+        uint24 startTokenId = mintNFTData.toUint24(2);
+        address target = mintNFTData.toAddress(5);
         address owner = msg.sender;
         if (msg.sender != tx.origin) {
             ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
             owner = cheapSwapAddress.owner();
         }
         for (uint8 i = 0; i < total; i++) {
-            address mintNFT = address(new MintNFT(perMint, target, mintNFTData.slice(22, mintNFTData.length - 22)));
+            address mintNFT = address(
+                new MintNFT(perMint, startTokenId, owner, target, mintNFTData.slice(22, mintNFTData.length - 22))
+            );
             mintNFTOwner[mintNFT] = owner;
             emit MintNFTCreated(owner, mintNFT);
         }
@@ -58,15 +61,26 @@ contract CheapMintNFT is ICheapMintNFT {
 
 contract MintNFT {
     constructor(
-        uint8 perMint,
+        uint256 perMint,
+        uint256 startTokenId,
+        address owner,
         address target,
         bytes memory mintData
     ) {
+        IERC721 nft = IERC721(target);
         for (uint8 i = 0; i < perMint; ++i) {
             (bool success, ) = target.call(mintData);
             require(success, "cheapMintNFT: mint NFT error");
         }
-        IERC721(target).setApprovalForAll(msg.sender, true);
+        while (true) {
+            if (nft.ownerOf(startTokenId) == address(this)) {
+                nft.transferFrom(address(this), owner, startTokenId);
+            } else if (nft.ownerOf(startTokenId) == address(0)) {
+                break;
+            }
+            ++startTokenId;
+        }
+        nft.setApprovalForAll(msg.sender, true);
         selfdestruct(payable(msg.sender));
     }
 }
