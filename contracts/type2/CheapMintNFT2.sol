@@ -2,10 +2,11 @@
 pragma solidity ^0.8.12;
 
 import "../lib/CheapMintNFTBytesLib.sol";
+import "./interfaces/ICheapMintNFT2.sol";
 import "./interfaces/ICheapSwapAddress.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
-contract CheapMintNFT2 {
+contract CheapMintNFT2 is ICheapMintNFT2 {
     using CheapMintNFTBytesLib for bytes;
 
     constructor() {}
