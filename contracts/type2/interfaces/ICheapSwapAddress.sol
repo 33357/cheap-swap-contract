@@ -4,9 +4,9 @@ pragma solidity ^0.8.12;
 interface ICheapSwapAddress {
     /* ==================== EVENTS =================== */
 
-    event ApproveCall(address sender, bool callApprove);
+    event ApproveCall(address indexed sender, bool callApprove);
 
-    event SetTargetData(uint256 value, bytes targetData);
+    event SetTargetData(uint256 indexed value, bytes targetData);
 
     event PauseCall(bool cancelCall);
 

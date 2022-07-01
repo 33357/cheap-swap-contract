@@ -3,12 +3,14 @@ pragma solidity ^0.8.12;
 
 import "../lib/CheapMintNFTBytesLib.sol";
 import "./interfaces/ICheapSwapAddress.sol";
+import "./interfaces/ICheapMintNFT.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
-contract CheapMintNFT {
+contract CheapMintNFT is ICheapMintNFT {
     using CheapMintNFTBytesLib for bytes;
-    mapping(address => address) public mintOwner;
+
+    mapping(address => address) public mintNFTContractOwner;
 
     constructor() {}
 
@@ -24,38 +26,48 @@ contract CheapMintNFT {
             owner = cheapSwapAddress.owner();
         }
         for (uint8 i = 0; i < totalContract; i++) {
-            mintOwner[
-                address(new MintNFT(perContractMint, target, owner, mintNFTData.slice(22, mintNFTData.length - 22)))
-            ] = owner;
+            address mintNFTContract = address(
+                new MintNFTContract(perContractMint, target, owner, mintNFTData.slice(22, mintNFTData.length - 22))
+            );
+            mintNFTContractOwner[mintNFTContract] = owner;
+            emit MintNFTContractCreated(owner, mintNFTContract);
         }
     }
 
-    function getAddressNFT(
+    function getNFTFromContractList(
         address target,
         address[] calldata contractList,
         uint256[] calldata tokenId
     ) external {
         IERC721 nft = IERC721(target);
         for (uint256 i = 0; i < contractList.length; ++i) {
-            require(mintOwner[contractList[i]] == msg.sender, "CheapMintNFT: not owner");
+            require(mintNFTContractOwner[contractList[i]] == msg.sender, "CheapMintNFT: not owner");
             nft.transferFrom(contractList[i], msg.sender, tokenId[i]);
         }
     }
 
-    function getNFT(
+    function getNFTFromTokenIdList(
         address target,
         address contractAddress,
         uint256[] calldata tokenId
     ) external {
         IERC721 nft = IERC721(target);
         for (uint256 i = 0; i < tokenId.length; ++i) {
-            require(mintOwner[contractAddress] == msg.sender, "CheapMintNFT: not owner");
+            require(mintNFTContractOwner[contractAddress] == msg.sender, "CheapMintNFT: not owner");
             nft.transferFrom(contractAddress, msg.sender, tokenId[i]);
         }
     }
 }
 
-contract MintNFT is IERC721Receiver {
+contract MintNFTContract is IERC721Receiver {
+    event ERC721Received(
+        address operator,
+        address from,
+        address sender,
+        address mintNFTContract,
+        address owner,
+        uint256 tokenId
+    );
     address owner;
 
     constructor(
@@ -71,7 +83,7 @@ contract MintNFT is IERC721Receiver {
             require(success, "cheapMintNFT: mint NFT error");
         }
         nft.setApprovalForAll(msg.sender, true);
-        selfdestruct(payable(msg.sender));
+        //selfdestruct(payable(msg.sender));
     }
 
     /* ================ TRANSACTION FUNCTIONS ================ */
@@ -82,7 +94,8 @@ contract MintNFT is IERC721Receiver {
         uint256 tokenId,
         bytes calldata data
     ) external override returns (bytes4) {
-        IERC721(msg.sender).safeTransferFrom(address(this), owner, tokenId);
+        emit ERC721Received(operator, from, msg.sender, address(this), owner, tokenId);
+        //IERC721(msg.sender).safeTransferFrom(address(this), owner, tokenId);
         return this.onERC721Received.selector;
     }
 }
