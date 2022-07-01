@@ -9,7 +9,7 @@ task(`contract:verify`, `verify contract`)
   .setAction(async (args, hre: HardhatRuntimeEnvironment) => {
     const contract = args['contract'];
     const _args = JSON.parse(args['args']);
-    
+
     const deployment = await utils.getDeployment(
       Number(await hre.getChainId())
     );
