@@ -10,15 +10,15 @@ interface ICheapMintNFT {
 
     function mint(bytes calldata mintNFTData) external;
 
-    function getNFTFromContractList(
-        address target,
-        address[] calldata contractList,
-        uint256[] calldata tokenId
-    ) external;
+    // function getNFTFromContractList(
+    //     address target,
+    //     address[] calldata contractList,
+    //     uint256[] calldata tokenId
+    // ) external;
 
-    function getNFTFromTokenIdList(
-        address target,
-        address contractAddress,
-        uint256[] calldata tokenId
-    ) external;
+    // function getNFTFromTokenIdList(
+    //     address target,
+    //     address contractAddress,
+    //     uint256[] calldata tokenId
+    // ) external;
 }
