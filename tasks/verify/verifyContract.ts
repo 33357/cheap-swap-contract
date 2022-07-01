@@ -5,8 +5,10 @@ import * as utils from '../utils';
 
 task(`contract:verify`, `verify contract`)
   .addOptionalParam('contract', 'The contract name')
+  .addOptionalParam('args', 'The contract args')
   .setAction(async (args, hre: HardhatRuntimeEnvironment) => {
     const contract = args['contract'];
+    const _args = JSON.parse(args['args']);
     const deployment = await utils.getDeployment(
       Number(await hre.getChainId())
     );
@@ -16,6 +18,6 @@ task(`contract:verify`, `verify contract`)
     );
     await hre.run('verify:verify', {
       address: deployment[contract].implAddress,
-      constructorArguments: [],
+      constructorArguments: _args,
     });
   });
