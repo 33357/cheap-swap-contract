@@ -17,14 +17,15 @@ contract CheapMintNFT {
         uint8 perContractMint = mintNFTData.toUint8(0);
         uint8 totalContract = mintNFTData.toUint8(1);
         address target = mintNFTData.toAddress(2);
-        ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
+        address owner;
+        if (msg.sender == tx.origin) {
+            owner = msg.sender;
+        } else {
+            ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
+            owner = cheapSwapAddress.owner();
+        }
         for (uint8 i = 0; i < totalContract; i++) {
-            new MintNFT(
-                perContractMint,
-                target,
-                cheapSwapAddress.owner(),
-                mintNFTData.slice(22, mintNFTData.length - 22)
-            );
+            new MintNFT(perContractMint, target, owner, mintNFTData.slice(22, mintNFTData.length - 22));
         }
     }
 
