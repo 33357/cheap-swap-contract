@@ -76,8 +76,3 @@ yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapM
 
 yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract ERC721_TEST --args [] --network $NETWORK_ID
 ```
-
-
-
-0x0101ce01c5e02dea8f3b6c65d8cd09f2d2f2c59f08951249c58b
-
