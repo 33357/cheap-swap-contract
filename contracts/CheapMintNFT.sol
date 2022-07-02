@@ -36,10 +36,7 @@ contract CheapMintNFT is ICheapMintNFT {
             uint256 thisGas = gasleft();
             uint256 beforeGas = thisGas;
             uint256 useGas;
-            while (thisGas >= useGas) {
-                if (value > 0 && address(this).balance < value) {
-                    break;
-                }
+            while (thisGas >= useGas && address(this).balance >= value) {
                 beforeGas = thisGas;
                 new MintNFT{value: value}(mintAmount, startTokenId, owner, target, mintData);
                 startTokenId += mintAmount;
