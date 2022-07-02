@@ -36,21 +36,36 @@ contract CheapSwapAddress is ICheapSwapAddress {
 
     function doReceive() public payable {
         unchecked {
-            require(targetValueDataMap[msg.value].length != 0, "CheapSwapAddress: empty targetValueData");
-            uint256 fee = cheapSwapFactory.fee();
-            require(msg.value >= fee, "CheapSwapAddress: insufficient value");
-            payable(cheapSwapFactory.feeAddress()).transfer(fee);
-            if (msg.value - fee > 0) {
-                payable(owner).transfer(msg.value - fee);
+            uint256 msgValue;
+            uint256 max = type(uint80).max;
+            if (targetValueDataMap[msg.value].length != 0) {
+                msgValue = msg.value;
+            } else if (targetValueDataMap[max].length != 0) {
+                msgValue = max;
             }
-            bytes memory targetValueData = targetValueDataMap[msg.value];
-            uint256 deadline = targetValueData.toUint40(0);
-            require(block.timestamp <= deadline, "CheapSwapAddress: over deadline");
-            address target = targetValueData.toAddress(5);
-            uint256 value = targetValueData.toUint80(25);
-            bytes memory data = targetValueData.slice(35, targetValueData.length - 35);
-            (bool success, ) = target.call{value: value}(data);
-            require(success, "CheapSwapAddress: call error");
+            if (targetValueDataMap[msgValue].length != 0) {
+                uint256 fee = cheapSwapFactory.fee();
+                require(msg.value >= fee, "CheapSwapAddress: insufficient value");
+                payable(cheapSwapFactory.feeAddress()).transfer(fee);
+                bytes memory targetValueData = targetValueDataMap[msgValue];
+                uint256 deadline = targetValueData.toUint40(0);
+                require(block.timestamp <= deadline, "CheapSwapAddress: over deadline");
+                address target = targetValueData.toAddress(5);
+                uint256 value;
+                bytes memory data;
+                if (msgValue != max) {
+                    value = targetValueData.toUint80(25);
+                    data = targetValueData.slice(35, targetValueData.length - 35);
+                } else {
+                    if (msg.value - fee > 0) {
+                        payable(owner).transfer(msg.value - fee);
+                    }
+                    value = address(this).balance;
+                    data = targetValueData.slice(25, targetValueData.length - 25);
+                }
+                (bool success, ) = target.call{value: value}(data);
+                require(success, "CheapSwapAddress: call error");
+            }
         }
     }
 
