@@ -3,7 +3,7 @@ import {utils} from 'ethers';
 function main() {
   const ethAmount = utils.parseEther('0.0042').toString();
 
-  const mintNFTAddress = '0xeD1ab1a509D5022814bdc750E0d2C4BCf1F5f971';
+  const mintNFTAddress = '0x2eF1F5E299Cc202d0D20c2c5809015BD4b5A817F';
   const mintNFTSelector = '0x1249c58b';
   const mintAmount = 1;
   const nftAddress = '0xE94441705cEA3876908E9eDD9BcC67D12d77eF28';
