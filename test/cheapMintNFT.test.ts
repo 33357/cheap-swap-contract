@@ -5,8 +5,8 @@ function main() {
 
   const mintNFTAddress = '0xeD1ab1a509D5022814bdc750E0d2C4BCf1F5f971';
   const mintNFTSelector = '0x1249c58b';
-  const mintAmount = 3;
-  const nftAddress = '0xdf76646579172515e8C5831cfEa7fE2159b69Fbc';
+  const mintAmount = 1;
+  const nftAddress = '0xE94441705cEA3876908E9eDD9BcC67D12d77eF28';
   const nftSelector = '0xa0712d68';
   const cheapMintNFTCode =
     mintNFTSelector +
