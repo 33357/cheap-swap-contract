@@ -8,13 +8,17 @@ contract ERC721_TEST is ERC721 {
 
     constructor() ERC721("ERC721_TEST", "ERC721") {}
 
-    function mint() external {
-        _mint(msg.sender, nextTokenId);
-        nextTokenId++;
+    function mint(uint256 quality) external {
+        for (uint256 i = 0; i < quality; i++) {
+            _mint(msg.sender, nextTokenId);
+            nextTokenId++;
+        }
     }
 
-    function safeMint() external {
-        _safeMint(msg.sender, nextTokenId);
-        nextTokenId++;
+    function safeMint(uint256 quality) external {
+        for (uint256 i = 0; i < quality; i++) {
+            _safeMint(msg.sender, nextTokenId);
+            nextTokenId++;
+        }
     }
 }
