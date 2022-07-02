@@ -34,7 +34,7 @@ contract CheapMintNFT is ICheapMintNFT {
             require(!success, "CheapMintNFT: can not get startTokenId");
             uint256 startTokenId = returnData.toUint256(returnData.length - 32);
             uint256 thisGas = gasleft();
-            uint256 beforeGas = thisGas;
+            uint256 beforeGas;
             uint256 useGas;
             while (thisGas >= useGas && address(this).balance >= value) {
                 beforeGas = thisGas;
