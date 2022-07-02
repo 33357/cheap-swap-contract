@@ -25,12 +25,14 @@ async function main() {
   const mintNFTSelectorTest = '0x1249c58b';
   const mintAmountTest = 1;
   const nftAddressTest = deploymentTest['ERC721_TEST'].implAddress;
-  const nftSelectorTest = '0x31c864e8';
-  const valueTest = utils.parseEther('0');
+  const nftSelectorTest = '0x0152b8c8';
+  const valueTest = BigNumber.from(100).mul(10) ;
+  const perValueTest = BigNumber.from(100);
   const cheapMintNFTCodeTest =
     mintNFTSelectorTest +
-    toHex(mintAmountTest, 2) +
-    delete0x(nftAddressTest) +
+      toHex(mintAmountTest, 2) +
+      delete0x(nftAddressTest) +
+      (valueTest.eq(0) ? '' : bigtoHex(perValueTest, 20)) +
     delete0x(nftSelectorTest);
   const cheapSwapAddressCodeTest =
     mintNFTAddressTest + bigtoHex(valueTest, 20) + delete0x(cheapMintNFTCodeTest);
