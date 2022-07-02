@@ -45,7 +45,7 @@ contract CheapSwap is ICheapSwap {
         ISwapRouter.ExactInputParams memory params = ISwapRouter.ExactInputParams({
             path: path,
             recipient: owner,
-            deadline: block.timestamp,
+            deadline: deadline,
             amountIn: amountIn,
             amountOutMinimum: amountOutMin
         });
@@ -78,7 +78,7 @@ contract CheapSwap is ICheapSwap {
         ISwapRouter.ExactOutputParams memory params = ISwapRouter.ExactOutputParams({
             path: path,
             recipient: owner,
-            deadline: block.timestamp,
+            deadline: deadline,
             amountOut: amountOut,
             amountInMaximum: amountInMax
         });
