@@ -82,7 +82,6 @@ contract CheapSwap is ICheapSwap {
             amountOut: amountOut,
             amountInMaximum: amountInMax
         });
-
         uint256 amountIn = Router.exactOutput(params);
         uint256 amount = amountInMax - amountIn;
         if (amount > 0) {
