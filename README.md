@@ -59,7 +59,7 @@ export GAS_PRICE=30
 
 #### deploy script
 ```bash
-yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:deploy --contract CheapSwapFactory2 --gas-price $GAS_PRICE --wait-num $WAIT_NUM --network $NETWORK_ID
+yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:deploy --contract CheapSwapFactory --gas-price $GAS_PRICE --wait-num $WAIT_NUM --network $NETWORK_ID
 
 yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:deploy --contract CheapMintNFT --gas-price $GAS_PRICE --wait-num $WAIT_NUM --network $NETWORK_ID
 
@@ -68,7 +68,7 @@ yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:deploy --contract ERC721
 
 #### verify contract
 ```bash
-yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapSwapFactory2 --args [] --network $NETWORK_ID
+yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapSwapFactory --args [] --network $NETWORK_ID
 
 yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapSwapAddress --args [\"0xEA20AAa104d17AdfF2fb719c4d855c21F9c5438e\"] --network $NETWORK_ID
 
