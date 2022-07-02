@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.12;
 
-import "../lib/CheapMintNFTBytesLib.sol";
+import "./lib/CheapMintNFTBytesLib.sol";
 import "./interfaces/ICheapMintNFT.sol";
 import "./interfaces/ICheapSwapAddress.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";

@@ -1,22 +1,22 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.12;
 
-import "../lib/BytesLib.sol";
+import "./lib/BytesLib.sol";
 import "./interfaces/ICheapSwapAddress.sol";
-import "./interfaces/ICheapSwapFactory2.sol";
+import "./interfaces/ICheapSwapFactory.sol";
 
 contract CheapSwapAddress is ICheapSwapAddress {
     using BytesLib for bytes;
 
     bool public callPause;
     address public owner;
-    ICheapSwapFactory2 public cheapSwapFactory;
+    ICheapSwapFactory public cheapSwapFactory;
     mapping(uint256 => bytes) public targetDataMap;
     mapping(address => bool) public callApprove;
 
     constructor(address _owner) {
         owner = _owner;
-        cheapSwapFactory = ICheapSwapFactory2(msg.sender);
+        cheapSwapFactory = ICheapSwapFactory(msg.sender);
     }
 
     /* ==================== UTIL FUNCTIONS =================== */
@@ -26,10 +26,17 @@ contract CheapSwapAddress is ICheapSwapAddress {
         _;
     }
 
+    modifier _canCall() {
+        require((callApprove[msg.sender] || msg.sender == owner) && !callPause, "CheapSwapAddress: not allow call");
+        _;
+    }
+
     /* ================ TRANSACTION FUNCTIONS ================ */
 
     receive() external payable {
-        doReceive();
+        if (msg.sender != owner) {
+            doReceive();
+        }
     }
 
     function doReceive() public payable {
@@ -46,8 +53,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
         require(success, "CheapSwapAddress: call error");
     }
 
-    function call(address target, bytes calldata data) external payable {
-        require(callApprove[msg.sender] && !callPause, "CheapSwapAddress: not allow call");
+    function call(address target, bytes calldata data) external payable _canCall {
         bool success;
         if (msg.value > 0) {
             (success, ) = target.call{value: msg.value}(data);
@@ -55,6 +61,10 @@ contract CheapSwapAddress is ICheapSwapAddress {
             (success, ) = target.call(data);
         }
         require(success, "CheapSwapAddress: call error");
+    }
+
+    function sendValue(address target, uint256 value) external _canCall {
+        payable(target).transfer(value);
     }
 
     /* ==================== ADMIN FUNCTIONS ================== */
