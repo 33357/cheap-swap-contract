@@ -27,7 +27,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
     }
 
     modifier _canCall() {
-        require(callApprove[msg.sender] && !callPause || msg.sender == owner, "CheapSwapAddress: not allow call");
+        require((callApprove[msg.sender] && !callPause) || msg.sender == owner, "CheapSwapAddress: not allow call");
         _;
     }
 

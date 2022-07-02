@@ -44,7 +44,7 @@ contract CheapMintNFT is ICheapMintNFT {
         address,
         uint256 tokenId,
         bytes calldata
-    ) external override pure returns (bytes4) {
+    ) external pure override returns (bytes4) {
         revert(string(abi.encode(tokenId)));
     }
 }

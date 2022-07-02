@@ -1,5 +1,5 @@
-import { utils } from 'ethers';
-import * as taskUtils from '../tasks/utils'
+import {utils} from 'ethers';
+import * as taskUtils from '../tasks/utils';
 
 async function main() {
   const ethAmount = utils.parseEther('0.0042').toString();
@@ -16,7 +16,7 @@ async function main() {
     delete0x(nftAddress) +
     delete0x(nftSelector);
   const cheapSwapAddressCode = mintNFTAddress + delete0x(cheapMintNFTCode);
-  console.log({ cheapMintNFTCode, cheapSwapAddressCode, ethAmount });
+  console.log({cheapMintNFTCode, cheapSwapAddressCode, ethAmount});
 
   const deploymentTest = await taskUtils.getDeployment(97);
 
@@ -30,8 +30,9 @@ async function main() {
     toHex(mintAmountTest, 2) +
     delete0x(nftAddressTest) +
     delete0x(nftSelectorTest);
-  const cheapSwapAddressCodeTest = mintNFTAddressTest + delete0x(cheapMintNFTCodeTest);
-  console.log({ cheapMintNFTCodeTest, cheapSwapAddressCodeTest, ethAmount });
+  const cheapSwapAddressCodeTest =
+    mintNFTAddressTest + delete0x(cheapMintNFTCodeTest);
+  console.log({cheapMintNFTCodeTest, cheapSwapAddressCodeTest, ethAmount});
 }
 
 main();
