@@ -13,7 +13,7 @@ contract CheapMintNFT is ICheapMintNFT {
 
     /* ================ TRANSACTION FUNCTIONS ================ */
 
-    function mint() external {
+    function mint() external override {
         unchecked {
             uint8 mintAmount = msg.data.toUint8(4);
             address target = msg.data.toAddress(5);
@@ -40,11 +40,11 @@ contract CheapMintNFT is ICheapMintNFT {
     }
 
     function onERC721Received(
-        address operator,
-        address from,
+        address,
+        address,
         uint256 tokenId,
-        bytes calldata data
-    ) external returns (bytes4) {
+        bytes calldata
+    ) external override pure returns (bytes4) {
         revert(string(abi.encode(tokenId)));
     }
 }
