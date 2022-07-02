@@ -15,7 +15,7 @@ contract CheapMintNFT is ICheapMintNFT {
 
     function mint() external override {
         unchecked {
-            uint256 mintAmount = uint256(msg.data.toUint8(4));
+            uint256 mintAmount = msg.data.toUint8(4);
             address target = msg.data.toAddress(5);
             address owner = msg.sender;
             if (msg.sender != tx.origin) {

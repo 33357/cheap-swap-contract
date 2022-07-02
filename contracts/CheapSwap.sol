@@ -20,9 +20,9 @@ contract CheapSwap is ICheapSwap {
     /* ================ TRANSACTION FUNCTIONS ================ */
 
     function exactInput() external payable {
-        uint256 deadline = uint256(msg.data.toUint32(4));
+        uint256 deadline = msg.data.toUint32(4);
         require(block.timestamp >= deadline, "CheapSwap: over deadline");
-        uint256 amountOutMin = uint256(msg.data.toUint112(8));
+        uint256 amountOutMin = msg.data.toUint112(8);
         uint256 amountIn;
         bytes memory path;
         ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
@@ -32,7 +32,7 @@ contract CheapSwap is ICheapSwap {
             path = msg.data.slice(22, msg.data.length - 22);
             WETH.deposit{value: amountIn}();
         } else {
-            amountIn = uint256(msg.data.toUint112(22));
+            amountIn = msg.data.toUint112(22);
             path = msg.data.slice(36, msg.data.length - 36);
             address tokenIn = path.toAddress(0);
             cheapSwapAddress.call(
@@ -55,9 +55,9 @@ contract CheapSwap is ICheapSwap {
     }
 
     function exactOutput() external payable {
-        uint256 deadline = uint256(msg.data.toUint32(4));
+        uint256 deadline = msg.data.toUint32(4);
         require(block.timestamp >= deadline, "CheapSwap: over deadline");
-        uint256 amountOut = uint256(msg.data.toUint112(8));
+        uint256 amountOut = msg.data.toUint112(8);
         uint256 amountInMax;
         bytes memory path;
         address tokenIn;
@@ -68,7 +68,7 @@ contract CheapSwap is ICheapSwap {
             path = msg.data.slice(22, msg.data.length - 22);
             WETH.deposit{value: amountInMax}();
         } else {
-            amountInMax = uint256(msg.data.toUint112(22));
+            amountInMax = msg.data.toUint112(22);
             path = msg.data.slice(36, msg.data.length - 36);
             tokenIn = path.toAddress(23);
             cheapSwapAddress.call(
