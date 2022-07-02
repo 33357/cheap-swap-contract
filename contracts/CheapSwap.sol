@@ -88,9 +88,9 @@ contract CheapSwap is ICheapSwap {
         if (amount > 0) {
             if (tokenIn == address(0)) {
                 WETH.withdraw(amount);
-                payable(cheapSwapAddress.owner()).transfer(amount);
+                payable(owner).transfer(amount);
             }
-            IERC20(tokenIn).transfer(cheapSwapAddress.owner(), amount);
+            IERC20(tokenIn).transfer(owner, amount);
         }
     }
 
