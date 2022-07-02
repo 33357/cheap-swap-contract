@@ -20,18 +20,14 @@ function main() {
   const cheapSwapAddressCode = mintNFTAddress + delete0x(cheapMintNFTCode);
   console.log({cheapMintNFTCode, cheapSwapAddressCode, ethAmount});
 
-  const _mintNFTAddress = '0x2B65A39B3a91e5E209000dF9ABA52C0E6b1606E6';
+  const _mintNFTAddress = '0xAB93961ad0c4d5EF38cDd838E623726b228FA9bC';
   const _mintNFTSelector = '0x1249c58b';
-  const _createAmount = 1;
   const _mintAmount = 1;
-  const _startTokenId = 10;
   const _nftAddress = '0xD524313285c11C150e4B762f2adFE54D4Bf7d429';
   const _nftSelector = '0x6871ee40';
   const _cheapMintNFTCode =
     _mintNFTSelector +
-    toHex(_createAmount, 2) +
     toHex(_mintAmount, 2) +
-    toHex(_startTokenId, 6) +
     delete0x(_nftAddress) +
     delete0x(_nftSelector);
   const _cheapSwapAddressCode = _mintNFTAddress + delete0x(_cheapMintNFTCode);

@@ -15,14 +15,14 @@ contract CheapMintNFT2 is ICheapMintNFT2 {
 
     function mint() external {
         unchecked {
-            uint8 mintAmount = msg.data.toUint8(0);
-            address target = msg.data.toAddress(1);
+            uint8 mintAmount = msg.data.toUint8(4);
+            address target = msg.data.toAddress(5);
             address owner = msg.sender;
             if (msg.sender != tx.origin) {
                 ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
                 owner = cheapSwapAddress.owner();
             }
-            bytes memory mintData = msg.data.slice(21, msg.data.length - 21);
+            bytes memory mintData = msg.data.slice(25, msg.data.length - 25);
             (bool success, bytes memory returnData) = target.call(abi.encodePacked(mintData, mintAmount));
             require(!success, "CheapMintNFT: can not get startTokenId");
             uint256 startTokenId = returnData.toUint256(returnData.length - 32);
