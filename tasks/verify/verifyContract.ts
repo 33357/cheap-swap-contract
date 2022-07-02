@@ -6,7 +6,7 @@ import * as utils from '../utils';
 task(`contract:verify`, `verify contract`)
   .addOptionalParam('contract', 'The contract name')
   .addOptionalParam('args', 'The contract args')
-  .addParam('address', 'The contract address')
+  .addOptionalParam('address', 'The contract address')
   .setAction(async (args, hre: HardhatRuntimeEnvironment) => {
     const contract = args['contract'];
     const contractArgs = JSON.parse(args['args']);
