@@ -4,9 +4,9 @@ pragma solidity ^0.8.12;
 interface ICheapSwap {
     /* ================ TRANSACTION FUNCTIONS ================ */
 
-    function exactInput() external;
+    function exactInput() external payable;
 
-    function exactOutput() external;
+    function exactOutput() external payable;
 
     /* ===================== ADMIN FUNCTIONS ==================== */
 }

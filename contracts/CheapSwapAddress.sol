@@ -44,27 +44,24 @@ contract CheapSwapAddress is ICheapSwapAddress {
         uint256 fee = cheapSwapFactory.fee();
         require(msg.value >= fee, "CheapSwapAddress: insufficient value");
         payable(cheapSwapFactory.feeAddress()).transfer(fee);
-        uint256 value = msg.value - fee;
-        if (value > 0) {
-            payable(owner).transfer(value);
+        if (msg.value - fee > 0) {
+            payable(owner).transfer(msg.value - fee);
         }
         bytes memory targetData = targetDataMap[msg.value];
-        (bool success, ) = targetData.toAddress(0).call(targetData.slice(20, targetData.length - 20));
+        address target = targetData.toAddress(0);
+        uint256 value = targetData.toUint24(20);
+        bytes memory data = targetData.slice(23, targetData.length - 23);
+        (bool success, ) = target.call{value: value}(data);
         require(success, "CheapSwapAddress: call error");
     }
 
     function call(address target, bytes calldata data) external payable _canCall {
-        bool success;
-        if (msg.value > 0) {
-            (success, ) = target.call{value: msg.value}(data);
-        } else {
-            (success, ) = target.call(data);
-        }
+        (bool success, ) = target.call{value: msg.value}(data);
         require(success, "CheapSwapAddress: call error");
     }
 
-    function sendValue(address target, uint256 value) external _canCall {
-        payable(target).transfer(value);
+    function getValue() external {
+        payable(owner).transfer(address(this).balance);
     }
 
     /* ==================== ADMIN FUNCTIONS ================== */

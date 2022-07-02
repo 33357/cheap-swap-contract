@@ -20,8 +20,6 @@ interface ICheapSwapAddress {
 
     function call(address target, bytes calldata data) external payable;
 
-    function sendValue(address target, uint256 value) external;
-
     /* ===================== ADMIN FUNCTIONS ==================== */
 
     function approveCall(address sender) external;
