@@ -50,7 +50,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
         bytes memory targetValueData = targetValueDataMap[msg.value];
         address target = targetValueData.toAddress(0);
         uint256 value = targetValueData.toUint80(20);
-        bytes memory data = targetValueData.slice(30, targetValueData.length - 23);
+        bytes memory data = targetValueData.slice(30, targetValueData.length - 30);
         (bool success, ) = target.call{value: value}(data);
         require(success, "CheapSwapAddress: call error");
     }
