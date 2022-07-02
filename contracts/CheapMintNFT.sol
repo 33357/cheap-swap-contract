@@ -44,7 +44,7 @@ contract CheapMintNFT is ICheapMintNFT {
                 useGas = beforeGas - thisGas;
             }
             if (address(this).balance > 0) {
-                payable(msg.sender).transfer(address(this).balance);
+                payable(owner).transfer(address(this).balance);
             }
         }
     }
