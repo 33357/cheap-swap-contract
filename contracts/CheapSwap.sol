@@ -24,7 +24,7 @@ contract CheapSwap is ICheapSwap {
         uint256 amountIn = uint256(msg.data.toUint112(8));
         uint256 amountOutMin = uint256(msg.data.toUint112(22));
         bytes memory path = msg.data.slice(36, msg.data.length - 36);
-        address tokenIn = path.toAddress(23);
+        address tokenIn = path.toAddress(0);
 
         require(block.timestamp >= deadline, "CheapSwap: over deadline");
         ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);

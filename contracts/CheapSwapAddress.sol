@@ -1,12 +1,12 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.12;
 
-import "./lib/BytesLib.sol";
+import "./lib/CheapSwapAddressBytesLib.sol";
 import "./interfaces/ICheapSwapAddress.sol";
 import "./interfaces/ICheapSwapFactory.sol";
 
 contract CheapSwapAddress is ICheapSwapAddress {
-    using BytesLib for bytes;
+    using CheapSwapAddressBytesLib for bytes;
 
     bool public callPause;
     address public owner;
