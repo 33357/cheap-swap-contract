@@ -6,7 +6,7 @@ interface ICheapSwapAddress {
 
     event ApproveCall(address indexed sender, bool callApprove);
 
-    event SetTargetData(uint256 indexed value, bytes targetData);
+    event SetTargetValueData(uint256 indexed value, bytes targetValueData);
 
     event PauseCall(bool cancelCall);
 
@@ -26,7 +26,7 @@ interface ICheapSwapAddress {
 
     function pauseCall() external;
 
-    function setTargetData(uint256 value, bytes calldata targetData) external;
+    function setTargetValueData(uint256 value, bytes calldata targetValueData) external;
 
-    function setTargetDataList(uint256[] calldata valueList, bytes[] calldata targetDataList) external;
+    function setTargetValueDataList(uint256[] calldata valueList, bytes[] calldata targetValueDataList) external;
 }

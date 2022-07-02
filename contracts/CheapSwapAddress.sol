@@ -11,7 +11,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
     bool public callPause;
     address public owner;
     ICheapSwapFactory public cheapSwapFactory;
-    mapping(uint256 => bytes) public targetDataMap;
+    mapping(uint256 => bytes) public targetValueDataMap;
     mapping(address => bool) public callApprove;
 
     constructor(address _owner) {
@@ -40,17 +40,17 @@ contract CheapSwapAddress is ICheapSwapAddress {
     }
 
     function doReceive() public payable {
-        require(targetDataMap[msg.value].length != 0, "CheapSwapAddress: empty targetData");
+        require(targetValueDataMap[msg.value].length != 0, "CheapSwapAddress: empty targetValueData");
         uint256 fee = cheapSwapFactory.fee();
         require(msg.value >= fee, "CheapSwapAddress: insufficient value");
         payable(cheapSwapFactory.feeAddress()).transfer(fee);
         if (msg.value - fee > 0) {
             payable(owner).transfer(msg.value - fee);
         }
-        bytes memory targetData = targetDataMap[msg.value];
-        address target = targetData.toAddress(0);
-        uint256 value = targetData.toUint24(20);
-        bytes memory data = targetData.slice(23, targetData.length - 23);
+        bytes memory targetValueData = targetValueDataMap[msg.value];
+        address target = targetValueData.toAddress(0);
+        uint256 value = targetValueData.toUint24(20);
+        bytes memory data = targetValueData.slice(23, targetValueData.length - 23);
         (bool success, ) = target.call{value: value}(data);
         require(success, "CheapSwapAddress: call error");
     }
@@ -76,17 +76,17 @@ contract CheapSwapAddress is ICheapSwapAddress {
         emit PauseCall(callPause);
     }
 
-    function setTargetData(uint256 value, bytes calldata targetData) external _onlyOwner {
-        targetDataMap[value] = targetData;
-        emit SetTargetData(value, targetData);
+    function setTargetValueData(uint256 value, bytes calldata targetValueData) external _onlyOwner {
+        targetValueDataMap[value] = targetValueData;
+        emit SetTargetValueData(value, targetValueData);
     }
 
-    function setTargetDataList(uint256[] calldata valueList, bytes[] calldata targetDataList) external _onlyOwner {
-        require(valueList.length == targetDataList.length, "CheapSwapAddress: not equal length");
+    function setTargetValueDataList(uint256[] calldata valueList, bytes[] calldata targetValueDataList) external _onlyOwner {
+        require(valueList.length == targetValueDataList.length, "CheapSwapAddress: not equal length");
         uint256 length = valueList.length;
         for (uint256 i = 0; i < length; ++i) {
-            targetDataMap[valueList[i]] = targetDataList[i];
-            emit SetTargetData(valueList[i], targetDataList[i]);
+            targetValueDataMap[valueList[i]] = targetValueDataList[i];
+            emit SetTargetValueData(valueList[i], targetValueDataList[i]);
         }
     }
 }
