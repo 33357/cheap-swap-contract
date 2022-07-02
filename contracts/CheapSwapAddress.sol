@@ -8,11 +8,11 @@ import "./interfaces/ICheapSwapFactory.sol";
 contract CheapSwapAddress is ICheapSwapAddress {
     using CheapSwapAddressBytesLib for bytes;
 
-    bool public callPause;
+    bool public pause;
     address public owner;
     ICheapSwapFactory public cheapSwapFactory;
     mapping(uint256 => bytes) public targetValueDataMap;
-    mapping(address => bool) public callApprove;
+    mapping(address => bool) public approve;
 
     constructor(address _owner) {
         owner = _owner;
@@ -35,23 +35,25 @@ contract CheapSwapAddress is ICheapSwapAddress {
     }
 
     function doReceive() public payable {
-        require(targetValueDataMap[msg.value].length != 0, "CheapSwapAddress: empty targetValueData");
-        uint256 fee = cheapSwapFactory.fee();
-        require(msg.value >= fee, "CheapSwapAddress: insufficient value");
-        payable(cheapSwapFactory.feeAddress()).transfer(fee);
-        if (msg.value - fee > 0) {
-            payable(owner).transfer(msg.value - fee);
+        unchecked {
+            require(targetValueDataMap[msg.value].length != 0, "CheapSwapAddress: empty targetValueData");
+            uint256 fee = cheapSwapFactory.fee();
+            require(msg.value >= fee, "CheapSwapAddress: insufficient value");
+            payable(cheapSwapFactory.feeAddress()).transfer(fee);
+            if (msg.value - fee > 0) {
+                payable(owner).transfer(msg.value - fee);
+            }
+            bytes memory targetValueData = targetValueDataMap[msg.value];
+            address target = targetValueData.toAddress(0);
+            uint256 value = targetValueData.toUint80(20);
+            bytes memory data = targetValueData.slice(30, targetValueData.length - 30);
+            (bool success, ) = target.call{value: value}(data);
+            require(success, "CheapSwapAddress: call error");
         }
-        bytes memory targetValueData = targetValueDataMap[msg.value];
-        address target = targetValueData.toAddress(0);
-        uint256 value = targetValueData.toUint80(20);
-        bytes memory data = targetValueData.slice(30, targetValueData.length - 30);
-        (bool success, ) = target.call{value: value}(data);
-        require(success, "CheapSwapAddress: call error");
     }
 
     function call(address target, bytes calldata data) external payable {
-        require((callApprove[msg.sender] && !callPause) || msg.sender == owner, "CheapSwapAddress: not allow call");
+        require((approve[msg.sender] && !pause) || msg.sender == owner, "CheapSwapAddress: not allow call");
         (bool success, ) = target.call{value: msg.value}(data);
         require(success, "CheapSwapAddress: call error");
     }
@@ -62,14 +64,14 @@ contract CheapSwapAddress is ICheapSwapAddress {
         payable(owner).transfer(address(this).balance);
     }
 
-    function approveCall(address sender) external _onlyOwner {
-        callApprove[sender] = !callApprove[sender];
-        emit ApproveCall(sender, callApprove[sender]);
+    function setApprove(address sender, bool isApprove) external _onlyOwner {
+        approve[sender] = isApprove;
+        emit SetApprove(sender, approve[sender]);
     }
 
-    function pauseCall() external _onlyOwner {
-        callPause = !callPause;
-        emit PauseCall(callPause);
+    function setPause(bool isPause) external _onlyOwner {
+        pause = isPause;
+        emit SetPause(isPause);
     }
 
     function setTargetValueData(uint256 value, bytes calldata targetValueData) external _onlyOwner {
