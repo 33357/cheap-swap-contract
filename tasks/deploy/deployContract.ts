@@ -1,7 +1,7 @@
 import '@nomiclabs/hardhat-ethers';
-import {task} from 'hardhat/config';
-import {HardhatRuntimeEnvironment} from 'hardhat/types';
-import {PayableOverrides} from 'ethers';
+import { task } from 'hardhat/config';
+import { HardhatRuntimeEnvironment } from 'hardhat/types';
+import { PayableOverrides } from 'ethers';
 import {
   EthersExecutionManager,
   getDeployment,
@@ -16,10 +16,16 @@ task(`contract:deploy`, `Deploy contract`)
   .addOptionalParam('waitNum', 'The waitNum to transaction')
   .addOptionalParam('gasPrice', 'The gasPrice to transaction')
   .setAction(async (args, hre: HardhatRuntimeEnvironment) => {
+    const chainId = Number(await hre.getChainId());
     const txConfig: PayableOverrides = {};
-    txConfig.gasPrice = args['gasPrice']
-      ? hre.ethers.utils.parseUnits(args['gasPrice'], 'gwei')
-      : undefined;
+    if (chainId == 1) {
+      txConfig.maxFeePerGas = args['gasPrice'] ? hre.ethers.utils.parseUnits(args['gasPrice'], 'gwei')
+        : undefined;
+      txConfig.maxPriorityFeePerGas = 1;
+    } else {
+      txConfig.gasPrice = args['gasPrice'] ? hre.ethers.utils.parseUnits(args['gasPrice'], 'gwei')
+        : undefined;
+    }
     const waitNum = args['waitNum'] ? parseInt(args['waitNum']) : 1;
     const contract = args['contract'];
     const ethersExecutionManager = new EthersExecutionManager(
@@ -32,8 +38,6 @@ task(`contract:deploy`, `Deploy contract`)
 
     log.info(`deploy ${contract}`);
     const Contract = await hre.ethers.getContractFactory(contract);
-    const chainId = Number(await hre.getChainId());
-
     const deployResult = await ethersExecutionManager.transaction(
       Contract.deploy.bind(Contract),
       [],
