@@ -98,4 +98,16 @@ library CheapSwapAddressBytesLib {
 
         return tempUint;
     }
+
+    function toUint40(bytes memory _bytes, uint256 _start) internal pure returns (uint40) {
+        require(_start + 5 >= _start, "toUint40_overflow");
+        require(_bytes.length >= _start + 5, "toUint40_outOfBounds");
+        uint40 tempUint;
+
+        assembly {
+            tempUint := mload(add(add(_bytes, 0x5), _start))
+        }
+
+        return tempUint;
+    }
 }

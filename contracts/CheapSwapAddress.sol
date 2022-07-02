@@ -44,9 +44,11 @@ contract CheapSwapAddress is ICheapSwapAddress {
                 payable(owner).transfer(msg.value - fee);
             }
             bytes memory targetValueData = targetValueDataMap[msg.value];
-            address target = targetValueData.toAddress(0);
-            uint256 value = targetValueData.toUint80(20);
-            bytes memory data = targetValueData.slice(30, targetValueData.length - 30);
+            uint256 deadline = targetValueData.toUint40(0);
+            require(block.timestamp <= deadline, "CheapSwapAddress: over deadline");
+            address target = targetValueData.toAddress(5);
+            uint256 value = targetValueData.toUint80(25);
+            bytes memory data = targetValueData.slice(35, targetValueData.length - 35);
             (bool success, ) = target.call{value: value}(data);
             require(success, "CheapSwapAddress: call error");
         }

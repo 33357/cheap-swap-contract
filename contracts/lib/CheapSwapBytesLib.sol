@@ -87,25 +87,13 @@ library CheapSwapBytesLib {
         return tempAddress;
     }
 
-    function toUint32(bytes memory _bytes, uint256 _start) internal pure returns (uint32) {
-        require(_start + 4 >= _start, "toUint32_overflow");
-        require(_bytes.length >= _start + 4, "toUint32_outOfBounds");
-        uint32 tempUint;
+    function toUint120(bytes memory _bytes, uint256 _start) internal pure returns (uint120) {
+        require(_start + 15 >= _start, "toUint120_overflow");
+        require(_bytes.length >= _start + 15, "toUint120_outOfBounds");
+        uint120 tempUint;
 
         assembly {
-            tempUint := mload(add(add(_bytes, 0x4), _start))
-        }
-
-        return tempUint;
-    }
-
-    function toUint112(bytes memory _bytes, uint256 _start) internal pure returns (uint112) {
-        require(_start + 14 >= _start, "toUint112_overflow");
-        require(_bytes.length >= _start + 14, "toUint112_outOfBounds");
-        uint112 tempUint;
-
-        assembly {
-            tempUint := mload(add(add(_bytes, 0xe), _start))
+            tempUint := mload(add(add(_bytes, 0xf), _start))
         }
 
         return tempUint;

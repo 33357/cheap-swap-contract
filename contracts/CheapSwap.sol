@@ -20,20 +20,18 @@ contract CheapSwap is ICheapSwap {
     /* ================ TRANSACTION FUNCTIONS ================ */
 
     function exactInput() external payable {
-        uint256 deadline = msg.data.toUint32(4);
-        require(block.timestamp >= deadline, "CheapSwap: over deadline");
-        uint256 amountOutMin = msg.data.toUint112(8);
+        uint256 amountOutMin = msg.data.toUint120(4);
         uint256 amountIn;
         bytes memory path;
         ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
         address owner = cheapSwapAddress.owner();
         if (msg.value > 0) {
             amountIn = msg.value;
-            path = msg.data.slice(22, msg.data.length - 22);
+            path = msg.data.slice(19, msg.data.length - 19);
             WETH.deposit{value: amountIn}();
         } else {
-            amountIn = msg.data.toUint112(22);
-            path = msg.data.slice(36, msg.data.length - 36);
+            amountIn = msg.data.toUint120(19);
+            path = msg.data.slice(34, msg.data.length - 34);
             address tokenIn = path.toAddress(0);
             cheapSwapAddress.call(
                 tokenIn,
@@ -47,7 +45,7 @@ contract CheapSwap is ICheapSwap {
         ISwapRouter.ExactInputParams memory params = ISwapRouter.ExactInputParams({
             path: path,
             recipient: owner,
-            deadline: deadline,
+            deadline: block.timestamp,
             amountIn: amountIn,
             amountOutMinimum: amountOutMin
         });
@@ -55,9 +53,7 @@ contract CheapSwap is ICheapSwap {
     }
 
     function exactOutput() external payable {
-        uint256 deadline = msg.data.toUint32(4);
-        require(block.timestamp >= deadline, "CheapSwap: over deadline");
-        uint256 amountOut = msg.data.toUint112(8);
+        uint256 amountOut = msg.data.toUint120(4);
         uint256 amountInMax;
         bytes memory path;
         address tokenIn;
@@ -65,11 +61,11 @@ contract CheapSwap is ICheapSwap {
         address owner = cheapSwapAddress.owner();
         if (msg.value > 0) {
             amountInMax = msg.value;
-            path = msg.data.slice(22, msg.data.length - 22);
+            path = msg.data.slice(19, msg.data.length - 19);
             WETH.deposit{value: amountInMax}();
         } else {
-            amountInMax = msg.data.toUint112(22);
-            path = msg.data.slice(36, msg.data.length - 36);
+            amountInMax = msg.data.toUint120(19);
+            path = msg.data.slice(34, msg.data.length - 34);
             tokenIn = path.toAddress(23);
             cheapSwapAddress.call(
                 tokenIn,
@@ -83,7 +79,7 @@ contract CheapSwap is ICheapSwap {
         ISwapRouter.ExactOutputParams memory params = ISwapRouter.ExactOutputParams({
             path: path,
             recipient: owner,
-            deadline: deadline,
+            deadline: block.timestamp,
             amountOut: amountOut,
             amountInMaximum: amountInMax
         });
