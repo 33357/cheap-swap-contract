@@ -37,11 +37,8 @@ contract CheapSwapAddress is ICheapSwapAddress {
     function doReceive() public payable {
         unchecked {
             uint256 msgValue;
-            uint256 max = type(uint80).max;
             if (targetValueDataMap[msg.value].length != 0) {
                 msgValue = msg.value;
-            } else if (targetValueDataMap[max].length != 0) {
-                msgValue = max;
             }
             if (targetValueDataMap[msgValue].length != 0) {
                 uint256 fee = cheapSwapFactory.fee();
@@ -53,7 +50,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
                 address target = targetValueData.toAddress(5);
                 uint256 value;
                 bytes memory data;
-                if (msgValue != max) {
+                if (msgValue != 0) {
                     value = targetValueData.toUint80(25);
                     data = targetValueData.slice(35, targetValueData.length - 35);
                 } else {
