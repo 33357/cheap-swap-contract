@@ -1,4 +1,4 @@
-import {utils} from 'ethers';
+import { BigNumber, utils } from 'ethers';
 import * as taskUtils from '../tasks/utils';
 
 async function main() {
@@ -10,13 +10,14 @@ async function main() {
   const mintAmount = 1;
   const nftAddress = '0xE94441705cEA3876908E9eDD9BcC67D12d77eF28';
   const nftSelector = '0xa0712d68';
+  const value = utils.parseEther('0');
   const cheapMintNFTCode =
     mintNFTSelector +
     toHex(mintAmount, 2) +
     delete0x(nftAddress) +
     delete0x(nftSelector);
-  const cheapSwapAddressCode = mintNFTAddress + delete0x(cheapMintNFTCode);
-  console.log({cheapMintNFTCode, cheapSwapAddressCode, ethAmount});
+  const cheapSwapAddressCode = mintNFTAddress + delete0x(bigtoHex(value, 20)) + delete0x(cheapMintNFTCode);
+  console.log({ cheapMintNFTCode, cheapSwapAddressCode, ethAmount });
 
   const deploymentTest = await taskUtils.getDeployment(97);
 
@@ -25,20 +26,29 @@ async function main() {
   const mintAmountTest = 1;
   const nftAddressTest = deploymentTest['ERC721_TEST'].implAddress;
   const nftSelectorTest = '0x31c864e8';
+  const valueTest = utils.parseEther('0');
   const cheapMintNFTCodeTest =
     mintNFTSelectorTest +
     toHex(mintAmountTest, 2) +
     delete0x(nftAddressTest) +
     delete0x(nftSelectorTest);
   const cheapSwapAddressCodeTest =
-    mintNFTAddressTest + delete0x(cheapMintNFTCodeTest);
-  console.log({cheapMintNFTCodeTest, cheapSwapAddressCodeTest, ethAmount});
+    mintNFTAddressTest + bigtoHex(valueTest, 20) + delete0x(cheapMintNFTCodeTest);
+  console.log({ cheapMintNFTCodeTest, cheapSwapAddressCodeTest, ethAmount });
 }
 
 main();
 
 function toHex(num: number, fixed: number) {
   let hex = num.toString(16);
+  while (hex.length < fixed) {
+    hex = '0' + hex;
+  }
+  return hex;
+}
+
+function bigtoHex(big: BigNumber, fixed: number) {
+  let hex = delete0x(big.toHexString());
   while (hex.length < fixed) {
     hex = '0' + hex;
   }
