@@ -58,19 +58,6 @@ contract CheapMintNFT is ICheapMintNFT {
     ) external pure override returns (bytes4) {
         revert(string(abi.encode(tokenId)));
     }
-
-    function calculateAddr(bytes32 salt) public view override returns (address) {
-        return
-            address(
-                uint160(
-                    uint256(
-                        keccak256(
-                            abi.encodePacked(bytes1(0xff), address(this), salt, keccak256(type(MintNFT).creationCode))
-                        )
-                    )
-                )
-            );
-    }
 }
 
 contract MintNFT {
