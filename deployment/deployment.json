@@ -33,20 +33,12 @@
       "fromBlock": 15037390
     },
     "CheapMintNFT": {
-      "proxyAddress": "0xd0116f96E3d934738d7C9a92936B8879176B5137",
-      "implAddress": "0xd0116f96E3d934738d7C9a92936B8879176B5137",
+      "proxyAddress": "0xeD1ab1a509D5022814bdc750E0d2C4BCf1F5f971",
+      "implAddress": "0xeD1ab1a509D5022814bdc750E0d2C4BCf1F5f971",
       "version": "1.0.0",
       "contract": "CheapMintNFT",
       "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
-      "fromBlock": 15056204
-    },
-    "CheapMintNFT2": {
-      "proxyAddress": "0x174dC5e369993bE60A16657F32E24380fc8A709F",
-      "implAddress": "0x174dC5e369993bE60A16657F32E24380fc8A709F",
-      "version": "1.0.0",
-      "contract": "CheapMintNFT2",
-      "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
-      "fromBlock": 15060022
+      "fromBlock": 15061183
     }
   },
   "97": {
@@ -67,12 +59,12 @@
       "fromBlock": 20641531
     },
     "CheapMintNFT": {
-      "proxyAddress": "0x55235177DCA0bc768C5c3EB856D419dd48c74A5f",
-      "implAddress": "0x55235177DCA0bc768C5c3EB856D419dd48c74A5f",
+      "proxyAddress": "0x473eDE716359EFCc81b21612970DF773703EeF03",
+      "implAddress": "0x473eDE716359EFCc81b21612970DF773703EeF03",
       "version": "1.0.0",
       "contract": "CheapMintNFT",
       "operator": "0x588DB5090Cc9a2fC4b82c4d900CE73043711372D",
-      "fromBlock": 20676002
+      "fromBlock": 20698286
     },
     "ERC721_TEST": {
       "proxyAddress": "0xD524313285c11C150e4B762f2adFE54D4Bf7d429",
@@ -81,14 +73,6 @@
       "contract": "ERC721_TEST",
       "operator": "0x588DB5090Cc9a2fC4b82c4d900CE73043711372D",
       "fromBlock": 20671628
-    },
-    "CheapMintNFT2": {
-      "proxyAddress": "0x2B65A39B3a91e5E209000dF9ABA52C0E6b1606E6",
-      "implAddress": "0x2B65A39B3a91e5E209000dF9ABA52C0E6b1606E6",
-      "version": "1.0.0",
-      "contract": "CheapMintNFT2",
-      "operator": "0x588DB5090Cc9a2fC4b82c4d900CE73043711372D",
-      "fromBlock": 20681531
     }
   }
 }
