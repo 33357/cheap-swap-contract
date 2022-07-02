@@ -27,7 +27,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
     }
 
     modifier _canCall() {
-        require((callApprove[msg.sender] || msg.sender == owner) && !callPause, "CheapSwapAddress: not allow call");
+        require(callApprove[msg.sender] && !callPause || msg.sender == owner, "CheapSwapAddress: not allow call");
         _;
     }
 
@@ -60,11 +60,11 @@ contract CheapSwapAddress is ICheapSwapAddress {
         require(success, "CheapSwapAddress: call error");
     }
 
-    function getValue() external {
+    /* ==================== ADMIN FUNCTIONS ================== */
+
+    function getValue() external _onlyOwner {
         payable(owner).transfer(address(this).balance);
     }
-
-    /* ==================== ADMIN FUNCTIONS ================== */
 
     function approveCall(address sender) external _onlyOwner {
         callApprove[sender] = !callApprove[sender];
@@ -81,7 +81,10 @@ contract CheapSwapAddress is ICheapSwapAddress {
         emit SetTargetValueData(value, targetValueData);
     }
 
-    function setTargetValueDataList(uint256[] calldata valueList, bytes[] calldata targetValueDataList) external _onlyOwner {
+    function setTargetValueDataList(uint256[] calldata valueList, bytes[] calldata targetValueDataList)
+        external
+        _onlyOwner
+    {
         require(valueList.length == targetValueDataList.length, "CheapSwapAddress: not equal length");
         uint256 length = valueList.length;
         for (uint256 i = 0; i < length; ++i) {
