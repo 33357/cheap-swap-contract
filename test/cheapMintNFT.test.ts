@@ -3,18 +3,14 @@ import {utils} from 'ethers';
 function main() {
   const ethAmount = utils.parseEther('0.0042').toString();
 
-  const mintNFTAddress = '0x174dC5e369993bE60A16657F32E24380fc8A709F';
+  const mintNFTAddress = '0xeD1ab1a509D5022814bdc750E0d2C4BCf1F5f971';
   const mintNFTSelector = '0x1249c58b';
-  const createAmount = 1;
   const mintAmount = 3;
-  const startTokenId = 1136;
   const nftAddress = '0xdf76646579172515e8C5831cfEa7fE2159b69Fbc';
   const nftSelector = '0xa0712d68';
   const cheapMintNFTCode =
     mintNFTSelector +
-    toHex(createAmount, 2) +
     toHex(mintAmount, 2) +
-    toHex(startTokenId, 6) +
     delete0x(nftAddress) +
     delete0x(nftSelector);
   const cheapSwapAddressCode = mintNFTAddress + delete0x(cheapMintNFTCode);
@@ -22,7 +18,7 @@ function main() {
 
   const _mintNFTAddress = '0xAB93961ad0c4d5EF38cDd838E623726b228FA9bC';
   const _mintNFTSelector = '0x1249c58b';
-  const _mintAmount = 1;
+  const _mintAmount = 3;
   const _nftAddress = '0xD524313285c11C150e4B762f2adFE54D4Bf7d429';
   const _nftSelector = '0x6871ee40';
   const _cheapMintNFTCode =
