@@ -64,8 +64,6 @@ yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:deploy --contract CheapS
 yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:deploy --contract CheapMintNFT --gas-price $GAS_PRICE --wait-num $WAIT_NUM --network $NETWORK_ID
 
 yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:deploy --contract ERC721_TEST --gas-price $GAS_PRICE --wait-num $WAIT_NUM --network $NETWORK_ID
-
-yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:deploy --contract CheapMintNFT2 --gas-price $GAS_PRICE --wait-num $WAIT_NUM --network $NETWORK_ID
 ```
 
 #### verify contract
@@ -77,6 +75,4 @@ yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapS
 yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapMintNFT --args [] --network $NETWORK_ID
 
 yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract ERC721_TEST --args [] --network $NETWORK_ID
-
-yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapMintNFT2 --args [] --network $NETWORK_ID
 ```
