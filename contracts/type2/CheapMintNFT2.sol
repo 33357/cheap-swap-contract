@@ -14,27 +14,38 @@ contract CheapMintNFT2 is ICheapMintNFT2 {
     /* ================ TRANSACTION FUNCTIONS ================ */
 
     function mint() external {
-        uint8 createAmount = msg.data.toUint8(4);
-        uint8 mintAmount = msg.data.toUint8(5);
-        uint24 startTokenId = msg.data.toUint24(6);
-        address target = msg.data.toAddress(9);
-        address owner = msg.sender;
-        if (msg.sender != tx.origin) {
-            ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
-            owner = cheapSwapAddress.owner();
-        }
-        IERC721 nft = IERC721(target);
-        while (true) {
-            try nft.ownerOf(startTokenId) returns (address) {
-                ++startTokenId;
-            } catch (bytes memory) {
-                break;
+        unchecked {
+            uint8 mintAmount = msg.data.toUint8(0);
+            address target = msg.data.toAddress(1);
+            address owner = msg.sender;
+            if (msg.sender != tx.origin) {
+                ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
+                owner = cheapSwapAddress.owner();
+            }
+            bytes memory mintData = msg.data.slice(21, msg.data.length - 21);
+            (bool success, bytes memory returnData) = target.call(abi.encodePacked(mintData, mintAmount));
+            require(!success, "CheapMintNFT: can not get startTokenId");
+            uint256 startTokenId = returnData.toUint256(returnData.length - 32);
+            uint256 thisGas = gasleft();
+            uint256 beforeGas = thisGas;
+            uint256 useGas;
+            while (thisGas >= useGas) {
+                beforeGas = thisGas;
+                new MintNFT(mintAmount, startTokenId, owner, target, mintData);
+                startTokenId += mintAmount;
+                thisGas = gasleft();
+                useGas = beforeGas - thisGas;
             }
         }
-        for (uint8 i = 0; i < createAmount; ++i) {
-            new MintNFT(mintAmount, startTokenId, owner, target, msg.data.slice(29, msg.data.length - 29));
-            startTokenId += mintAmount;
-        }
+    }
+
+    function onERC721Received(
+        address operator,
+        address from,
+        uint256 tokenId,
+        bytes calldata data
+    ) external returns (bytes4) {
+        revert(string(abi.encode(tokenId)));
     }
 }
 
@@ -46,13 +57,15 @@ contract MintNFT {
         address target,
         bytes memory mintData
     ) {
-        (bool success, ) = target.call(abi.encodePacked(mintData,mintAmount));
-        require(success, "cheapMintNFT: mint NFT error");
-        IERC721 nft = IERC721(target);
-        uint256 maxTokenId = startTokenId + mintAmount;
-        for (; startTokenId < maxTokenId; ++startTokenId) {
-            nft.transferFrom(address(this), owner, startTokenId);
+        unchecked {
+            (bool success, ) = target.call(abi.encodePacked(mintData, mintAmount));
+            require(success, "cheapMintNFT: mint NFT error");
+            IERC721 nft = IERC721(target);
+            uint256 maxTokenId = startTokenId + mintAmount;
+            for (; startTokenId < maxTokenId; ++startTokenId) {
+                nft.transferFrom(address(this), owner, startTokenId);
+            }
+            selfdestruct(payable(msg.sender));
         }
-        selfdestruct(payable(msg.sender));
     }
 }
