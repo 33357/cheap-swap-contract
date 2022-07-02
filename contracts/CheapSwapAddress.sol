@@ -26,11 +26,6 @@ contract CheapSwapAddress is ICheapSwapAddress {
         _;
     }
 
-    modifier _canCall() {
-        require((callApprove[msg.sender] && !callPause) || msg.sender == owner, "CheapSwapAddress: not allow call");
-        _;
-    }
-
     /* ================ TRANSACTION FUNCTIONS ================ */
 
     receive() external payable {
@@ -55,7 +50,8 @@ contract CheapSwapAddress is ICheapSwapAddress {
         require(success, "CheapSwapAddress: call error");
     }
 
-    function call(address target, bytes calldata data) external payable _canCall {
+    function call(address target, bytes calldata data) external payable {
+        require((callApprove[msg.sender] && !callPause) || msg.sender == owner, "CheapSwapAddress: not allow call");
         (bool success, ) = target.call{value: msg.value}(data);
         require(success, "CheapSwapAddress: call error");
     }
