@@ -6,10 +6,10 @@ import "./interfaces/ICheapSwapRouter.sol";
 import "./interfaces/ICheapSwapAddress.sol";
 import "./lib/ISwapRouter.sol";
 import "./lib/IWETH.sol";
-import "./lib/CheapSwapBytesLib.sol";
+import "./lib/CheapSwapRouterBytesLib.sol";
 
 contract CheapSwapRouter is ICheapSwapRouter {
-    using CheapSwapBytesLib for bytes;
+    using CheapSwapRouterBytesLib for bytes;
     ISwapRouter public Router = ISwapRouter(0xE592427A0AEce92De3Edee1F18E0157C05861564);
     IWETH9 public WETH = IWETH9(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
 
@@ -22,6 +22,7 @@ contract CheapSwapRouter is ICheapSwapRouter {
     function _getSwapData(bytes calldata msgData)
         internal
         returns (
+            uint8 typeNum,
             // 买入数量
             uint120 amountOut,
             // 卖出数量
@@ -30,20 +31,25 @@ contract CheapSwapRouter is ICheapSwapRouter {
             bytes memory path
         )
     {
-        amountOut = msgData.toUint120(4);
+        typeNum = msgData.toUint8(4);
+        amountOut = msgData.toUint120(5);
         if (msg.value > 0) {
             amountIn = uint120(msg.value);
-            path = msgData.slice(19, msgData.length - 19);
+            path = msgData.slice(20, msgData.length - 20);
         } else {
             amountIn = msgData.toUint120(19);
-            path = msgData.slice(34, msgData.length - 34);
+            path = msgData.slice(35, msgData.length - 35);
         }
     }
 
     /* ================ TRANSACTION FUNCTIONS ================ */
 
     function exactInput() external payable {
-        (uint120 amountOutMin, uint120 amountIn, bytes memory path) = _getSwapData(msg.data);
+        (uint8 typeNum, uint120 amountOutMin, uint120 amountIn, bytes memory path) = _getSwapData(msg.data);
+        if (typeNum == 1) {
+            // amountOutMin = amountIn * amountOutMinPerAmountIn / 10**18
+            amountOutMin = (amountIn * amountOutMin) / 10**18;
+        }
         ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
         address owner = cheapSwapAddress.owner();
         // 获取卖出代币
@@ -71,7 +77,11 @@ contract CheapSwapRouter is ICheapSwapRouter {
     }
 
     function exactOutput() external payable {
-        (uint120 amountOut, uint120 amountInMax, bytes memory path) = _getSwapData(msg.data);
+        (uint8 typeNum, uint120 amountOut, uint120 amountInMax, bytes memory path) = _getSwapData(msg.data);
+        if (typeNum == 1) {
+            // amountOutMax = amountOut * amountInMaxPerAmountOut / 10**18
+            amountInMax = (amountOut * amountInMax) / 10**18;
+        }
         address tokenIn;
         ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
         address owner = cheapSwapAddress.owner();
@@ -108,37 +118,4 @@ contract CheapSwapRouter is ICheapSwapRouter {
             }
         }
     }
-
-    // function exactMaxInput() external payable {
-    //     uint256 amountOutMinPerAmountIn = msg.data.toUint120(4);
-    //     uint256 amountIn;
-    //     bytes memory path;
-    //     ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
-    //     address owner = cheapSwapAddress.owner();
-    //     if (msg.value > 0) {
-    //         amountIn = msg.value;
-    //         path = msg.data.slice(19, msg.data.length - 19);
-    //         WETH.deposit{value: amountIn}();
-    //     } else {
-    //         path = msg.data.slice(19, msg.data.length - 19);
-    //         address tokenIn = path.toAddress(0);
-    //         amountIn = IERC20(tokenIn).balanceOf(owner);
-    //         cheapSwapAddress.call(
-    //             tokenIn,
-    //             abi.encodeWithSignature("transferFrom(address,address,uint256)", owner, address(this), amountIn)
-    //         );
-    //         if (IERC20(tokenIn).allowance(address(this), address(Router)) == 0) {
-    //             IERC20(tokenIn).approve(address(Router), type(uint256).max);
-    //         }
-    //     }
-
-    //     ISwapRouter.ExactInputParams memory params = ISwapRouter.ExactInputParams({
-    //         path: path,
-    //         recipient: owner,
-    //         deadline: block.timestamp,
-    //         amountIn: amountIn,
-    //         amountOutMinimum: (amountOutMinPerAmountIn * amountIn) / 10**18
-    //     });
-    //     Router.exactInput(params);
-    // }
 }
