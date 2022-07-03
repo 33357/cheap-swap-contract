@@ -94,7 +94,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
                 // 不能超过运行次数
                 if (maxRunTime != type(uint8).max) {
                     require(runTime < maxRunTime, "CheapSwapAddress: over runTime");
-                    targetDataMap[msg.value][0] = bytes1(runTime++);
+                    targetDataMap[msg.value][0] = bytes1(++runTime);
                 }
                 // 收费
                 uint256 fee = cheapSwapFactory.fee();
