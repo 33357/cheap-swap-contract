@@ -51,15 +51,16 @@ contract CheapSwapAddress is ICheapSwapAddress {
             bytes memory data
         )
     {
-        runTime = targetDataMap[msgValue].toUint8(0);
-        maxRunTime = targetDataMap[msgValue].toUint8(1);
-        deadline = targetDataMap[msgValue].toUint40(2);
-        target = targetDataMap[msgValue].toAddress(7);
+        bytes memory targetData = targetDataMap[msgValue];
+        runTime = targetData.toUint8(0);
+        maxRunTime = targetData.toUint8(1);
+        deadline = targetData.toUint40(2);
+        target = targetData.toAddress(7);
         if (msgValue > 0) {
-            value = targetDataMap[msgValue].toUint80(27);
-            data = targetDataMap[msgValue].slice(37, targetDataMap[msgValue].length - 37);
+            value = targetData.toUint80(27);
+            data = targetData.slice(37, targetData.length - 37);
         } else {
-            data = targetDataMap[msgValue].slice(27, targetDataMap[msgValue].length - 27);
+            data = targetData.slice(27, targetData.length - 27);
         }
     }
 
