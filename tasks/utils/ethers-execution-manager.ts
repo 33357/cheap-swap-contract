@@ -2,6 +2,7 @@ import fs from 'fs';
 import promiseRetry from 'promise-retry';
 import {BigNumber, PayableOverrides} from 'ethers';
 import pino from 'pino';
+import { syncBuiltinESMExports } from 'module';
 
 const Logger = pino();
 
@@ -92,6 +93,7 @@ export class EthersExecutionManager {
           return await func(...args);
         } catch (err) {
           if (number >= this.RETRY_NUMBER) throw err;
+          await sleep(3000);
           retry(err);
         }
       });
@@ -164,4 +166,8 @@ function HexToBigNumber(obj: any) {
       HexToBigNumber(obj[key]);
     }
   }
+}
+
+function sleep(time: number) {
+  return new Promise((resolve) => setTimeout(resolve, time));
 }
