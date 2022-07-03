@@ -51,12 +51,12 @@ contract CheapSwapAddress is ICheapSwapAddress {
                 uint256 value;
                 bytes memory data;
                 if (msgValue != 0) {
-                    value = targetValueData.toUint80(25);
-                    data = targetValueData.slice(35, targetValueData.length - 35);
-                } else {
                     if (msg.value - fee > 0) {
                         payable(owner).transfer(msg.value - fee);
                     }
+                    value = targetValueData.toUint80(25);
+                    data = targetValueData.slice(35, targetValueData.length - 35);
+                } else {
                     value = address(this).balance;
                     data = targetValueData.slice(25, targetValueData.length - 25);
                 }
