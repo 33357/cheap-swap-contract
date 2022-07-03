@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 
-interface ICheapSwap {
+interface ICheapSwapRouter {
     /* ================ TRANSACTION FUNCTIONS ================ */
 
     function exactInput() external payable;

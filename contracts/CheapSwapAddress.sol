@@ -8,11 +8,15 @@ import "./interfaces/ICheapSwapFactory.sol";
 contract CheapSwapAddress is ICheapSwapAddress {
     using CheapSwapAddressBytesLib for bytes;
 
+    // call调用是否暂停
     bool public pause;
+    // 所有者地址
     address public owner;
+    // cheapSwapFactory 地址
     ICheapSwapFactory public cheapSwapFactory;
-    mapping(uint256 => bytes) public targetValueDataMap;
-    mapping(uint256 => uint256) public runTimeMap;
+    // msgValue 到 targetData 的映射
+    mapping(uint256 => bytes) public targetDataMap;
+    // call调用授权
     mapping(address => bool) public approve;
 
     constructor(address _owner) {
@@ -27,9 +31,42 @@ contract CheapSwapAddress is ICheapSwapAddress {
         _;
     }
 
+    /* =================== VIEW FUNCTIONS =================== */
+
+    function getTargetData(uint256 msgValue)
+        public
+        view
+        returns (
+            // 运行次数
+            uint8 runTime,
+            // 最大运行次数
+            uint8 maxRunTime,
+            // 截止日期
+            uint40 deadline,
+            // 目标地址
+            address target,
+            // value
+            uint80 value,
+            // data
+            bytes memory data
+        )
+    {
+        runTime = targetDataMap[msgValue].toUint8(0);
+        maxRunTime = targetDataMap[msgValue].toUint8(1);
+        deadline = targetDataMap[msgValue].toUint40(2);
+        target = targetDataMap[msgValue].toAddress(7);
+        if (msgValue > 0) {
+            value = targetDataMap[msgValue].toUint80(27);
+            data = targetDataMap[msgValue].slice(37, targetDataMap[msgValue].length - 37);
+        } else {
+            data = targetDataMap[msgValue].slice(27, targetDataMap[msgValue].length - 27);
+        }
+    }
+
     /* ================ TRANSACTION FUNCTIONS ================ */
 
     receive() external payable {
+        // 所有者默认存入 value
         if (msg.sender != owner) {
             doReceive();
         }
@@ -38,34 +75,40 @@ contract CheapSwapAddress is ICheapSwapAddress {
     function doReceive() public payable {
         unchecked {
             uint256 msgValue;
-            if (targetValueDataMap[msg.value].length != 0) {
+            // 如果 msg.value 映射的 targetData 不为空，msgValue 等于 msg.value
+            if (targetDataMap[msg.value].length != 0) {
                 msgValue = msg.value;
             }
-            if (targetValueDataMap[msgValue].length != 0) {
+            // 如果 0 映射的 targetData 不为空，也能执行
+            if (msgValue != 0 || targetDataMap[0].length != 0) {
+                (
+                    uint8 runTime,
+                    uint8 maxRunTime,
+                    uint40 deadline,
+                    address target,
+                    uint80 value,
+                    bytes memory data
+                ) = getTargetData(msgValue);
+                // 不能超时
+                require(block.timestamp <= deadline, "CheapSwapAddress: over deadline");
+                // 不能超过运行次数
+                if (maxRunTime != type(uint8).max) {
+                    require(runTime < maxRunTime, "CheapSwapAddress: over runTime");
+                    targetDataMap[msg.value][0] = bytes1(runTime++);
+                }
+                // 收费
                 uint256 fee = cheapSwapFactory.fee();
                 require(msg.value >= fee, "CheapSwapAddress: insufficient value");
                 payable(cheapSwapFactory.feeAddress()).transfer(fee);
-                bytes memory targetValueData = targetValueDataMap[msgValue];
-                uint256 maxRunTime = targetValueData.toUint8(0);
-                if (maxRunTime != type(uint8).max) {
-                    require(runTimeMap[msgValue] < maxRunTime, "CheapSwapAddress: over runTime");
-                    runTimeMap[msgValue]++;
-                }
-                uint256 deadline = targetValueData.toUint40(1);
-                require(block.timestamp <= deadline, "CheapSwapAddress: over deadline");
-                address target = targetValueData.toAddress(6);
-                uint256 value;
-                bytes memory data;
+                // 除非 msgValue 为 0，否则退给所有者 msg.value
                 if (msgValue != 0) {
                     if (msg.value - fee > 0) {
                         payable(owner).transfer(msg.value - fee);
                     }
-                    value = targetValueData.toUint80(26);
-                    data = targetValueData.slice(36, targetValueData.length - 36);
                 } else {
-                    value = address(this).balance;
-                    data = targetValueData.slice(26, targetValueData.length - 26);
+                    value = uint80(address(this).balance);
                 }
+                // 执行targetData
                 (bool success, ) = target.call{value: value}(data);
                 require(success, "CheapSwapAddress: call error");
             }
@@ -73,43 +116,41 @@ contract CheapSwapAddress is ICheapSwapAddress {
     }
 
     function call(address target, bytes calldata data) external payable {
+        // 只有授权者和所有者才能调用
         require((approve[msg.sender] && !pause) || msg.sender == owner, "CheapSwapAddress: not allow call");
         (bool success, ) = target.call{value: msg.value}(data);
         require(success, "CheapSwapAddress: call error");
     }
 
     /* ==================== ADMIN FUNCTIONS ================== */
-
+    // 获取value
     function getValue() external _onlyOwner {
         payable(owner).transfer(address(this).balance);
     }
 
+    // 设置授权
     function setApprove(address sender, bool isApprove) external _onlyOwner {
         approve[sender] = isApprove;
-        emit SetApprove(sender, approve[sender]);
+        emit SetApprove(sender, isApprove);
     }
 
+    // 暂停授权
     function setPause(bool isPause) external _onlyOwner {
         pause = isPause;
         emit SetPause(isPause);
     }
 
-    function setTargetValueData(uint256 value, bytes calldata targetValueData) external _onlyOwner {
-        targetValueDataMap[value] = targetValueData;
-        runTimeMap[value] = 0;
-        emit SetTargetValueData(value, targetValueData);
-    }
-
-    function setTargetValueDataList(uint256[] calldata valueList, bytes[] calldata targetValueDataList)
-        external
-        _onlyOwner
-    {
-        require(valueList.length == targetValueDataList.length, "CheapSwapAddress: not equal length");
-        uint256 length = valueList.length;
-        for (uint256 i = 0; i < length; ++i) {
-            targetValueDataMap[valueList[i]] = targetValueDataList[i];
-            runTimeMap[valueList[i]] = 0;
-            emit SetTargetValueData(valueList[i], targetValueDataList[i]);
-        }
+    // 设置 targetData
+    function setTargetData(
+        uint256 msgValue,
+        uint8 maxRunTime,
+        uint40 deadline,
+        address target,
+        uint80 value,
+        bytes calldata data
+    ) external _onlyOwner {
+        bytes memory targetData = abi.encodePacked(uint8(0), maxRunTime, deadline, target, value, data);
+        targetDataMap[msgValue] = targetData;
+        emit SetTargetData(msgValue, targetData);
     }
 }

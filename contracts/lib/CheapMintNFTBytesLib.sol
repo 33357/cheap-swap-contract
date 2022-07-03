@@ -99,6 +99,18 @@ library CheapMintNFTBytesLib {
         return tempUint;
     }
 
+    function toUint32(bytes memory _bytes, uint256 _start) internal pure returns (uint32) {
+        require(_start + 4 >= _start, "toUint32_overflow");
+        require(_bytes.length >= _start + 4, "toUint32_outOfBounds");
+        uint32 tempUint;
+
+        assembly {
+            tempUint := mload(add(add(_bytes, 0x4), _start))
+        }
+
+        return tempUint;
+    }
+
     function toUint80(bytes memory _bytes, uint256 _start) internal pure returns (uint80) {
         require(_start + 10 >= _start, "toUint80_overflow");
         require(_bytes.length >= _start + 10, "toUint80_outOfBounds");
@@ -106,18 +118,6 @@ library CheapMintNFTBytesLib {
 
         assembly {
             tempUint := mload(add(add(_bytes, 0xa), _start))
-        }
-
-        return tempUint;
-    }
-
-    function toUint256(bytes memory _bytes, uint256 _start) internal pure returns (uint256) {
-        require(_start + 32 >= _start, "toUint24_overflow");
-        require(_bytes.length >= _start + 32, "toUint24_outOfBounds");
-        uint256 tempUint;
-
-        assembly {
-            tempUint := mload(add(add(_bytes, 32), _start))
         }
 
         return tempUint;

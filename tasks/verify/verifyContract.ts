@@ -1,6 +1,6 @@
 import '@nomiclabs/hardhat-ethers';
-import { task } from 'hardhat/config';
-import { HardhatRuntimeEnvironment } from 'hardhat/types';
+import {task} from 'hardhat/config';
+import {HardhatRuntimeEnvironment} from 'hardhat/types';
 import * as utils from '../utils';
 
 task(`contract:verify`, `verify contract`)
@@ -13,10 +13,10 @@ task(`contract:verify`, `verify contract`)
     const deployment = await utils.getDeployment(
       Number(await hre.getChainId())
     );
-    const address = args['address'] ? args['address'] : deployment[contract].implAddress;
-    utils.log.info(
-      `verify ${contract}, address: ${address}`
-    );
+    const address = args['address']
+      ? args['address']
+      : deployment[contract].implAddress;
+    utils.log.info(`verify ${contract}, address: ${address}`);
     await hre.run('verify:verify', {
       address: address,
       constructorArguments: contractArgs,

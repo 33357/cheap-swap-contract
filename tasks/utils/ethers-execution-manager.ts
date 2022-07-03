@@ -2,7 +2,7 @@ import fs from 'fs';
 import promiseRetry from 'promise-retry';
 import {BigNumber, PayableOverrides} from 'ethers';
 import pino from 'pino';
-import { syncBuiltinESMExports } from 'module';
+import {syncBuiltinESMExports} from 'module';
 
 const Logger = pino();
 
@@ -121,7 +121,7 @@ export class EthersExecutionManager {
         );
         return func(...args, config).catch(async (err: Error) => {
           if (number >= this.RETRY_NUMBER) throw err;
-          Logger.info(err)
+          Logger.info(err);
           await sleep(3000);
           retry(err);
         });

@@ -1,8 +1,10 @@
-import { ethers, BigNumber } from 'ethers';
-import { getDeployment } from '../tasks';
+import {ethers, BigNumber} from 'ethers';
+import {getDeployment} from '../tasks';
 
 async function main() {
-  console.log(`--------------------------------------safeMint--------------------------------------------`);
+  console.log(
+    `--------------------------------------safeMint--------------------------------------------`
+  );
   const ethAmount = ethers.utils.parseEther('0.0042').toString();
   const deployment = await getDeployment(1);
   const mintNFTAddress = deployment['CheapMintNFT'].implAddress;
@@ -19,10 +21,17 @@ async function main() {
     delete0x(nftAddress) +
     (value.eq(0) ? '' : bigToHex(perValue, 20)) +
     delete0x(nftSelector);
-  const cheapSwapAddressCode = '0x' + numToHex(deadline, 10) + mintNFTAddress + delete0x(bigToHex(value, 20)) + delete0x(cheapMintNFTCode);
-  console.log({ cheapMintNFTCode, cheapSwapAddressCode, ethAmount })
+  const cheapSwapAddressCode =
+    '0x' +
+    numToHex(deadline, 10) +
+    mintNFTAddress +
+    delete0x(bigToHex(value, 20)) +
+    delete0x(cheapMintNFTCode);
+  console.log({cheapMintNFTCode, cheapSwapAddressCode, ethAmount});
 
-  console.log(`--------------------------------------priceMint--------------------------------------------`);
+  console.log(
+    `--------------------------------------priceMint--------------------------------------------`
+  );
   const ethAmount2 = ethers.utils.parseEther('0.0043').toString();
   const deployment2 = await getDeployment(1);
   const mintNFTAddress2 = deployment2['CheapMintNFT'].implAddress;
@@ -39,10 +48,17 @@ async function main() {
     delete0x(nftAddress2) +
     (value2.eq(0) ? '' : bigToHex(perValue2, 20)) +
     delete0x(nftSelector2);
-  const cheapSwapAddressCode2 = '0x' + numToHex(deadline2, 10) + mintNFTAddress2 + delete0x(bigToHex(value2, 20)) + delete0x(cheapMintNFTCode2);
-  console.log({ cheapMintNFTCode2, cheapSwapAddressCode2, ethAmount2 })
+  const cheapSwapAddressCode2 =
+    '0x' +
+    numToHex(deadline2, 10) +
+    mintNFTAddress2 +
+    delete0x(bigToHex(value2, 20)) +
+    delete0x(cheapMintNFTCode2);
+  console.log({cheapMintNFTCode2, cheapSwapAddressCode2, ethAmount2});
 
-  console.log(`--------------------------------------Test safeMint--------------------------------------------`);
+  console.log(
+    `--------------------------------------Test safeMint--------------------------------------------`
+  );
   const ethAmountTest = ethers.utils.parseEther('0.0042').toString();
   const deploymentTest = await getDeployment(97);
   const mintNFTAddressTest = deploymentTest['CheapMintNFT'].implAddress;
@@ -60,10 +76,16 @@ async function main() {
     (valueTest.eq(0) ? '' : bigToHex(perValueTest, 20)) +
     delete0x(nftSelectorTest);
   const cheapSwapAddressCodeTest =
-    '0x' + numToHex(deadlineTest, 10) + delete0x(mintNFTAddressTest) + bigToHex(valueTest, 20) + delete0x(cheapMintNFTCodeTest);
-  console.log({ cheapMintNFTCodeTest, cheapSwapAddressCodeTest, ethAmountTest });
+    '0x' +
+    numToHex(deadlineTest, 10) +
+    delete0x(mintNFTAddressTest) +
+    bigToHex(valueTest, 20) +
+    delete0x(cheapMintNFTCodeTest);
+  console.log({cheapMintNFTCodeTest, cheapSwapAddressCodeTest, ethAmountTest});
 
-  console.log(`--------------------------------------Test priceMint--------------------------------------------`);
+  console.log(
+    `--------------------------------------Test priceMint--------------------------------------------`
+  );
   const ethAmountTest2 = ethers.utils.parseEther('0.0043').toString();
   const mintNFTAddressTest2 = deploymentTest['CheapMintNFT'].implAddress;
   const mintNFTSelectorTest2 = '0x1249c58b';
@@ -80,8 +102,16 @@ async function main() {
     (valueTest2.eq(0) ? '' : bigToHex(perValueTest2, 20)) +
     delete0x(nftSelectorTest2);
   const cheapSwapAddressCodeTest2 =
-    '0x' + numToHex(deadlineTest2, 10) + delete0x(mintNFTAddressTest2) + bigToHex(valueTest2, 20) + delete0x(cheapMintNFTCodeTest2);
-  console.log({ cheapMintNFTCodeTest2, cheapSwapAddressCodeTest2, ethAmountTest2 });
+    '0x' +
+    numToHex(deadlineTest2, 10) +
+    delete0x(mintNFTAddressTest2) +
+    bigToHex(valueTest2, 20) +
+    delete0x(cheapMintNFTCodeTest2);
+  console.log({
+    cheapMintNFTCodeTest2,
+    cheapSwapAddressCodeTest2,
+    ethAmountTest2,
+  });
 }
 
 main();

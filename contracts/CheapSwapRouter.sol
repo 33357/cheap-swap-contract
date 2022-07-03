@@ -2,13 +2,13 @@
 pragma solidity ^0.8.12;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "./interfaces/ICheapSwap.sol";
+import "./interfaces/ICheapSwapRouter.sol";
 import "./interfaces/ICheapSwapAddress.sol";
 import "./lib/ISwapRouter.sol";
 import "./lib/IWETH.sol";
 import "./lib/CheapSwapBytesLib.sol";
 
-contract CheapSwap is ICheapSwap {
+contract CheapSwapRouter is ICheapSwapRouter {
     using CheapSwapBytesLib for bytes;
     ISwapRouter public Router = ISwapRouter(0xE592427A0AEce92De3Edee1F18E0157C05861564);
     IWETH9 public WETH = IWETH9(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
@@ -17,21 +17,39 @@ contract CheapSwap is ICheapSwap {
         IERC20(address(WETH)).approve(address(Router), type(uint256).max);
     }
 
+    /* =================== VIEW FUNCTIONS =================== */
+
+    function _getSwapData(bytes calldata msgData)
+        internal
+        returns (
+            // 买入数量
+            uint120 amountOut,
+            // 卖出数量
+            uint120 amountIn,
+            // 交易路径
+            bytes memory path
+        )
+    {
+        amountOut = msgData.toUint120(4);
+        if (msg.value > 0) {
+            amountIn = uint120(msg.value);
+            path = msgData.slice(19, msgData.length - 19);
+        } else {
+            amountIn = msgData.toUint120(19);
+            path = msgData.slice(34, msgData.length - 34);
+        }
+    }
+
     /* ================ TRANSACTION FUNCTIONS ================ */
 
     function exactInput() external payable {
-        uint256 amountOutMin = msg.data.toUint120(4);
-        uint256 amountIn;
-        bytes memory path;
+        (uint120 amountOutMin, uint120 amountIn, bytes memory path) = _getSwapData(msg.data);
         ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
         address owner = cheapSwapAddress.owner();
+        // 获取卖出代币
         if (msg.value > 0) {
-            amountIn = msg.value;
-            path = msg.data.slice(19, msg.data.length - 19);
             WETH.deposit{value: amountIn}();
         } else {
-            amountIn = msg.data.toUint120(19);
-            path = msg.data.slice(34, msg.data.length - 34);
             address tokenIn = path.toAddress(0);
             cheapSwapAddress.call(
                 tokenIn,
@@ -41,7 +59,7 @@ contract CheapSwap is ICheapSwap {
                 IERC20(tokenIn).approve(address(Router), type(uint256).max);
             }
         }
-
+        // 执行 swap
         ISwapRouter.ExactInputParams memory params = ISwapRouter.ExactInputParams({
             path: path,
             recipient: owner,
@@ -53,19 +71,14 @@ contract CheapSwap is ICheapSwap {
     }
 
     function exactOutput() external payable {
-        uint256 amountOut = msg.data.toUint120(4);
-        uint256 amountInMax;
-        bytes memory path;
+        (uint120 amountOut, uint120 amountInMax, bytes memory path) = _getSwapData(msg.data);
         address tokenIn;
         ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
         address owner = cheapSwapAddress.owner();
+        // 获取卖出代币
         if (msg.value > 0) {
-            amountInMax = msg.value;
-            path = msg.data.slice(19, msg.data.length - 19);
             WETH.deposit{value: amountInMax}();
         } else {
-            amountInMax = msg.data.toUint120(19);
-            path = msg.data.slice(34, msg.data.length - 34);
             tokenIn = path.toAddress(23);
             cheapSwapAddress.call(
                 tokenIn,
@@ -75,7 +88,7 @@ contract CheapSwap is ICheapSwap {
                 IERC20(tokenIn).approve(address(Router), type(uint256).max);
             }
         }
-
+        // 执行 swap
         ISwapRouter.ExactOutputParams memory params = ISwapRouter.ExactOutputParams({
             path: path,
             recipient: owner,
@@ -85,6 +98,7 @@ contract CheapSwap is ICheapSwap {
         });
         uint256 amountIn = Router.exactOutput(params);
         uint256 amount = amountInMax - amountIn;
+        // 退回多余代币
         if (amount > 0) {
             if (msg.value > 0) {
                 WETH.withdraw(amount);
@@ -95,36 +109,36 @@ contract CheapSwap is ICheapSwap {
         }
     }
 
-    function exactMaxInput() external payable {
-        uint256 amountOutMinPerAmountIn = msg.data.toUint120(4);
-        uint256 amountIn;
-        bytes memory path;
-        ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
-        address owner = cheapSwapAddress.owner();
-        if (msg.value > 0) {
-            amountIn = msg.value;
-            path = msg.data.slice(19, msg.data.length - 19);
-            WETH.deposit{value: amountIn}();
-        } else {
-            path = msg.data.slice(19, msg.data.length - 19);
-            address tokenIn = path.toAddress(0);
-            amountIn = IERC20(tokenIn).balanceOf(owner);
-            cheapSwapAddress.call(
-                tokenIn,
-                abi.encodeWithSignature("transferFrom(address,address,uint256)", owner, address(this), amountIn)
-            );
-            if (IERC20(tokenIn).allowance(address(this), address(Router)) == 0) {
-                IERC20(tokenIn).approve(address(Router), type(uint256).max);
-            }
-        }
+    // function exactMaxInput() external payable {
+    //     uint256 amountOutMinPerAmountIn = msg.data.toUint120(4);
+    //     uint256 amountIn;
+    //     bytes memory path;
+    //     ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
+    //     address owner = cheapSwapAddress.owner();
+    //     if (msg.value > 0) {
+    //         amountIn = msg.value;
+    //         path = msg.data.slice(19, msg.data.length - 19);
+    //         WETH.deposit{value: amountIn}();
+    //     } else {
+    //         path = msg.data.slice(19, msg.data.length - 19);
+    //         address tokenIn = path.toAddress(0);
+    //         amountIn = IERC20(tokenIn).balanceOf(owner);
+    //         cheapSwapAddress.call(
+    //             tokenIn,
+    //             abi.encodeWithSignature("transferFrom(address,address,uint256)", owner, address(this), amountIn)
+    //         );
+    //         if (IERC20(tokenIn).allowance(address(this), address(Router)) == 0) {
+    //             IERC20(tokenIn).approve(address(Router), type(uint256).max);
+    //         }
+    //     }
 
-        ISwapRouter.ExactInputParams memory params = ISwapRouter.ExactInputParams({
-            path: path,
-            recipient: owner,
-            deadline: block.timestamp,
-            amountIn: amountIn,
-            amountOutMinimum: (amountOutMinPerAmountIn * amountIn) / 10**18
-        });
-        Router.exactInput(params);
-    }
+    //     ISwapRouter.ExactInputParams memory params = ISwapRouter.ExactInputParams({
+    //         path: path,
+    //         recipient: owner,
+    //         deadline: block.timestamp,
+    //         amountIn: amountIn,
+    //         amountOutMinimum: (amountOutMinPerAmountIn * amountIn) / 10**18
+    //     });
+    //     Router.exactInput(params);
+    // }
 }
