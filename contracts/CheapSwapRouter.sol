@@ -17,6 +17,7 @@ contract CheapSwapRouter is ICheapSwapRouter {
     IWETH9 public WETH = IWETH9(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
 
     constructor() {
+        // WETH 授权给 Router
         IERC20(address(WETH)).approve(address(Router), type(uint256).max);
     }
 
