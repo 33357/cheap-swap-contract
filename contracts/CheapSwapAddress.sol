@@ -12,6 +12,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
     address public owner;
     ICheapSwapFactory public cheapSwapFactory;
     mapping(uint256 => bytes) public targetValueDataMap;
+    mapping(uint256 => uint256) public runTimeMap;
     mapping(address => bool) public approve;
 
     constructor(address _owner) {
@@ -45,20 +46,25 @@ contract CheapSwapAddress is ICheapSwapAddress {
                 require(msg.value >= fee, "CheapSwapAddress: insufficient value");
                 payable(cheapSwapFactory.feeAddress()).transfer(fee);
                 bytes memory targetValueData = targetValueDataMap[msgValue];
-                uint256 deadline = targetValueData.toUint40(0);
+                uint256 maxRunTime = targetValueData.toUint8(0);
+                if (maxRunTime != type(uint8).max) {
+                    require(runTimeMap[msgValue] < maxRunTime, "CheapSwapAddress: over runTime");
+                    runTimeMap[msgValue]++;
+                }
+                uint256 deadline = targetValueData.toUint40(1);
                 require(block.timestamp <= deadline, "CheapSwapAddress: over deadline");
-                address target = targetValueData.toAddress(5);
+                address target = targetValueData.toAddress(6);
                 uint256 value;
                 bytes memory data;
                 if (msgValue != 0) {
                     if (msg.value - fee > 0) {
                         payable(owner).transfer(msg.value - fee);
                     }
-                    value = targetValueData.toUint80(25);
-                    data = targetValueData.slice(35, targetValueData.length - 35);
+                    value = targetValueData.toUint80(26);
+                    data = targetValueData.slice(36, targetValueData.length - 36);
                 } else {
                     value = address(this).balance;
-                    data = targetValueData.slice(25, targetValueData.length - 25);
+                    data = targetValueData.slice(26, targetValueData.length - 26);
                 }
                 (bool success, ) = target.call{value: value}(data);
                 require(success, "CheapSwapAddress: call error");
@@ -90,6 +96,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
 
     function setTargetValueData(uint256 value, bytes calldata targetValueData) external _onlyOwner {
         targetValueDataMap[value] = targetValueData;
+        runTimeMap[value] = 0;
         emit SetTargetValueData(value, targetValueData);
     }
 
@@ -101,6 +108,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
         uint256 length = valueList.length;
         for (uint256 i = 0; i < length; ++i) {
             targetValueDataMap[valueList[i]] = targetValueDataList[i];
+            runTimeMap[valueList[i]] = 0;
             emit SetTargetValueData(valueList[i], targetValueDataList[i]);
         }
     }
