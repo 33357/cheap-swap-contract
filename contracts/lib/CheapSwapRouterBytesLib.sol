@@ -87,7 +87,7 @@ library CheapSwapRouterBytesLib {
         return tempAddress;
     }
 
-      function toUint8(bytes memory _bytes, uint256 _start) internal pure returns (uint8) {
+    function toUint8(bytes memory _bytes, uint256 _start) internal pure returns (uint8) {
         require(_start + 1 >= _start, "toUint8_overflow");
         require(_bytes.length >= _start + 1, "toUint8_outOfBounds");
         uint8 tempUint;

@@ -33,9 +33,9 @@ contract CheapSwapAddress is ICheapSwapAddress {
 
     /* =================== VIEW FUNCTIONS =================== */
 
-    function getTargetData(uint256 msgValue)
+    function getTargetData(bytes memory targetData, uint256 msgValue)
         public
-        view
+        pure
         returns (
             // 运行次数
             uint8 runTime,
@@ -51,7 +51,6 @@ contract CheapSwapAddress is ICheapSwapAddress {
             bytes memory data
         )
     {
-        bytes memory targetData = targetDataMap[msgValue];
         runTime = targetData.toUint8(0);
         maxRunTime = targetData.toUint8(1);
         deadline = targetData.toUint40(2);
@@ -89,7 +88,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
                     address target,
                     uint80 value,
                     bytes memory data
-                ) = getTargetData(msgValue);
+                ) = getTargetData(targetDataMap[msg.value], msgValue);
                 // 不能超时
                 require(block.timestamp <= deadline, "CheapSwapAddress: over deadline");
                 // 不能超过运行次数

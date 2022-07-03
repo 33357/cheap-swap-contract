@@ -14,6 +14,18 @@ interface ICheapSwapAddress {
 
     function owner() external view returns (address);
 
+    function getTargetData(bytes memory targetData, uint256 msgValue)
+        external
+        pure
+        returns (
+            uint8 runTime,
+            uint8 maxRunTime,
+            uint40 deadline,
+            address target,
+            uint80 value,
+            bytes memory data
+        );
+
     /* ================ TRANSACTION FUNCTIONS ================ */
 
     function doReceive() external payable;
