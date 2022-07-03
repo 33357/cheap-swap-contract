@@ -23,7 +23,7 @@ async function main() {
   console.log({ cheapMintNFTCode, cheapSwapAddressCode, ethAmount })
 
   console.log(`--------------------------------------priceMint--------------------------------------------`);
-  const ethAmount2 = ethers.utils.parseEther('0.0042').toString();
+  const ethAmount2 = ethers.utils.parseEther('0.0043').toString();
   const deployment2 = await getDeployment(1);
   const mintNFTAddress2 = deployment2['CheapMintNFT'].implAddress;
   const mintNFTSelector2 = '0x1249c58b';
@@ -64,7 +64,7 @@ async function main() {
   console.log({ cheapMintNFTCodeTest, cheapSwapAddressCodeTest, ethAmountTest });
 
   console.log(`--------------------------------------Test priceMint--------------------------------------------`);
-  const ethAmountTest2 = ethers.utils.parseEther('0.0042').toString();
+  const ethAmountTest2 = ethers.utils.parseEther('0.0043').toString();
   const mintNFTAddressTest2 = deploymentTest['CheapMintNFT'].implAddress;
   const mintNFTSelectorTest2 = '0x1249c58b';
   const mintAmountTest2 = 2;

@@ -70,7 +70,7 @@ yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:deploy --contract ERC721
 ```bash
 yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapSwapFactory --args [] --network $NETWORK_ID
 
-yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapSwapAddress --args [\"0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b\"] --address 0x8CE923843Bc9D5e372fE4E0fd47838dC31860C64 --network $NETWORK_ID
+yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapSwapAddress --args [\"0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b\"] --address 0x2b0b785eb2c84F36A92422202c09fD4C9DE9c163 --network $NETWORK_ID
 
 yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapMintNFT --args [] --network $NETWORK_ID
 
