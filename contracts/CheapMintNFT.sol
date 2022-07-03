@@ -55,7 +55,7 @@ contract CheapMintNFT is ICheapMintNFT {
                 abi.encodePacked(selector, uint256(mintAmount))
             );
             require(!success, "CheapMintNFT: can not get startTokenId");
-            uint256 startTokenId = returnData.toUint32(returnData.length - 32);
+            uint256 startTokenId = returnData.toUint32(returnData.length - 4);
             uint256 thisGas = gasleft();
             uint256 beforeGas;
             uint256 useGas;
