@@ -22,6 +22,7 @@ contract CheapSwapRouter is ICheapSwapRouter {
     function _getSwapData(bytes calldata msgData)
         internal
         returns (
+            // 类型
             uint8 typeNum,
             // 买入数量
             uint120 amountOut,
