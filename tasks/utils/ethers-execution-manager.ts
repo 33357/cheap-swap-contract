@@ -93,7 +93,6 @@ export class EthersExecutionManager {
           return await func(...args);
         } catch (err) {
           if (number >= this.RETRY_NUMBER) throw err;
-          await sleep(3000);
           retry(err);
         }
       });
@@ -120,8 +119,10 @@ export class EthersExecutionManager {
         Logger.info(
           `execute operation transaction:${functionIndex}, ${functionName}, try ${number}`
         );
-        return func(...args, config).catch((err: Error) => {
+        return func(...args, config).catch(async (err: Error) => {
           if (number >= this.RETRY_NUMBER) throw err;
+          Logger.info(err)
+          await sleep(3000);
           retry(err);
         });
       });
