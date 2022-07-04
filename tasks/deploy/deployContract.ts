@@ -18,7 +18,7 @@ task(`contract:deploy`, `Deploy contract`)
   .setAction(async (args, hre: HardhatRuntimeEnvironment) => {
     const chainId = Number(await hre.getChainId());
     const txConfig: PayableOverrides = {};
-    if (chainId == 1) {
+    if (chainId == 1 || chainId == 137) {
       txConfig.maxFeePerGas = args['gasPrice']
         ? hre.ethers.utils.parseUnits(args['gasPrice'], 'gwei')
         : undefined;

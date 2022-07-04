@@ -87,6 +87,22 @@ const config: HardhatUserConfig = {
         .mul(10 ** 9)
         .toNumber(),
     },
+    137: {
+      url: `https://polygon-rpc.com/`,
+      accounts,
+      timeout: 60000,
+      gasPrice: BigNumber.from(gasPrice)
+        .mul(10 ** 9)
+        .toNumber(),
+    },
+    8001: {
+      url: `https://matic-mumbai.chainstacklabs.com/`,
+      accounts,
+      timeout: 60000,
+      gasPrice: BigNumber.from(gasPrice)
+        .mul(10 ** 9)
+        .toNumber(),
+    },
   },
   namedAccounts: {
     deployer: 0,

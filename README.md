@@ -67,6 +67,22 @@ export WAIT_NUM=3
 export GAS_PRICE=30
 ```
 
+#### ployTest
+``` bash
+export ENV_FILE='./envs/env.ployTest'
+export NETWORK_ID=80001
+export WAIT_NUM=3
+export GAS_PRICE=10
+```
+
+#### ploy
+``` bash
+export ENV_FILE='./envs/env.ploy'
+export NETWORK_ID=137
+export WAIT_NUM=3
+export GAS_PRICE=30
+```
+
 ### script
 
 #### deploy script
