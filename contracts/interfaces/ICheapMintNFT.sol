@@ -8,6 +8,7 @@ interface ICheapMintNFT {
         external
         pure
         returns (
+            uint80 callMsgValue,
             address target,
             uint80 value,
             uint32 selector,

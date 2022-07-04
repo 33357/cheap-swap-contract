@@ -18,6 +18,7 @@ contract CheapMintNFT is ICheapMintNFT {
         pure
         override
         returns (
+            uint80 callMsgValue,
             // 目标地址
             address target,
             // value
@@ -28,14 +29,15 @@ contract CheapMintNFT is ICheapMintNFT {
             uint8 mintAmount
         )
     {
-        target = msgData.toAddress(4);
+        callMsgValue = msgData.toUint80(4);
+        target = msgData.toAddress(14);
         if (msgValue > 0) {
-            value = msgData.toUint80(24);
+            value = msgData.toUint80(34);
+            selector = msgData.toUint32(44);
+            mintAmount = msgData.toUint8(48);
+        } else {
             selector = msgData.toUint32(34);
             mintAmount = msgData.toUint8(38);
-        } else {
-            selector = msgData.toUint32(24);
-            mintAmount = msgData.toUint8(28);
         }
     }
 
@@ -43,7 +45,7 @@ contract CheapMintNFT is ICheapMintNFT {
 
     function mint() external payable override {
         unchecked {
-            (address target, uint80 value, uint32 selector, uint8 mintAmount) = getMintData(msg.data, msg.value);
+            (, address target, uint80 value, uint32 selector, uint8 mintAmount) = getMintData(msg.data, msg.value);
             // 兼容 msg.sender
             address owner = msg.sender;
             if (msg.sender != tx.origin) {

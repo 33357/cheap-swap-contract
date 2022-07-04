@@ -8,6 +8,7 @@ interface ICheapSwapRouterV3 {
         external
         pure
         returns (
+            uint80 callMsgValue,
             uint8 typeNum,
             uint120 amountOut,
             uint120 amountIn,

@@ -29,6 +29,7 @@ contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
         pure
         override
         returns (
+            uint80 callMsgValue,
             // 类型
             uint8 typeNum,
             // 买入数量
@@ -39,21 +40,25 @@ contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
             bytes memory path
         )
     {
-        typeNum = msgData.toUint8(4);
-        amountOut = msgData.toUint120(5);
+        callMsgValue = msgData.toUint80(4);
+        typeNum = msgData.toUint8(14);
+        amountOut = msgData.toUint120(15);
         if (msgValue > 0) {
             amountIn = uint120(msgValue);
-            path = msgData.slice(20, msgData.length - 20);
+            path = msgData.slice(30, msgData.length - 30);
         } else {
-            amountIn = msgData.toUint120(20);
-            path = msgData.slice(35, msgData.length - 35);
+            amountIn = msgData.toUint120(30);
+            path = msgData.slice(45, msgData.length - 45);
         }
     }
 
     /* ================ TRANSACTION FUNCTIONS ================ */
 
     function exactInput() external payable {
-        (uint8 typeNum, uint120 amountOutMin, uint120 amountIn, bytes memory path) = getSwapData(msg.data, msg.value);
+        (uint80 callMsgValue, uint8 typeNum, uint120 amountOutMin, uint120 amountIn, bytes memory path) = getSwapData(
+            msg.data,
+            msg.value
+        );
         if (typeNum == 1) {
             // amountOutMin = amountIn * amountOutMinPerAmountIn / 10**18
             amountOutMin = (amountIn * amountOutMin) / 10**18;
@@ -67,6 +72,7 @@ contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
             address tokenIn = path.toAddress(0);
             // 从 owner 获取数量为 amountIn 的 tokenIn
             cheapSwapAddress.call(
+                callMsgValue,
                 tokenIn,
                 abi.encodeWithSignature("transferFrom(address,address,uint256)", owner, address(this), amountIn)
             );
@@ -86,7 +92,10 @@ contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
     }
 
     function exactOutput() external payable {
-        (uint8 typeNum, uint120 amountOut, uint120 amountInMax, bytes memory path) = getSwapData(msg.data, msg.value);
+        (uint80 callMsgValue, uint8 typeNum, uint120 amountOut, uint120 amountInMax, bytes memory path) = getSwapData(
+            msg.data,
+            msg.value
+        );
         if (typeNum == 1) {
             // amountOutMax = amountOut * amountInMaxPerAmountOut / 10**18
             amountInMax = (amountOut * amountInMax) / 10**18;
@@ -101,6 +110,7 @@ contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
             tokenIn = path.toAddress(23);
             // 从 owner 获取数量为 amountIn 的 tokenIn
             cheapSwapAddress.call(
+                callMsgValue,
                 tokenIn,
                 abi.encodeWithSignature("transferFrom(address,address,uint256)", owner, address(this), amountInMax)
             );

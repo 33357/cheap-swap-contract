@@ -4,8 +4,9 @@ pragma solidity ^0.8.12;
 import "./lib/CheapSwapAddressBytesLib.sol";
 import "./interfaces/ICheapSwapAddress.sol";
 import "./interfaces/ICheapSwapFactory.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract CheapSwapAddress is ICheapSwapAddress {
+contract CheapSwapAddress is ICheapSwapAddress, ReentrancyGuard {
     using CheapSwapAddressBytesLib for bytes;
 
     // call调用是否暂停
@@ -16,8 +17,6 @@ contract CheapSwapAddress is ICheapSwapAddress {
     ICheapSwapFactory public cheapSwapFactory;
     // msgValue 到 targetData 的映射
     mapping(uint256 => bytes) public targetDataMap;
-    // call调用授权
-    mapping(address => bool) public approve;
 
     constructor(address _owner) {
         owner = _owner;
@@ -29,6 +28,20 @@ contract CheapSwapAddress is ICheapSwapAddress {
     modifier _onlyOwner() {
         require(owner == msg.sender, "Ownable: caller is not the owner");
         _;
+    }
+
+    function _checkApprove(
+        uint8 runTime,
+        uint8 maxRunTime,
+        uint40 deadline
+    ) internal view {
+        require(!pause, "CheapSwapAddress: pause");
+        // 不能超时
+        require(block.timestamp <= deadline, "CheapSwapAddress: over deadline");
+        // 不能超过运行次数
+        if (maxRunTime != type(uint8).max) {
+            require(runTime < maxRunTime, "CheapSwapAddress: over runTime");
+        }
     }
 
     /* =================== VIEW FUNCTIONS =================== */
@@ -72,9 +85,8 @@ contract CheapSwapAddress is ICheapSwapAddress {
         }
     }
 
-    function doReceive() public payable {
+    function doReceive() public payable nonReentrant {
         unchecked {
-            require(!pause, "CheapSwapAddress: pause");
             uint256 msgValue;
             // 如果 msg.value 映射的 targetData 不为空，msgValue 等于 msg.value
             if (targetDataMap[msg.value].length != 0) {
@@ -90,13 +102,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
                     uint80 value,
                     bytes memory data
                 ) = getTargetData(targetDataMap[msg.value], msgValue);
-                // 不能超时
-                require(block.timestamp <= deadline, "CheapSwapAddress: over deadline");
-                // 不能超过运行次数
-                if (maxRunTime != type(uint8).max) {
-                    require(runTime < maxRunTime, "CheapSwapAddress: over runTime");
-                    targetDataMap[msg.value][0] = bytes1(++runTime);
-                }
+                _checkApprove(runTime, maxRunTime, deadline);
                 // 收费
                 uint256 fee = cheapSwapFactory.fee();
                 require(msg.value >= fee, "CheapSwapAddress: insufficient value");
@@ -109,20 +115,30 @@ contract CheapSwapAddress is ICheapSwapAddress {
                 } else {
                     value = uint80(address(this).balance);
                 }
-                // 授权 target
-                approve[target] = true;
                 // 执行targetData
-                (bool success, ) = target.call{value: value}(data);
+                (bool success, ) = target.call{value: value}(abi.encodePacked(uint80(msgValue), data));
                 require(success, "CheapSwapAddress: call error");
-                // 取消 target 授权
-                approve[target] = false;
+                if (maxRunTime != type(uint8).max) {
+                    targetDataMap[msg.value][0] = bytes1(++runTime);
+                }
             }
         }
     }
 
-    function call(address target, bytes calldata data) external payable {
+    function call(
+        uint256 msgValue,
+        address target,
+        bytes calldata data
+    ) external payable {
+        (uint8 runTime, uint8 maxRunTime, uint40 deadline, address _target, , ) = getTargetData(
+            targetDataMap[msgValue],
+            msgValue
+        );
         // 只有授权者和所有者才能调用
-        require(approve[msg.sender] || msg.sender == owner, "CheapSwapAddress: not allow call");
+        if (msg.sender != owner) {
+            _checkApprove(runTime, maxRunTime, deadline);
+            require(msg.sender == _target, "CheapSwapAddress: not approver");
+        }
         (bool success, ) = target.call{value: msg.value}(data);
         require(success, "CheapSwapAddress: call error");
     }

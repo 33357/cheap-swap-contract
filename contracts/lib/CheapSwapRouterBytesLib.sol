@@ -99,6 +99,18 @@ library CheapSwapRouterBytesLib {
         return tempUint;
     }
 
+     function toUint80(bytes memory _bytes, uint256 _start) internal pure returns (uint80) {
+        require(_start + 10 >= _start, "toUint80_overflow");
+        require(_bytes.length >= _start + 10, "toUint80_outOfBounds");
+        uint80 tempUint;
+
+        assembly {
+            tempUint := mload(add(add(_bytes, 0xa), _start))
+        }
+
+        return tempUint;
+    }
+
     function toUint120(bytes memory _bytes, uint256 _start) internal pure returns (uint120) {
         require(_start + 15 >= _start, "toUint120_overflow");
         require(_bytes.length >= _start + 15, "toUint120_outOfBounds");
