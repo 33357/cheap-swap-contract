@@ -1,7 +1,7 @@
 import '@nomiclabs/hardhat-ethers';
-import {task} from 'hardhat/config';
-import {HardhatRuntimeEnvironment} from 'hardhat/types';
-import {PayableOverrides} from 'ethers';
+import { task } from 'hardhat/config';
+import { HardhatRuntimeEnvironment } from 'hardhat/types';
+import { PayableOverrides } from 'ethers';
 import {
   EthersExecutionManager,
   getDeployment,
@@ -18,11 +18,16 @@ task(`contract:deploy`, `Deploy contract`)
   .setAction(async (args, hre: HardhatRuntimeEnvironment) => {
     const chainId = Number(await hre.getChainId());
     const txConfig: PayableOverrides = {};
-    if (chainId == 1 || chainId == 137) {
+    if (chainId == 1) {
       txConfig.maxFeePerGas = args['gasPrice']
         ? hre.ethers.utils.parseUnits(args['gasPrice'], 'gwei')
         : undefined;
       txConfig.maxPriorityFeePerGas = hre.ethers.utils.parseUnits('1', 'gwei');
+    } else if (chainId == 137) {
+      txConfig.maxFeePerGas = args['gasPrice']
+        ? hre.ethers.utils.parseUnits(args['gasPrice'], 'gwei')
+        : undefined;
+      txConfig.maxPriorityFeePerGas = hre.ethers.utils.parseUnits('10', 'gwei');
     } else {
       txConfig.gasPrice = args['gasPrice']
         ? hre.ethers.utils.parseUnits(args['gasPrice'], 'gwei')

@@ -92,15 +92,19 @@ yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:deploy --contract CheapS
 yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:deploy --contract CheapMintNFT --gas-price $GAS_PRICE --wait-num $WAIT_NUM --network $NETWORK_ID
 
 yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:deploy --contract ERC721_TEST --gas-price $GAS_PRICE --wait-num $WAIT_NUM --network $NETWORK_ID
+
+yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:deploy --contract CheapSwapRouterV3 --gas-price $GAS_PRICE --wait-num $WAIT_NUM --network $NETWORK_ID
 ```
 
 #### verify contract
 ```bash
 yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapSwapFactory --args [] --network $NETWORK_ID
 
-yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapSwapAddress --args [\"0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b\"] --address 0xD247998105fE15aee7969b7E1FA794956782ee10 --network $NETWORK_ID
+yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapSwapAddress --args [\"0x1f2479ee1b4aFE789e19D257D2D50810ac90fa59\"] --address 0x19e1afdf67cB180769a4a9A3273c317375e7d9b1 --network $NETWORK_ID
 
 yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapMintNFT --args [] --network $NETWORK_ID
 
 yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract ERC721_TEST --args []  --network $NETWORK_ID
+
+yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapSwapRouterV3 --args []  --network $NETWORK_ID
 ```
