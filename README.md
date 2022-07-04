@@ -37,7 +37,7 @@ yarn test:cov
 ### environment
 #### bscTest
 ``` bash
-export ENV_FILE='./envs/env.bsc-test'
+export ENV_FILE='./envs/env.bscTest'
 export NETWORK_ID=97
 export WAIT_NUM=1
 export GAS_PRICE=10
