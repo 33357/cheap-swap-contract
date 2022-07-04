@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 
-interface ICheapSwapRouter {
+interface ICheapSwapRouterV2 {
     /* =================== VIEW FUNCTIONS =================== */
 
     function getSwapData(bytes calldata msgData, uint256 msgValue)
@@ -11,7 +11,7 @@ interface ICheapSwapRouter {
             uint8 typeNum,
             uint120 amountOut,
             uint120 amountIn,
-            bytes memory path
+            address[] memory path
         );
 
     /* ================ TRANSACTION FUNCTIONS ================ */
