@@ -1,20 +1,20 @@
 {
   "1": {
     "CheapSwapFactory": {
-      "proxyAddress": "0x57b853b1287D0b1ed6dc36Dab1DBCbba7b4925A2",
-      "implAddress": "0x57b853b1287D0b1ed6dc36Dab1DBCbba7b4925A2",
+      "proxyAddress": "0x782780351B0F43372431Ee0DB5B7fFD4668E42D2",
+      "implAddress": "0x782780351B0F43372431Ee0DB5B7fFD4668E42D2",
       "version": "1.0.0",
       "contract": "CheapSwapFactory",
       "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
-      "fromBlock": 15067316
+      "fromBlock": 15073113
     },
     "CheapMintNFT": {
-      "proxyAddress": "0x0efb1F2d371B4eE6748854CDFd20216C74f28c8A",
-      "implAddress": "0x0efb1F2d371B4eE6748854CDFd20216C74f28c8A",
+      "proxyAddress": "0x01959bC17248faCBf3804FB58dc57652cF7B2C40",
+      "implAddress": "0x01959bC17248faCBf3804FB58dc57652cF7B2C40",
       "version": "1.0.0",
       "contract": "CheapMintNFT",
       "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
-      "fromBlock": 15067439
+      "fromBlock": 15073147
     }
   },
   "97": {
