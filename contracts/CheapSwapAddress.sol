@@ -126,13 +126,13 @@ contract CheapSwapAddress is ICheapSwapAddress, ReentrancyGuard {
     }
 
     function call(
-        uint256 msgValue,
+        uint256 callMsgValue,
         address target,
         bytes calldata data
     ) external payable {
         (uint8 runTime, uint8 maxRunTime, uint40 deadline, address _target, , ) = getTargetData(
-            targetDataMap[msgValue],
-            msgValue
+            targetDataMap[callMsgValue],
+            callMsgValue
         );
         // 只有授权者和所有者才能调用
         if (msg.sender != owner) {

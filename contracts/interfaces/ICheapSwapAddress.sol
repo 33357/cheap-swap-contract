@@ -29,7 +29,7 @@ interface ICheapSwapAddress {
     function doReceive() external payable;
 
     function call(
-        uint256 msgValue,
+        uint256 callMsgValue,
         address target,
         bytes calldata data
     ) external payable;
