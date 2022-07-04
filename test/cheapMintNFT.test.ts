@@ -6,7 +6,7 @@ async function main() {
     `--------------------------------------safeMint--------------------------------------------`
   );
   const deploymentMain = await getDeployment(1);
-  const main = {
+  const mainSafeMint = {
     msgValue: ethers.utils.parseEther('0.0042').toString(),
     maxRunTime: 1,
     deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
@@ -18,12 +18,12 @@ async function main() {
     nftSelector: '0x31c864e8',
     mintAmount: 2,
   };
-  logData(main);
+  logData(mainSafeMint);
 
   console.log(
     `--------------------------------------priceMint--------------------------------------------`
   );
-  const main2 = {
+  const mainPriceMint = {
     msgValue: ethers.utils.parseEther('0.0043').toString(),
     maxRunTime: 1,
     deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
@@ -35,13 +35,13 @@ async function main() {
     nftSelector: '0x0152b8c8',
     mintAmount: 2,
   };
-  logData(main2);
+  logData(mainPriceMint);
 
   console.log(
     `--------------------------------------Test safeMint--------------------------------------------`
   );
-  const deploymentTest = await getDeployment(97);
-  const test = {
+  const deploymentTest = await getDeployment(137);
+  const testSafeMint = {
     msgValue: ethers.utils.parseEther('0.0042').toString(),
     maxRunTime: 1,
     deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
@@ -53,12 +53,12 @@ async function main() {
     nftSelector: '0x31c864e8',
     mintAmount: 2,
   };
-  logData(test);
+  logData(testSafeMint);
 
   console.log(
     `--------------------------------------Test priceMint--------------------------------------------`
   );
-  const test2 = {
+  const testPriceMint = {
     msgValue: ethers.utils.parseEther('0.0043').toString(),
     maxRunTime: 1,
     deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
@@ -70,7 +70,7 @@ async function main() {
     nftSelector: '0x0152b8c8',
     mintAmount: 2,
   };
-  logData(test2);
+  logData(testPriceMint);
 }
 
 main();

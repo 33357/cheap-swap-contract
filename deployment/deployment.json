@@ -45,12 +45,12 @@
   },
   "137": {
     "CheapSwapFactory": {
-      "proxyAddress": "0xb591b80eFe306DBe2835E9dfc341F86Ad937be92",
-      "implAddress": "0xb591b80eFe306DBe2835E9dfc341F86Ad937be92",
+      "proxyAddress": "0xb13b8EDC58c47C7183B4Ad63EFe6ACe62c0EFd18",
+      "implAddress": "0xb13b8EDC58c47C7183B4Ad63EFe6ACe62c0EFd18",
       "version": "1.0.0",
       "contract": "CheapSwapFactory",
       "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
-      "fromBlock": 30330322
+      "fromBlock": 30330919
     },
     "CheapSwapRouterV3": {
       "proxyAddress": "0x6f2DAdAccC69a78231DBB33BE47EF53F942Ad35D",
