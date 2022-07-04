@@ -10,7 +10,15 @@
 
 ## 核心代码
 
-[contracts](./contracts)
+[contracts](./contracts/)
+
+## 运行脚本
+
+[test](./test/)
+
+```bash
+yarn test ./test/cheapSwapRouterV3.test.ts
+```
 
 ## Sample Scripts
 ### Install dependencies

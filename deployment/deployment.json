@@ -42,5 +42,31 @@
       "operator": "0x588DB5090Cc9a2fC4b82c4d900CE73043711372D",
       "fromBlock": 20738689
     }
+  },
+  "137": {
+    "CheapSwapFactory": {
+      "proxyAddress": "0xbA65281e98Cb8224C7a2ee1B860572e1991CB0a6",
+      "implAddress": "0xbA65281e98Cb8224C7a2ee1B860572e1991CB0a6",
+      "version": "1.0.0",
+      "contract": "CheapSwapFactory",
+      "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
+      "fromBlock": 30317630
+    },
+    "CheapSwapRouterV3": {
+      "proxyAddress": "0xb5852e69Be43f4f71Fe656144485d2B2675bdb7A",
+      "implAddress": "0xb5852e69Be43f4f71Fe656144485d2B2675bdb7A",
+      "version": "1.0.0",
+      "contract": "CheapSwapRouterV3",
+      "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
+      "fromBlock": 30321238
+    },
+    "CheapMintNFT": {
+      "proxyAddress": "0x41bC9BFf138aA0ab2127DC782e6e7ED5941FE78a",
+      "implAddress": "0x41bC9BFf138aA0ab2127DC782e6e7ED5941FE78a",
+      "version": "1.0.0",
+      "contract": "CheapMintNFT",
+      "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
+      "fromBlock": 30321412
+    }
   }
 }

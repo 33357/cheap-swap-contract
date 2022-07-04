@@ -128,4 +128,6 @@ contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
             }
         }
     }
+
+    receive() external payable {}
 }
