@@ -70,9 +70,17 @@ contract CheapSwapAddress is ICheapSwapAddress, ReentrancyGuard {
         target = targetData.toAddress(7);
         if (msgValue > 0) {
             value = targetData.toUint80(27);
-            data = targetData.slice(37, targetData.length - 37);
+            data = abi.encodePacked(
+                targetData.toUint32(37),
+                uint80(msgValue),
+                targetData.slice(41, targetData.length - 41)
+            );
         } else {
-            data = targetData.slice(27, targetData.length - 27);
+            data = abi.encodePacked(
+                targetData.toUint32(27),
+                uint80(msgValue),
+                targetData.slice(31, targetData.length - 31)
+            );
         }
     }
 
@@ -116,7 +124,7 @@ contract CheapSwapAddress is ICheapSwapAddress, ReentrancyGuard {
                     value = uint80(address(this).balance);
                 }
                 // 执行targetData
-                (bool success, ) = target.call{value: value}(abi.encodePacked(uint80(msgValue), data));
+                (bool success, ) = target.call{value: value}(data);
                 require(success, "CheapSwapAddress: call error");
                 if (maxRunTime != type(uint8).max) {
                     targetDataMap[msg.value][0] = bytes1(++runTime);
