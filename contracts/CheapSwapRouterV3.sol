@@ -14,9 +14,10 @@ contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
     // uniswapV3 Router
     ISwapRouter public Router = ISwapRouter(0xE592427A0AEce92De3Edee1F18E0157C05861564);
     // WETH
-    IWETH9 public WETH = IWETH9(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
+    IWETH9 public WETH;
 
     constructor() {
+        WETH = IWETH9(Router.WETH9());
         // WETH 授权给 Router
         IERC20(address(WETH)).approve(address(Router), type(uint256).max);
     }

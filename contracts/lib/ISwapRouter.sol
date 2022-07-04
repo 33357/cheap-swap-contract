@@ -2,6 +2,8 @@
 pragma solidity ^0.8.12;
 
 interface ISwapRouter {
+    function WETH9() external view returns (address);
+
     struct ExactInputParams {
         bytes path;
         address recipient;
