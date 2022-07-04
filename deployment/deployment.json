@@ -53,12 +53,12 @@
       "fromBlock": 30317630
     },
     "CheapSwapRouterV3": {
-      "proxyAddress": "0xb5852e69Be43f4f71Fe656144485d2B2675bdb7A",
-      "implAddress": "0xb5852e69Be43f4f71Fe656144485d2B2675bdb7A",
+      "proxyAddress": "0x04812E660A00c5d330C4D0055325A8E49fC8D8Cf",
+      "implAddress": "0x04812E660A00c5d330C4D0055325A8E49fC8D8Cf",
       "version": "1.0.0",
       "contract": "CheapSwapRouterV3",
       "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
-      "fromBlock": 30321238
+      "fromBlock": 30326679
     },
     "CheapMintNFT": {
       "proxyAddress": "0x41bC9BFf138aA0ab2127DC782e6e7ED5941FE78a",

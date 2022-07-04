@@ -4,8 +4,6 @@ pragma solidity ^0.8.12;
 interface ICheapSwapAddress {
     /* ==================== EVENTS =================== */
 
-    event SetApprove(address indexed sender, bool isApprove);
-
     event SetTargetData(uint256 indexed value, bytes targetData);
 
     event SetPause(bool isPause);
@@ -33,8 +31,6 @@ interface ICheapSwapAddress {
     function call(address target, bytes calldata data) external payable;
 
     /* ===================== ADMIN FUNCTIONS ==================== */
-
-    function setApprove(address sender, bool isApprove) external;
 
     function setPause(bool isPause) external;
 

@@ -74,6 +74,7 @@ contract CheapSwapAddress is ICheapSwapAddress {
 
     function doReceive() public payable {
         unchecked {
+            require(!pause, "CheapSwapAddress: pause");
             uint256 msgValue;
             // 如果 msg.value 映射的 targetData 不为空，msgValue 等于 msg.value
             if (targetDataMap[msg.value].length != 0) {
@@ -108,16 +109,20 @@ contract CheapSwapAddress is ICheapSwapAddress {
                 } else {
                     value = uint80(address(this).balance);
                 }
+                // 授权 target
+                approve[target] = true;
                 // 执行targetData
                 (bool success, ) = target.call{value: value}(data);
                 require(success, "CheapSwapAddress: call error");
+                // 取消 target 授权
+                approve[target] = false;
             }
         }
     }
 
     function call(address target, bytes calldata data) external payable {
         // 只有授权者和所有者才能调用
-        require((approve[msg.sender] && !pause) || msg.sender == owner, "CheapSwapAddress: not allow call");
+        require(approve[msg.sender] || msg.sender == owner, "CheapSwapAddress: not allow call");
         (bool success, ) = target.call{value: msg.value}(data);
         require(success, "CheapSwapAddress: call error");
     }
@@ -126,12 +131,6 @@ contract CheapSwapAddress is ICheapSwapAddress {
     // 获取value
     function getValue() external _onlyOwner {
         payable(owner).transfer(address(this).balance);
-    }
-
-    // 设置授权
-    function setApprove(address sender, bool isApprove) external _onlyOwner {
-        approve[sender] = isApprove;
-        emit SetApprove(sender, isApprove);
     }
 
     // 暂停授权
