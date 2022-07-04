@@ -1,5 +1,5 @@
-import { ethers, BigNumber } from 'ethers';
-import { getDeployment } from '../tasks';
+import {ethers, BigNumber} from 'ethers';
+import {getDeployment} from '../tasks';
 
 async function main() {
   console.log(
@@ -16,9 +16,9 @@ async function main() {
     nftAddress: '0xBD14cFf6ed9A1a44d2B7028D2dA04aa009975A3c',
     mintValue: ethers.utils.parseEther('0'),
     nftSelector: '0x31c864e8',
-    mintAmount: 2
-  }
-  logData(main)
+    mintAmount: 2,
+  };
+  logData(main);
 
   console.log(
     `--------------------------------------priceMint--------------------------------------------`
@@ -33,9 +33,9 @@ async function main() {
     nftAddress: '0xBD14cFf6ed9A1a44d2B7028D2dA04aa009975A3c',
     mintValue: ethers.utils.parseEther('0.001'),
     nftSelector: '0x0152b8c8',
-    mintAmount: 2
-  }
-  logData(main2)
+    mintAmount: 2,
+  };
+  logData(main2);
 
   console.log(
     `--------------------------------------Test safeMint--------------------------------------------`
@@ -51,9 +51,9 @@ async function main() {
     nftAddress: deploymentTest['ERC721_TEST'].implAddress,
     mintValue: BigNumber.from(0),
     nftSelector: '0x31c864e8',
-    mintAmount: 2
-  }
-  logData(test)
+    mintAmount: 2,
+  };
+  logData(test);
 
   console.log(
     `--------------------------------------Test priceMint--------------------------------------------`
@@ -68,9 +68,9 @@ async function main() {
     nftAddress: deploymentTest['ERC721_TEST'].implAddress,
     mintValue: BigNumber.from(100).mul(2),
     nftSelector: '0x0152b8c8',
-    mintAmount: 2
-  }
-  logData(test2)
+    mintAmount: 2,
+  };
+  logData(test2);
 }
 
 main();
@@ -102,10 +102,11 @@ function logData(obj: any) {
     deadline: obj.deadline,
     target: obj.cheapMintNFTAddress,
     value: obj.value.toString(),
-    data: obj.cheapMintNFTSelector +
+    data:
+      obj.cheapMintNFTSelector +
       delete0x(obj.nftAddress) +
       (obj.value.eq(0) ? '' : bigToHex(obj.mintValue, 20)) +
       delete0x(obj.nftSelector) +
-      numToHex(obj.mintAmount, 2)
-  })
+      numToHex(obj.mintAmount, 2),
+  });
 }

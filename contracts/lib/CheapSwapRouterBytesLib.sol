@@ -99,7 +99,7 @@ library CheapSwapRouterBytesLib {
         return tempUint;
     }
 
-     function toUint80(bytes memory _bytes, uint256 _start) internal pure returns (uint80) {
+    function toUint80(bytes memory _bytes, uint256 _start) internal pure returns (uint80) {
         require(_start + 10 >= _start, "toUint80_overflow");
         require(_bytes.length >= _start + 10, "toUint80_outOfBounds");
         uint80 tempUint;

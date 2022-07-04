@@ -1,7 +1,7 @@
 import '@nomiclabs/hardhat-ethers';
-import { task } from 'hardhat/config';
-import { HardhatRuntimeEnvironment } from 'hardhat/types';
-import { PayableOverrides } from 'ethers';
+import {task} from 'hardhat/config';
+import {HardhatRuntimeEnvironment} from 'hardhat/types';
+import {PayableOverrides} from 'ethers';
 import {
   EthersExecutionManager,
   getDeployment,
