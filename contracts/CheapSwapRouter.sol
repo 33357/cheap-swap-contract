@@ -44,7 +44,7 @@ contract CheapSwapRouter is ICheapSwapRouter {
             amountIn = uint120(msgValue);
             path = msgData.slice(20, msgData.length - 20);
         } else {
-            amountIn = msgData.toUint120(19);
+            amountIn = msgData.toUint120(20);
             path = msgData.slice(35, msgData.length - 35);
         }
     }
