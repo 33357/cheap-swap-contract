@@ -7,7 +7,7 @@ import "./CheapSwapAddress.sol";
 
 contract CheapSwapFactory is ICheapSwapFactory, Ownable {
     // 用户地址对应的 cheapSwapAddress 地址
-    mapping(address => address) public addressMap;
+    mapping(address => address) public createCheapSwapAddressMap;
     // 手续费
     uint256 public fee = 0.001 ether;
     // 手续费地址
@@ -21,9 +21,9 @@ contract CheapSwapFactory is ICheapSwapFactory, Ownable {
     /* ================ TRANSACTION FUNCTIONS ================ */
 
     // 创建 cheapSwapAddress
-    function createAddress() external {
-        addressMap[msg.sender] = address(new CheapSwapAddress(msg.sender));
-        emit CreateAddress(msg.sender, addressMap[msg.sender]);
+    function createCheapSwapAddress() external {
+        createCheapSwapAddressMap[msg.sender] = address(new CheapSwapAddress(msg.sender));
+        emit CreateAddress(msg.sender, createCheapSwapAddressMap[msg.sender]);
     }
 
     /* =================== ADMIN FUNCTIONS =================== */

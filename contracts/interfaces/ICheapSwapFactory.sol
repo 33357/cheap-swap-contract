@@ -4,7 +4,7 @@ pragma solidity ^0.8.12;
 interface ICheapSwapFactory {
     /* ==================== EVENTS =================== */
 
-    event CreateAddress(address indexed owner, address chatSwapAddress);
+    event CreateAddress(address indexed owner, address cheapSwapAddress);
 
     /* ==================== VIEW FUNCTIONS =================== */
 
@@ -14,7 +14,7 @@ interface ICheapSwapFactory {
 
     /* ================ TRANSACTION FUNCTIONS ================ */
 
-    function createAddress() external;
+    function createCheapSwapAddress() external;
 
     /* ==================== ADMIN FUNCTIONS =================== */
 
