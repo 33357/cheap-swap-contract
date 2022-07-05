@@ -39,7 +39,7 @@ contract CheapSwapAddress is ICheapSwapAddress, ReentrancyGuard {
         // 不能超时
         require(block.timestamp <= deadline, "CheapSwapAddress: over deadline");
         // 不能超过运行次数
-        if (maxRunTime != type(uint8).max) {
+        if (maxRunTime != 0) {
             require(runTime < maxRunTime, "CheapSwapAddress: over runTime");
         }
     }
@@ -126,7 +126,7 @@ contract CheapSwapAddress is ICheapSwapAddress, ReentrancyGuard {
                 // 执行targetData
                 (bool success, ) = target.call{value: value}(data);
                 require(success, "CheapSwapAddress: call error");
-                if (maxRunTime != type(uint8).max) {
+                if (maxRunTime != 0) {
                     targetDataMap[msg.value][0] = bytes1(++runTime);
                 }
             }
