@@ -59,10 +59,6 @@ contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
             msg.data,
             msg.value
         );
-        if (typeNum == 1) {
-            // amountOutMin = amountIn * amountOutMinPerAmountIn / 10**18
-            amountOutMin = (amountIn * amountOutMin) / 10**18;
-        }
         ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
         address owner = cheapSwapAddress.owner();
         // 获取卖出代币
@@ -70,6 +66,9 @@ contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
             WETH.deposit{value: amountIn}();
         } else {
             address tokenIn = path.toAddress(0);
+            if (amountIn == 0) {
+                amountIn = uint120(IERC20(tokenIn).balanceOf(owner));
+            }
             // 从 owner 获取数量为 amountIn 的 tokenIn
             cheapSwapAddress.call(
                 callMsgValue,
@@ -79,6 +78,10 @@ contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
             if (IERC20(tokenIn).allowance(address(this), address(Router)) == 0) {
                 IERC20(tokenIn).approve(address(Router), type(uint256).max);
             }
+        }
+        if (typeNum == 1) {
+            // amountOutMin = amountIn * amountOutMinPerAmountIn / 10**18
+            amountOutMin = (amountIn * amountOutMin) / 10**18;
         }
         // 执行 swap
         ISwapRouter.ExactInputParams memory params = ISwapRouter.ExactInputParams({
@@ -97,7 +100,7 @@ contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
             msg.value
         );
         if (typeNum == 1) {
-            // amountOutMax = amountOut * amountInMaxPerAmountOut / 10**18
+            // amountInMax = amountOut * amountInMaxPerAmountOut / 10**18
             amountInMax = (amountOut * amountInMax) / 10**18;
         }
         address tokenIn;
@@ -108,6 +111,9 @@ contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
             WETH.deposit{value: amountInMax}();
         } else {
             tokenIn = path.toAddress(23);
+            if (amountInMax == 0) {
+                amountInMax = uint120(IERC20(tokenIn).balanceOf(owner));
+            }
             // 从 owner 获取数量为 amountIn 的 tokenIn
             cheapSwapAddress.call(
                 callMsgValue,

@@ -1,5 +1,5 @@
-import {BigNumber, ethers} from 'ethers';
-import {getDeployment} from '../tasks';
+import { BigNumber, ethers } from 'ethers';
+import { getDeployment } from '../tasks';
 
 const uniswap = {
   encodePath(path: string[], fees: Array<number>): string {
@@ -163,10 +163,9 @@ async function main() {
     typeNum: 1,
     // amountInMax
     amoutIn: ethers.utils.parseEther('0.001'),
-    amountOut: ethers.utils
-      .parseEther('0.001')
+    amountOut: BigNumber.from(100)
       .mul(BigNumber.from((10 ** 18).toString()))
-      .div(BigNumber.from(100)),
+      .div(ethers.utils.parseEther('0.001')),
     path: uniswap.encodePath(
       [
         '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
