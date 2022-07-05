@@ -109,7 +109,7 @@ contract CheapSwapAddress is ICheapSwapAddress, ReentrancyGuard {
                     address target,
                     uint80 value,
                     bytes memory data
-                ) = getTargetData(targetDataMap[msg.value], msgValue);
+                ) = getTargetData(targetDataMap[msgValue], msgValue);
                 _checkApprove(runTime, maxRunTime, deadline);
                 // 收费
                 uint256 fee = cheapSwapFactory.fee();

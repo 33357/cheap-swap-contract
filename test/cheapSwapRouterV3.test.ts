@@ -98,7 +98,7 @@ async function main() {
     `------------------------------------test token exactPerInput----------------------------------------------`
   );
   const testTokenExactPerInput = {
-    msgValue: ethers.utils.parseEther('0').toString(),
+    msgValue: ethers.utils.parseEther('0.0045').toString(),
     maxRunTime: 1,
     deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
     cheapSwapRouterV3Address: deploymentTest['CheapSwapRouterV3'].implAddress,
@@ -122,11 +122,11 @@ async function main() {
     `------------------------------------test value exactPerInputmax----------------------------------------------`
   );
   const testValueExactPerInputmax = {
-    msgValue: ethers.utils.parseEther('0.0046').toString(),
+    msgValue: ethers.utils.parseEther('0').toString(),
     maxRunTime: 1,
     deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
     cheapSwapRouterV3Address: deploymentTest['CheapSwapRouterV3'].implAddress,
-    value: ethers.utils.parseEther('0.001'),
+    value: ethers.utils.parseEther('0'),
     cheapSwapRouterV3Selector: '0xf60a7336',
     amoutIn: ethers.utils.parseEther('0'),
     // amountOutMinPerAmountIn
@@ -141,7 +141,7 @@ async function main() {
       [500]
     ),
   };
-  logData(testValueExactPerInput);
+  logData(testValueExactPerInputmax);
 
   console.log(
     `------------------------------------test token exactPerInputmax----------------------------------------------`
