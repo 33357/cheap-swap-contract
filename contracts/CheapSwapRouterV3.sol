@@ -124,7 +124,7 @@ contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
     function exactOutput() external payable {
         (address owner, address tokenIn, uint120 amountOut, uint120 amountInMax, bytes memory path) = _preSwap(
             false,
-            true
+            false
         );
         // 执行 swap
         ISwapRouter.ExactOutputParams memory params = ISwapRouter.ExactOutputParams({
