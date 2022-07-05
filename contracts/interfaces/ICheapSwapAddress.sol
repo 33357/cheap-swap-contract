@@ -12,9 +12,9 @@ interface ICheapSwapAddress {
 
     function owner() external view returns (address);
 
-    function getTargetData(bytes memory targetData, uint256 msgValue)
+    function getTargetData(uint256 msgValue)
         external
-        pure
+        view
         returns (
             uint8 runTime,
             uint8 maxRunTime,

@@ -46,9 +46,9 @@ contract CheapSwapAddress is ICheapSwapAddress, ReentrancyGuard {
 
     /* =================== VIEW FUNCTIONS =================== */
 
-    function getTargetData(bytes memory targetData, uint256 msgValue)
+    function getTargetData(uint256 msgValue)
         public
-        pure
+        view
         returns (
             // 运行次数
             uint8 runTime,
@@ -64,6 +64,7 @@ contract CheapSwapAddress is ICheapSwapAddress, ReentrancyGuard {
             bytes memory data
         )
     {
+        bytes memory targetData = targetDataMap[msgValue];
         runTime = targetData.toUint8(0);
         maxRunTime = targetData.toUint8(1);
         deadline = targetData.toUint40(2);
@@ -109,7 +110,7 @@ contract CheapSwapAddress is ICheapSwapAddress, ReentrancyGuard {
                     address target,
                     uint80 value,
                     bytes memory data
-                ) = getTargetData(targetDataMap[msgValue], msgValue);
+                ) = getTargetData(msgValue);
                 _checkApprove(runTime, maxRunTime, deadline);
                 // 收费
                 uint256 fee = cheapSwapFactory.fee();
@@ -138,10 +139,7 @@ contract CheapSwapAddress is ICheapSwapAddress, ReentrancyGuard {
         address target,
         bytes calldata data
     ) external payable {
-        (uint8 runTime, uint8 maxRunTime, uint40 deadline, address _target, , ) = getTargetData(
-            targetDataMap[callMsgValue],
-            callMsgValue
-        );
+        (uint8 runTime, uint8 maxRunTime, uint40 deadline, address _target, , ) = getTargetData(callMsgValue);
         // 只有授权者和所有者才能调用
         if (msg.sender != owner) {
             _checkApprove(runTime, maxRunTime, deadline);
