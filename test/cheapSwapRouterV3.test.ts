@@ -98,7 +98,7 @@ async function main() {
     `------------------------------------test token exactPerInput----------------------------------------------`
   );
   const testTokenExactPerInput = {
-    msgValue: ethers.utils.parseEther('0.0045').toString(),
+    msgValue: ethers.utils.parseEther('0').toString(),
     maxRunTime: 1,
     deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
     cheapSwapRouterV3Address: deploymentTest['CheapSwapRouterV3'].implAddress,
@@ -119,10 +119,59 @@ async function main() {
   logData(testTokenExactPerInput);
 
   console.log(
+    `------------------------------------test value exactPerInputmax----------------------------------------------`
+  );
+  const testValueExactPerInputmax = {
+    msgValue: ethers.utils.parseEther('0.0046').toString(),
+    maxRunTime: 1,
+    deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
+    cheapSwapRouterV3Address: deploymentTest['CheapSwapRouterV3'].implAddress,
+    value: ethers.utils.parseEther('0.001'),
+    cheapSwapRouterV3Selector: '0xf60a7336',
+    amoutIn: ethers.utils.parseEther('0'),
+    // amountOutMinPerAmountIn
+    amountOut: BigNumber.from(100)
+      .mul(BigNumber.from((10 ** 18).toString()))
+      .div(ethers.utils.parseEther('0.001')),
+    path: uniswap.encodePath(
+      [
+        '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
+        '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+      ],
+      [500]
+    ),
+  };
+  logData(testValueExactPerInput);
+
+  console.log(
+    `------------------------------------test token exactPerInputmax----------------------------------------------`
+  );
+  const testTokenExactPerInputmax = {
+    msgValue: ethers.utils.parseEther('0.0047').toString(),
+    maxRunTime: 1,
+    deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
+    cheapSwapRouterV3Address: deploymentTest['CheapSwapRouterV3'].implAddress,
+    value: ethers.utils.parseEther('0'),
+    cheapSwapRouterV3Selector: '0xf60a7336',
+    amoutIn: ethers.utils.parseEther('0'),
+    amountOut: BigNumber.from(100)
+      .mul(BigNumber.from((10 ** 18).toString()))
+      .div(ethers.utils.parseEther('0.001')),
+    path: uniswap.encodePath(
+      [
+        '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
+        '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+      ],
+      [500]
+    ),
+  };
+  logData(testTokenExactPerInputmax);
+
+  console.log(
     `------------------------------------test value exactOutput----------------------------------------------`
   );
   const testValueExactOutput = {
-    msgValue: ethers.utils.parseEther('0.0046').toString(),
+    msgValue: ethers.utils.parseEther('0.0048').toString(),
     maxRunTime: 1,
     deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
     cheapSwapRouterV3Address: deploymentTest['CheapSwapRouterV3'].implAddress,
@@ -145,7 +194,7 @@ async function main() {
     `------------------------------------test token exactOutput----------------------------------------------`
   );
   const testTokenExactOutput = {
-    msgValue: ethers.utils.parseEther('0.0047').toString(),
+    msgValue: ethers.utils.parseEther('0.0049').toString(),
     maxRunTime: 1,
     deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
     cheapSwapRouterV3Address: deploymentTest['CheapSwapRouterV3'].implAddress,

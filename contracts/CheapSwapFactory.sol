@@ -22,8 +22,9 @@ contract CheapSwapFactory is ICheapSwapFactory, Ownable {
 
     // 创建 cheapSwapAddress
     function createCheapSwapAddress() external {
-        createCheapSwapAddressMap[msg.sender] = address(new CheapSwapAddress(msg.sender));
-        emit CreateAddress(msg.sender, createCheapSwapAddressMap[msg.sender]);
+        address cheapSwapAddress = address(new CheapSwapAddress(msg.sender));
+        createCheapSwapAddressMap[msg.sender] = cheapSwapAddress;
+        emit CreateAddress(msg.sender, cheapSwapAddress);
     }
 
     /* =================== ADMIN FUNCTIONS =================== */

@@ -172,7 +172,12 @@ contract CheapSwapAddress is ICheapSwapAddress, ReentrancyGuard {
         uint80 value,
         bytes calldata data
     ) external _onlyOwner {
-        bytes memory targetData = abi.encodePacked(uint8(0), maxRunTime, deadline, target, value, data);
+        bytes memory targetData;
+        if (msgValue != 0) {
+            targetData = abi.encodePacked(uint8(0), maxRunTime, deadline, target, value, data);
+        } else {
+            targetData = abi.encodePacked(uint8(0), maxRunTime, deadline, target, data);
+        }
         targetDataMap[msgValue] = targetData;
         emit SetTargetData(msgValue, targetData);
     }
