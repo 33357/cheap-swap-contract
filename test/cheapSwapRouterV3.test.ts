@@ -204,6 +204,5 @@ function logData(obj: any) {
         (obj.value.eq(0) ? bigToHex(obj.amoutIn, 30) : '') +
         delete0x(obj.path),
     },
-    obj.amoutIn
   );
 }
