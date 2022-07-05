@@ -1,5 +1,5 @@
-import { BigNumber, ethers } from 'ethers';
-import { getDeployment } from '../tasks';
+import {BigNumber, ethers} from 'ethers';
+import {getDeployment} from '../tasks';
 
 const uniswap = {
   encodePath(path: string[], fees: Array<number>): string {
