@@ -11,7 +11,6 @@ import "./lib/CheapSwapRouterBytesLib.sol";
 contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
     using CheapSwapRouterBytesLib for bytes;
 
-    uint256 public receiveAmount;
     // uniswapV3 Router
     ISwapRouter public Router = ISwapRouter(0xE592427A0AEce92De3Edee1F18E0157C05861564);
     // WETH
@@ -140,7 +139,6 @@ contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
         // 退回多余代币
         if (amount > 0) {
             if (msg.value > 0) {
-                receiveAmount = amount;
                 WETH.withdraw(amount);
                 payable(owner).transfer(amount);
             } else {
@@ -150,7 +148,6 @@ contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
     }
 
     receive() external payable {
-        require(receiveAmount == msg.value);
-        receiveAmount = 0;
+        require(msg.sender == address(WETH), "CheapSwapRouterV3: not WETH");
     }
 }
