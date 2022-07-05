@@ -78,13 +78,12 @@ async function main() {
     deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
     cheapSwapRouterV3Address: deploymentTest['CheapSwapRouterV3'].implAddress,
     value: ethers.utils.parseEther('0.001'),
-    cheapSwapRouterV3Selector: '0x89a56aae',
+    cheapSwapRouterV3Selector: '0xf60a7336',
     amoutIn: ethers.utils.parseEther('0.001'),
     // amountOutMinPerAmountIn
-    amountOut: ethers.utils
-      .parseEther('0.001')
+    amountOut: BigNumber.from(100)
       .mul(BigNumber.from((10 ** 18).toString()))
-      .div(BigNumber.from(100)),
+      .div(ethers.utils.parseEther('0.001')),
     path: uniswap.encodePath(
       [
         '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
@@ -103,14 +102,12 @@ async function main() {
     maxRunTime: 1,
     deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
     cheapSwapRouterV3Address: deploymentTest['CheapSwapRouterV3'].implAddress,
-    value: ethers.utils.parseEther('0.001'),
-    cheapSwapRouterV3Selector: '0x89a56aae',
+    value: ethers.utils.parseEther('0'),
+    cheapSwapRouterV3Selector: '0xf60a7336',
     amoutIn: ethers.utils.parseEther('0.001'),
-    // amountOutMinPerAmountIn
-    amountOut: ethers.utils
-      .parseEther('0.001')
+    amountOut: BigNumber.from(100)
       .mul(BigNumber.from((10 ** 18).toString()))
-      .div(BigNumber.from(100)),
+      .div(ethers.utils.parseEther('0.001')),
     path: uniswap.encodePath(
       [
         '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
@@ -191,18 +188,16 @@ function delete0x(str: string) {
 }
 
 function logData(obj: any) {
-  console.log(
-    {
-      msgValue: obj.msgValue,
-      maxRunTime: obj.maxRunTime,
-      deadline: obj.deadline,
-      target: obj.cheapSwapRouterV3Address,
-      value: obj.value.toString(),
-      data:
-        obj.cheapSwapRouterV3Selector +
-        bigToHex(obj.amountOut, 30) +
-        (obj.value.eq(0) ? bigToHex(obj.amoutIn, 30) : '') +
-        delete0x(obj.path),
-    },
-  );
+  console.log({
+    msgValue: obj.msgValue,
+    maxRunTime: obj.maxRunTime,
+    deadline: obj.deadline,
+    target: obj.cheapSwapRouterV3Address,
+    value: obj.value.toString(),
+    data:
+      obj.cheapSwapRouterV3Selector +
+      bigToHex(obj.amountOut, 30) +
+      (obj.value.eq(0) ? bigToHex(obj.amoutIn, 30) : '') +
+      delete0x(obj.path),
+  });
 }
