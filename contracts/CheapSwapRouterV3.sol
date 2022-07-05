@@ -22,51 +22,35 @@ contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
         IERC20(address(WETH)).approve(address(Router), type(uint256).max);
     }
 
-    /* =================== VIEW FUNCTIONS =================== */
+    /* =================== UTIL FUNCTIONS =================== */
 
-    function getSwapData(bytes calldata msgData, uint256 msgValue)
-        public
-        pure
-        override
+    function _preSwap(bool isPer, bool isInput)
+        internal
         returns (
-            uint80 callMsgValue,
-            // 类型
-            uint8 typeNum,
-            // 买入数量
-            uint120 amountOut,
-            // 卖出数量
-            uint120 amountIn,
-            // 交易路径
-            bytes memory path
+            address,
+            address,
+            uint120,
+            uint120,
+            bytes memory
         )
     {
-        callMsgValue = msgData.toUint80(4);
-        typeNum = msgData.toUint8(14);
-        amountOut = msgData.toUint120(15);
-        if (msgValue > 0) {
-            amountIn = uint120(msgValue);
-            path = msgData.slice(30, msgData.length - 30);
-        } else {
-            amountIn = msgData.toUint120(30);
-            path = msgData.slice(45, msgData.length - 45);
-        }
-    }
-
-    /* ================ TRANSACTION FUNCTIONS ================ */
-
-    function exactInput() external payable {
-        (uint80 callMsgValue, uint8 typeNum, uint120 amountOutMin, uint120 amountIn, bytes memory path) = getSwapData(
+        (uint80 callMsgValue, uint120 amountOut, uint120 amountIn, bytes memory path) = getSwapData(
             msg.data,
             msg.value
         );
         ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
         address owner = cheapSwapAddress.owner();
+        address tokenIn;
         // 获取卖出代币
         if (msg.value > 0) {
             WETH.deposit{value: amountIn}();
         } else {
-            address tokenIn = path.toAddress(0);
-            if (amountIn == 0) {
+            if (isInput) {
+                tokenIn = path.toAddress(0);
+            } else {
+                tokenIn = path.toAddress(23);
+            }
+            if (isPer && amountIn == 0) {
                 amountIn = uint120(IERC20(tokenIn).balanceOf(owner));
             }
             // 从 owner 获取数量为 amountIn 的 tokenIn
@@ -79,10 +63,40 @@ contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
                 IERC20(tokenIn).approve(address(Router), type(uint256).max);
             }
         }
-        if (typeNum == 1) {
-            // amountOutMin = amountIn * amountOutMinPerAmountIn / 10**18
-            amountOutMin = (amountIn * amountOutMin) / 10**18;
+        return (owner, tokenIn, amountOut, amountIn, path);
+    }
+
+    /* =================== VIEW FUNCTIONS =================== */
+
+    function getSwapData(bytes calldata msgData, uint256 msgValue)
+        public
+        pure
+        override
+        returns (
+            uint80 callMsgValue,
+            // 买入数量
+            uint120 amountOut,
+            // 卖出数量
+            uint120 amountIn,
+            // 交易路径
+            bytes memory path
+        )
+    {
+        callMsgValue = msgData.toUint80(4);
+        amountOut = msgData.toUint120(14);
+        if (msgValue > 0) {
+            amountIn = uint120(msgValue);
+            path = msgData.slice(29, msgData.length - 29);
+        } else {
+            amountIn = msgData.toUint120(29);
+            path = msgData.slice(44, msgData.length - 44);
         }
+    }
+
+    /* ================ TRANSACTION FUNCTIONS ================ */
+
+    function exactInput() external payable {
+        (address owner, , uint120 amountOutMin, uint120 amountIn, bytes memory path) = _preSwap(false, true);
         // 执行 swap
         ISwapRouter.ExactInputParams memory params = ISwapRouter.ExactInputParams({
             path: path,
@@ -94,36 +108,24 @@ contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
         Router.exactInput(params);
     }
 
+    function exactPerAmountIn() external payable {
+        (address owner, , uint120 amountOutMinPerAmountIn, uint120 amountIn, bytes memory path) = _preSwap(true, true);
+        // 执行 swap
+        ISwapRouter.ExactInputParams memory params = ISwapRouter.ExactInputParams({
+            path: path,
+            recipient: owner,
+            deadline: block.timestamp,
+            amountIn: amountIn,
+            amountOutMinimum: (amountIn * amountOutMinPerAmountIn) / 10**18
+        });
+        Router.exactInput(params);
+    }
+
     function exactOutput() external payable {
-        (uint80 callMsgValue, uint8 typeNum, uint120 amountOut, uint120 amountInMax, bytes memory path) = getSwapData(
-            msg.data,
-            msg.value
+        (address owner, address tokenIn, uint120 amountOut, uint120 amountInMax, bytes memory path) = _preSwap(
+            false,
+            true
         );
-        if (typeNum == 1) {
-            // amountInMax = amountOut * amountInMaxPerAmountOut / 10**18
-            amountInMax = (amountOut * amountInMax) / 10**18;
-        }
-        address tokenIn;
-        ICheapSwapAddress cheapSwapAddress = ICheapSwapAddress(msg.sender);
-        address owner = cheapSwapAddress.owner();
-        // 获取卖出代币
-        if (msg.value > 0) {
-            WETH.deposit{value: amountInMax}();
-        } else {
-            tokenIn = path.toAddress(23);
-            if (amountInMax == 0) {
-                amountInMax = uint120(IERC20(tokenIn).balanceOf(owner));
-            }
-            // 从 owner 获取数量为 amountIn 的 tokenIn
-            cheapSwapAddress.call(
-                callMsgValue,
-                tokenIn,
-                abi.encodeWithSignature("transferFrom(address,address,uint256)", owner, address(this), amountInMax)
-            );
-            if (IERC20(tokenIn).allowance(address(this), address(Router)) == 0) {
-                IERC20(tokenIn).approve(address(Router), type(uint256).max);
-            }
-        }
         // 执行 swap
         ISwapRouter.ExactOutputParams memory params = ISwapRouter.ExactOutputParams({
             path: path,
@@ -138,7 +140,7 @@ contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
         if (amount > 0) {
             if (msg.value > 0) {
                 WETH.withdraw(amount);
-                payable(owner).transfer(amount);
+                payable(owner).transfer(address(this).balance);
             } else {
                 IERC20(tokenIn).transfer(owner, amount);
             }

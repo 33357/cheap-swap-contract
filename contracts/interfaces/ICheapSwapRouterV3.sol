@@ -9,7 +9,6 @@ interface ICheapSwapRouterV3 {
         pure
         returns (
             uint80 callMsgValue,
-            uint8 typeNum,
             uint120 amountOut,
             uint120 amountIn,
             bytes memory path
@@ -18,6 +17,8 @@ interface ICheapSwapRouterV3 {
     /* ================ TRANSACTION FUNCTIONS ================ */
 
     function exactInput() external payable;
+
+    function exactPerAmountIn() external payable;
 
     function exactOutput() external payable;
 }
