@@ -68,6 +68,14 @@ export WAIT_NUM=1
 export GAS_PRICE=3
 ```
 
+#### ROPSTEN
+``` bash
+export ENV_FILE='./envs/env.ropsten'
+export NETWORK_ID=3
+export WAIT_NUM=1
+export GAS_PRICE=3
+```
+
 #### eth
 ``` bash
 export ENV_FILE='./envs/env.eth'
@@ -109,7 +117,7 @@ yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:deploy --contract CheapS
 ```bash
 yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapSwapFactory --args [] --network $NETWORK_ID
 
-yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapSwapAddress --args [\"0x1f2479ee1b4aFE789e19D257D2D50810ac90fa59\"] --address 0x4c4e2dA358652ba0422b75Cd82d51f99d7fBf744 --network $NETWORK_ID
+yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapSwapAddress --args [\"0x1f2479ee1b4aFE789e19D257D2D50810ac90fa59\"] --address 0xe793A4236769d66a885b7FFC480269f468098B34 --network $NETWORK_ID
 
 yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapMintNFT --args [] --network $NETWORK_ID
 

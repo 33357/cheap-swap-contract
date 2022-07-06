@@ -63,6 +63,14 @@ const config: HardhatUserConfig = {
         .mul(10 ** 9)
         .toNumber(),
     },
+    3:{
+      url: `https://ropsten.infura.io/v3/${process.env.ROPSTEN_INFURA}`,
+      accounts,
+      timeout: 60000,
+      gasPrice: BigNumber.from(gasPrice)
+        .mul(10 ** 9)
+        .toNumber(),
+    },
     4: {
       url: `https://rinkeby.infura.io/v3/${process.env.RINKEBY_INFURA}`,
       accounts,

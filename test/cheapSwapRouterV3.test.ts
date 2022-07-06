@@ -1,5 +1,5 @@
-import {BigNumber, ethers} from 'ethers';
-import {getDeployment} from '../tasks';
+import { BigNumber, ethers } from 'ethers';
+import { getDeployment } from '../tasks';
 
 const uniswap = {
   encodePath(path: string[], fees: Array<number>): string {
@@ -246,7 +246,7 @@ function logData(obj: any) {
     data:
       obj.cheapSwapRouterV3Selector +
       bigToHex(obj.amountOut, 30) +
-      (obj.value.eq(0) ? bigToHex(obj.amoutIn, 30) : '') +
+      (obj.value.eq(0) && obj.msgValue != '0' ? bigToHex(obj.amoutIn, 30) : '') +
       delete0x(obj.path),
   });
 }
