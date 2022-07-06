@@ -18,26 +18,55 @@ const uniswap = {
 
 async function main() {
   console.log(
-    `------------------------------------exactInput----------------------------------------------`
+    `------------------------------------ setting ----------------------------------------------`
   );
-  const deploymentMain = await getDeployment(1);
+  // const deploymentMain = await getDeployment(1);
+  // const WETHMain = '0xc778417E063141139Fce010982780140Aa0cD5Ab';
+  // const USDTMain = '0xc7AD46e0b8a400Bb3C915120d284AafbA8fc4735';
+  // const amountInMain = ethers.utils.parseEther('0.001');
+  // const amountOutMain = BigNumber.from(100);
+  // const maxRunTimeMain = 1;
+  // const deadlineMain = Math.ceil(new Date().getTime() / 1000) + 60 * 60;
+  // const cheapSwapRouterV3AddressMain = deploymentMain['CheapSwapRouterV3'].implAddress;
+  const cheapSwapRouterV3AmountInSelector = '0x89a56aae';
+  const cheapSwapRouterV3PerAmountInSelector = '0xf60a7336';
+  const cheapSwapRouterV3AmountOutSelector = '0xb1e0a10c';
+  // const amountZeroMain = ethers.utils.parseEther('0');
+  // const amount18Main = BigNumber.from((10 ** 18).toString());
+  // const feeMain = 3000;
+  // const amountInPathMain = uniswap.encodePath(
+  //   [
+  //     WETHMain,
+  //     USDTMain,
+  //   ],
+  //   [feeMain]
+  // );
+  // const amountOutPathMain = uniswap.encodePath(
+  //   [
+  //     USDTMain,
+  //     WETHMain,
+  //   ],
+  //   [feeMain]
+  // )
 
   console.log(
-    `------------------------------------test value exactInput----------------------------------------------`
+    `------------------------------------exactInput----------------------------------------------`
   );
-  const deploymentTest = await getDeployment(4);
-  const WETH = '0xc778417E063141139Fce010982780140Aa0cD5Ab';
-  const USDT = '0xc7AD46e0b8a400Bb3C915120d284AafbA8fc4735';
-  // 778417e063141139fce010982780140aa0cd5ab 0001f4 c7ad46e0b8a400bb3c915120d284aafba8fc4735
+
+
+  console.log(
+    `------------------------------------ test setting ----------------------------------------------`
+  );
+  const deploymentTest = await getDeployment(137);
+  const WETH = '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270';
+  const USDT = '0xc2132D05D31c914a87C6611C10748AEb04B58e8F';
   const amountIn = ethers.utils.parseEther('0.001');
   const amountOut = BigNumber.from(100);
   const maxRunTime = 1;
   const deadline = Math.ceil(new Date().getTime() / 1000) + 60 * 60;
   const cheapSwapRouterV3Address = deploymentTest['CheapSwapRouterV3'].implAddress;
-  const cheapSwapRouterV3AmountInSelector = '0x89a56aae';
-  const cheapSwapRouterV3PerAmountInSelector = '0xf60a7336';
-  const cheapSwapRouterV3AmountOutSelector = '0xb1e0a10c';
   const amountZero = ethers.utils.parseEther('0');
+  const amount18 = BigNumber.from((10 ** 18).toString());
   const fee = 3000;
   const amountInPath = uniswap.encodePath(
     [
@@ -54,7 +83,9 @@ async function main() {
     [fee]
   )
 
-
+  console.log(
+    `------------------------------------ test value exactInput ----------------------------------------------`
+  );
   const testValueExactInput = {
     msgValue: ethers.utils.parseEther('0.0042').toString(),
     maxRunTime: maxRunTime,
@@ -100,7 +131,7 @@ async function main() {
     amoutIn: amountZero,
     // amountOutMinPerAmountIn
     amountOut: amountOut
-      .mul(BigNumber.from((10 ** 18).toString()))
+      .mul(amount18)
       .div(amountIn),
     path: amountInPath,
   };
@@ -117,9 +148,9 @@ async function main() {
     value: amountZero,
     cheapSwapRouterV3Selector: cheapSwapRouterV3PerAmountInSelector,
     amoutIn: amountZero,
-     // amountOutMinPerAmountIn
+    // amountOutMinPerAmountIn
     amountOut: amountOut
-      .mul(BigNumber.from((10 ** 18).toString()))
+      .mul(amount18)
       .div(amountIn),
     path: amountInPath,
   };
@@ -138,11 +169,10 @@ async function main() {
     amoutIn: amountZero,
     // amountOutMinPerAmountIn
     amountOut: amountOut
-      .mul(BigNumber.from((10 ** 18).toString()))
+      .mul(amount18)
       .div(amountIn),
     path: amountInPath,
   };
-  console.log(bigToHex(testValueExactPerInputmax.amountOut, 30));
   logData(testValueExactPerInputmax);
 
   console.log(
@@ -158,7 +188,7 @@ async function main() {
     amoutIn: amountZero,
     // amountOutMinPerAmountIn
     amountOut: amountOut
-      .mul(BigNumber.from((10 ** 18).toString()))
+      .mul(amount18)
       .div(amountIn),
     path: amountInPath,
   };

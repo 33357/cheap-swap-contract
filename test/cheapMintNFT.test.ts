@@ -1,76 +1,73 @@
-import {ethers, BigNumber} from 'ethers';
-import {getDeployment} from '../tasks';
+import { ethers, BigNumber } from 'ethers';
+import { getDeployment } from '../tasks';
 
 async function main() {
-  console.log(
-    `--------------------------------------safeMint--------------------------------------------`
-  );
-  const deploymentMain = await getDeployment(1);
-  const mainSafeMint = {
-    msgValue: ethers.utils.parseEther('0.0042').toString(),
-    maxRunTime: 1,
-    deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
-    cheapMintNFTAddress: deploymentMain['CheapMintNFT'].implAddress,
-    value: ethers.utils.parseEther('0'),
-    cheapMintNFTSelector: '0x1249c58b',
-    nftAddress: '0xBD14cFf6ed9A1a44d2B7028D2dA04aa009975A3c',
-    mintValue: ethers.utils.parseEther('0'),
-    nftSelector: '0x31c864e8',
-    mintAmount: 2,
-  };
-  logData(mainSafeMint);
+  const chainSetMap: { [chainId: number]: any } = {
+    1: {
+      maxRunTime: 1,
+      deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
+      cheapMintNFTAddress: (await getDeployment(1))['CheapMintNFT'].implAddress,
+      cheapMintNFTSelector: '0x1249c58b',
+      nftAddress: '0xBD14cFf6ed9A1a44d2B7028D2dA04aa009975A3c',
+      mintAmount: 2,
+      func: {
+        safeMint: {
+          msgValue: ethers.utils.parseEther('0.004').toString(),
+          value: ethers.utils.parseEther('0'),
+          selector: '0x31c864e8',
+          mintValue: ethers.utils.parseEther('0')
+        },
+        priceMint: {
+          msgValue: ethers.utils.parseEther('0.0041').toString(),
+          selector: '0x0152b8c8',
+          value: ethers.utils.parseEther('0.01'),
+          mintValue: ethers.utils.parseEther('0.001')
+        }
+      }
+    },
+    137: {
+      maxRunTime: 1,
+      deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
+      cheapMintNFTAddress: (await getDeployment(137))['CheapMintNFT'].implAddress,
+      cheapMintNFTSelector: '0x1249c58b',
+      nftAddress: (await getDeployment(137))['ERC721_TEST'].implAddress,
+      mintAmount: 2,
+      func: {
+        safeMint: {
+          msgValue: ethers.utils.parseEther('0.004').toString(),
+          value: ethers.utils.parseEther('0'),
+          selector: '0x31c864e8',
+          mintValue: ethers.utils.parseEther('0')
+        },
+        priceMint: {
+          msgValue: ethers.utils.parseEther('0.0041').toString(),
+          value: BigNumber.from(1000),
+          selector: '0x0152b8c8',
+          mintValue: BigNumber.from(200),
+        }
+      }
+    }
+  }
 
-  console.log(
-    `--------------------------------------priceMint--------------------------------------------`
-  );
-  const mainPriceMint = {
-    msgValue: ethers.utils.parseEther('0.0043').toString(),
-    maxRunTime: 1,
-    deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
-    cheapMintNFTAddress: deploymentMain['CheapMintNFT'].implAddress,
-    value: ethers.utils.parseEther('0.01'),
-    cheapMintNFTSelector: '0x1249c58b',
-    nftAddress: '0xBD14cFf6ed9A1a44d2B7028D2dA04aa009975A3c',
-    mintValue: ethers.utils.parseEther('0.001'),
-    nftSelector: '0x0152b8c8',
-    mintAmount: 2,
-  };
-  logData(mainPriceMint);
-
-  console.log(
-    `--------------------------------------Test safeMint--------------------------------------------`
-  );
-  const deploymentTest = await getDeployment(137);
-  const testSafeMint = {
-    msgValue: ethers.utils.parseEther('0.0042').toString(),
-    maxRunTime: 1,
-    deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
-    cheapMintNFTAddress: deploymentTest['CheapMintNFT'].implAddress,
-    value: BigNumber.from(0),
-    cheapMintNFTSelector: '0x1249c58b',
-    nftAddress: deploymentTest['ERC721_TEST'].implAddress,
-    mintValue: BigNumber.from(0),
-    nftSelector: '0x31c864e8',
-    mintAmount: 2,
-  };
-  logData(testSafeMint);
-
-  console.log(
-    `--------------------------------------Test priceMint--------------------------------------------`
-  );
-  const testPriceMint = {
-    msgValue: ethers.utils.parseEther('0.0043').toString(),
-    maxRunTime: 1,
-    deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
-    cheapMintNFTAddress: deploymentTest['CheapMintNFT'].implAddress,
-    value: BigNumber.from(100).mul(10),
-    cheapMintNFTSelector: '0x1249c58b',
-    nftAddress: deploymentTest['ERC721_TEST'].implAddress,
-    mintValue: BigNumber.from(100).mul(2),
-    nftSelector: '0x0152b8c8',
-    mintAmount: 2,
-  };
-  logData(testPriceMint);
+  for (const chainId in chainSetMap) {
+    const chainSet = chainSetMap[chainId];
+    for (const name in chainSet.func) {
+      const funcSet = chainSet.func[name]
+      logData({
+        name: `chainId ${chainId}, ${name}`,
+        msgValue: funcSet.msgValue,
+        maxRunTime: chainSet.maxRunTime,
+        deadline: chainSet.deadline,
+        cheapMintNFTAddress: chainSet.cheapMintNFTAddress,
+        value: funcSet.value,
+        cheapMintNFTSelector: chainSet.cheapMintNFTSelector,
+        nftAddress: chainSet.nftAddress,
+        mintValue: funcSet.mintValue,
+        nftSelector: funcSet.selector,
+        mintAmount: chainSet.mintAmount,
+      });
+    }
+  }
 }
 
 main();
@@ -96,6 +93,9 @@ function delete0x(str: string) {
 }
 
 function logData(obj: any) {
+  console.log(
+    `-------------------------------------- ${obj.name} --------------------------------------------`
+  );
   console.log({
     msgValue: obj.msgValue,
     maxRunTime: obj.maxRunTime,
