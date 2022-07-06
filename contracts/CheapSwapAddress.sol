@@ -128,7 +128,7 @@ contract CheapSwapAddress is ICheapSwapAddress, ReentrancyGuard {
                 (bool success, ) = target.call{value: value}(data);
                 require(success, "CheapSwapAddress: call error");
                 if (maxRunTime != 0) {
-                    targetDataMap[msg.value][0] = bytes1(++runTime);
+                    targetDataMap[msgValue][0] = bytes1(++runTime);
                 }
             }
         }
