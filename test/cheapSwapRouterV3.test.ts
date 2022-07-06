@@ -117,6 +117,7 @@ async function main() {
     value: amountZero,
     cheapSwapRouterV3Selector: cheapSwapRouterV3PerAmountInSelector,
     amoutIn: amountZero,
+     // amountOutMinPerAmountIn
     amountOut: amountOut
       .mul(BigNumber.from((10 ** 18).toString()))
       .div(amountIn),
@@ -142,7 +143,6 @@ async function main() {
     path: amountInPath,
   };
   console.log(bigToHex(testValueExactPerInputmax.amountOut, 30));
-  //000000000000000000000000018
   logData(testValueExactPerInputmax);
 
   console.log(
@@ -210,8 +210,6 @@ function numToHex(num: number, fixed: number) {
 }
 
 function bigToHex(big: BigNumber, fixed: number) {
-  console.log(big.toString())
-  console.log(big.toHexString())
   let hex = delete0x(big.toHexString());
   while (hex.length < fixed) {
     hex = '0' + hex;
