@@ -1,8 +1,43 @@
-import { ethers, BigNumber } from 'ethers';
-import { getDeployment } from '../tasks';
+import {ethers, BigNumber} from 'ethers';
+import {getDeployment} from '../tasks';
+
+interface CheapMintNFTData {
+  name: string;
+  msgValue: BigNumber;
+  maxRunTime: number;
+  deadline: number;
+  cheapMintNFTAddress: string;
+  value: BigNumber;
+  cheapMintNFTSelector: string;
+  nftAddress: string;
+  mintValue: BigNumber;
+  nftSelector: string;
+  mintAmount: number;
+}
+
+interface CheapMintNFTChainSet {
+  maxRunTime: number;
+  deadline: number;
+  cheapMintNFTAddress: string;
+  cheapMintNFTSelector: string;
+  nftAddress: string;
+  mintAmount: number;
+  func: {
+    [funcName: string]: CheapMintNFTFuncSet;
+  };
+}
+
+interface CheapMintNFTFuncSet {
+  msgValue: BigNumber;
+  value: BigNumber;
+  selector: string;
+  mintValue: BigNumber;
+}
 
 async function main() {
-  const chainSetMap: { [chainId: number]: any } = {
+  const chainSetMap: {
+    [chainId: number]: CheapMintNFTChainSet;
+  } = {
     1: {
       maxRunTime: 2,
       deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
@@ -12,48 +47,49 @@ async function main() {
       mintAmount: 2,
       func: {
         safeMint: {
-          msgValue: ethers.utils.parseEther('0.004').toString(),
+          msgValue: ethers.utils.parseEther('0.004'),
           value: ethers.utils.parseEther('0'),
           selector: '0x31c864e8',
-          mintValue: ethers.utils.parseEther('0')
+          mintValue: ethers.utils.parseEther('0'),
         },
         priceMint: {
-          msgValue: ethers.utils.parseEther('0.0041').toString(),
+          msgValue: ethers.utils.parseEther('0.0041'),
           selector: '0x0152b8c8',
           value: ethers.utils.parseEther('0.01'),
-          mintValue: ethers.utils.parseEther('0.001')
-        }
-      }
+          mintValue: ethers.utils.parseEther('0.001'),
+        },
+      },
     },
     137: {
       maxRunTime: 2,
       deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
-      cheapMintNFTAddress: (await getDeployment(137))['CheapMintNFT'].implAddress,
+      cheapMintNFTAddress: (await getDeployment(137))['CheapMintNFT']
+        .implAddress,
       cheapMintNFTSelector: '0x1249c58b',
       nftAddress: (await getDeployment(137))['ERC721_TEST'].implAddress,
       mintAmount: 2,
       func: {
         safeMint: {
-          msgValue: ethers.utils.parseEther('0.004').toString(),
+          msgValue: ethers.utils.parseEther('0.004'),
           value: ethers.utils.parseEther('0'),
           selector: '0x31c864e8',
-          mintValue: ethers.utils.parseEther('0')
+          mintValue: ethers.utils.parseEther('0'),
         },
         priceMint: {
-          msgValue: ethers.utils.parseEther('0.0041').toString(),
+          msgValue: ethers.utils.parseEther('0.0041'),
           value: BigNumber.from(1000),
           selector: '0x0152b8c8',
           mintValue: BigNumber.from(200),
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  };
 
   for (const chainId in chainSetMap) {
     const chainSet = chainSetMap[chainId];
     for (const name in chainSet.func) {
-      const funcSet = chainSet.func[name]
-      logData({
+      const funcSet = chainSet.func[name];
+      const mintNFTData: CheapMintNFTData = {
         name: `chainId ${chainId}, ${name}`,
         msgValue: funcSet.msgValue,
         maxRunTime: chainSet.maxRunTime,
@@ -65,7 +101,8 @@ async function main() {
         mintValue: funcSet.mintValue,
         nftSelector: funcSet.selector,
         mintAmount: chainSet.mintAmount,
-      });
+      };
+      logData(mintNFTData);
     }
   }
 }
@@ -92,21 +129,23 @@ function delete0x(str: string) {
   return str.replace('0x', '');
 }
 
-function logData(obj: any) {
+function logData(cheapMintNFTData: CheapMintNFTData) {
   console.log(
-    `-------------------------------------- ${obj.name} --------------------------------------------`
+    `-------------------------------------- ${cheapMintNFTData.name} --------------------------------------------`
   );
   console.log({
-    msgValue: obj.msgValue,
-    maxRunTime: obj.maxRunTime,
-    deadline: obj.deadline,
-    target: obj.cheapMintNFTAddress,
-    value: obj.value.toString(),
+    msgValue: cheapMintNFTData.msgValue.toString(),
+    maxRunTime: cheapMintNFTData.maxRunTime,
+    deadline: cheapMintNFTData.deadline,
+    target: cheapMintNFTData.cheapMintNFTAddress,
+    value: cheapMintNFTData.value.toString(),
     data:
-      obj.cheapMintNFTSelector +
-      delete0x(obj.nftAddress) +
-      (obj.value.eq(0) ? '' : bigToHex(obj.mintValue, 20)) +
-      delete0x(obj.nftSelector) +
-      numToHex(obj.mintAmount, 2),
+      cheapMintNFTData.cheapMintNFTSelector +
+      delete0x(cheapMintNFTData.nftAddress) +
+      (cheapMintNFTData.value.eq(0)
+        ? ''
+        : bigToHex(cheapMintNFTData.mintValue, 20)) +
+      delete0x(cheapMintNFTData.nftSelector) +
+      numToHex(cheapMintNFTData.mintAmount, 2),
   });
 }

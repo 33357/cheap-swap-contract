@@ -1,5 +1,5 @@
-import { BigNumber, ethers } from 'ethers';
-import { getDeployment } from '../tasks';
+import {BigNumber, ethers} from 'ethers';
+import {getDeployment} from '../tasks';
 
 const uniswap = {
   encodePath(path: string[], fees: Array<number>): string {
@@ -53,7 +53,6 @@ async function main() {
     `------------------------------------exactInput----------------------------------------------`
   );
 
-
   console.log(
     `------------------------------------ test setting ----------------------------------------------`
   );
@@ -64,24 +63,13 @@ async function main() {
   const amountOut = BigNumber.from(100);
   const maxRunTime = 1;
   const deadline = Math.ceil(new Date().getTime() / 1000) + 60 * 60;
-  const cheapSwapRouterV3Address = deploymentTest['CheapSwapRouterV3'].implAddress;
+  const cheapSwapRouterV3Address =
+    deploymentTest['CheapSwapRouterV3'].implAddress;
   const amountZero = ethers.utils.parseEther('0');
   const amount18 = BigNumber.from((10 ** 18).toString());
   const fee = 3000;
-  const amountInPath = uniswap.encodePath(
-    [
-      WETH,
-      USDT,
-    ],
-    [fee]
-  );
-  const amountOutPath = uniswap.encodePath(
-    [
-      USDT,
-      WETH,
-    ],
-    [fee]
-  )
+  const amountInPath = uniswap.encodePath([WETH, USDT], [fee]);
+  const amountOutPath = uniswap.encodePath([USDT, WETH], [fee]);
 
   console.log(
     `------------------------------------ test value exactInput ----------------------------------------------`
@@ -130,9 +118,7 @@ async function main() {
     cheapSwapRouterV3Selector: cheapSwapRouterV3PerAmountInSelector,
     amoutIn: amountZero,
     // amountOutMinPerAmountIn
-    amountOut: amountOut
-      .mul(amount18)
-      .div(amountIn),
+    amountOut: amountOut.mul(amount18).div(amountIn),
     path: amountInPath,
   };
   logData(testValueExactPerInput);
@@ -149,9 +135,7 @@ async function main() {
     cheapSwapRouterV3Selector: cheapSwapRouterV3PerAmountInSelector,
     amoutIn: amountZero,
     // amountOutMinPerAmountIn
-    amountOut: amountOut
-      .mul(amount18)
-      .div(amountIn),
+    amountOut: amountOut.mul(amount18).div(amountIn),
     path: amountInPath,
   };
   logData(testTokenExactPerInput);
@@ -168,9 +152,7 @@ async function main() {
     cheapSwapRouterV3Selector: cheapSwapRouterV3PerAmountInSelector,
     amoutIn: amountZero,
     // amountOutMinPerAmountIn
-    amountOut: amountOut
-      .mul(amount18)
-      .div(amountIn),
+    amountOut: amountOut.mul(amount18).div(amountIn),
     path: amountInPath,
   };
   logData(testValueExactPerInputmax);
@@ -187,9 +169,7 @@ async function main() {
     cheapSwapRouterV3Selector: cheapSwapRouterV3PerAmountInSelector,
     amoutIn: amountZero,
     // amountOutMinPerAmountIn
-    amountOut: amountOut
-      .mul(amount18)
-      .div(amountIn),
+    amountOut: amountOut.mul(amount18).div(amountIn),
     path: amountInPath,
   };
   logData(testTokenExactPerInputmax);
@@ -261,7 +241,9 @@ function logData(obj: any) {
     data:
       obj.cheapSwapRouterV3Selector +
       bigToHex(obj.amountOut, 30) +
-      (obj.value.eq(0) && obj.msgValue != '0' ? bigToHex(obj.amoutIn, 30) : '') +
+      (obj.value.eq(0) && obj.msgValue != '0'
+        ? bigToHex(obj.amoutIn, 30)
+        : '') +
       delete0x(obj.path),
   });
 }

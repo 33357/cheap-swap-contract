@@ -63,7 +63,7 @@ const config: HardhatUserConfig = {
         .mul(10 ** 9)
         .toNumber(),
     },
-    3:{
+    3: {
       url: `https://ropsten.infura.io/v3/${process.env.ROPSTEN_INFURA}`,
       accounts,
       timeout: 60000,
