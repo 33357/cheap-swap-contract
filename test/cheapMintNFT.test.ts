@@ -4,7 +4,7 @@ import { getDeployment } from '../tasks';
 async function main() {
   const chainSetMap: { [chainId: number]: any } = {
     1: {
-      maxRunTime: 1,
+      maxRunTime: 2,
       deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
       cheapMintNFTAddress: (await getDeployment(1))['CheapMintNFT'].implAddress,
       cheapMintNFTSelector: '0x1249c58b',
@@ -26,7 +26,7 @@ async function main() {
       }
     },
     137: {
-      maxRunTime: 1,
+      maxRunTime: 2,
       deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
       cheapMintNFTAddress: (await getDeployment(137))['CheapMintNFT'].implAddress,
       cheapMintNFTSelector: '0x1249c58b',

@@ -97,12 +97,12 @@
       "fromBlock": 30401937
     },
     "CheapMintNFT": {
-      "proxyAddress": "0xd0116f96E3d934738d7C9a92936B8879176B5137",
-      "implAddress": "0xd0116f96E3d934738d7C9a92936B8879176B5137",
+      "proxyAddress": "0xB94483492cEe2101D9E5f07e86dE219F8cAD395b",
+      "implAddress": "0xB94483492cEe2101D9E5f07e86dE219F8cAD395b",
       "version": "1.0.0",
       "contract": "CheapMintNFT",
       "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
-      "fromBlock": 30406333
+      "fromBlock": 30408131
     },
     "ERC721_TEST": {
       "proxyAddress": "0xCA16273d466Adb76ed4B84B8E3f11966E607f86E",
