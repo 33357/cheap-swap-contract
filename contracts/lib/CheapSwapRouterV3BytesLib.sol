@@ -8,7 +8,7 @@
  */
 pragma solidity >=0.5.0;
 
-library CheapSwapRouterBytesLib {
+library CheapSwapRouterV3BytesLib {
     function slice(
         bytes memory _bytes,
         uint256 _start,

@@ -6,10 +6,10 @@ import "./interfaces/ICheapSwapRouterV3.sol";
 import "./interfaces/ICheapSwapAddress.sol";
 import "./lib/ISwapRouter.sol";
 import "./lib/IWETH.sol";
-import "./lib/CheapSwapRouterBytesLib.sol";
+import "./lib/CheapSwapRouterV3BytesLib.sol";
 
 contract CheapSwapRouterV3 is ICheapSwapRouterV3 {
-    using CheapSwapRouterBytesLib for bytes;
+    using CheapSwapRouterV3BytesLib for bytes;
 
     // uniswapV3 Router
     ISwapRouter public Router = ISwapRouter(0xE592427A0AEce92De3Edee1F18E0157C05861564);

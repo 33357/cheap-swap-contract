@@ -18,8 +18,6 @@ interface CheapMintNFTData {
 interface CheapMintNFTChainSet {
   maxRunTime: number;
   deadline: number;
-  cheapMintNFTAddress: string;
-  cheapMintNFTSelector: string;
   nftAddress: string;
   mintAmount: number;
   func: {
@@ -41,8 +39,6 @@ async function main() {
     1: {
       maxRunTime: 2,
       deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
-      cheapMintNFTAddress: (await getDeployment(1))['CheapMintNFT'].implAddress,
-      cheapMintNFTSelector: '0x1249c58b',
       nftAddress: '0xBD14cFf6ed9A1a44d2B7028D2dA04aa009975A3c',
       mintAmount: 2,
       func: {
@@ -63,9 +59,6 @@ async function main() {
     137: {
       maxRunTime: 2,
       deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
-      cheapMintNFTAddress: (await getDeployment(137))['CheapMintNFT']
-        .implAddress,
-      cheapMintNFTSelector: '0x1249c58b',
       nftAddress: (await getDeployment(137))['ERC721_TEST'].implAddress,
       mintAmount: 2,
       func: {
@@ -94,9 +87,9 @@ async function main() {
         msgValue: funcSet.msgValue,
         maxRunTime: chainSet.maxRunTime,
         deadline: chainSet.deadline,
-        cheapMintNFTAddress: chainSet.cheapMintNFTAddress,
+        cheapMintNFTAddress: (await getDeployment(Number(chainId)))['CheapMintNFT'].implAddress,
         value: funcSet.value,
-        cheapMintNFTSelector: chainSet.cheapMintNFTSelector,
+        cheapMintNFTSelector: '0x1249c58b',
         nftAddress: chainSet.nftAddress,
         mintValue: funcSet.mintValue,
         nftSelector: funcSet.selector,
