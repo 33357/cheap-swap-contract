@@ -1,56 +1,28 @@
 {
   "1": {
     "CheapSwapFactory": {
-      "proxyAddress": "0x782780351B0F43372431Ee0DB5B7fFD4668E42D2",
-      "implAddress": "0x782780351B0F43372431Ee0DB5B7fFD4668E42D2",
+      "proxyAddress": "0x9Dbc8321b9477bB0F9981E05d22e1C1Ba09264Aa",
+      "implAddress": "0x9Dbc8321b9477bB0F9981E05d22e1C1Ba09264Aa",
       "version": "1.0.0",
       "contract": "CheapSwapFactory",
       "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
-      "fromBlock": 15073113
+      "fromBlock": 15093762
     },
     "CheapMintNFT": {
-      "proxyAddress": "0x01959bC17248faCBf3804FB58dc57652cF7B2C40",
-      "implAddress": "0x01959bC17248faCBf3804FB58dc57652cF7B2C40",
+      "proxyAddress": "0x4EF77d2992D555CE3cE84A243732710DC2aee1D1",
+      "implAddress": "0x4EF77d2992D555CE3cE84A243732710DC2aee1D1",
       "version": "1.0.0",
       "contract": "CheapMintNFT",
       "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
-      "fromBlock": 15073147
-    }
-  },
-  "3": {
-    "CheapSwapFactory": {
-      "proxyAddress": "0xaD5937377BcBc6635090F1b8D60C8D82b95F7f06",
-      "implAddress": "0xaD5937377BcBc6635090F1b8D60C8D82b95F7f06",
-      "version": "1.0.0",
-      "contract": "CheapSwapFactory",
-      "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
-      "fromBlock": 12534791
+      "fromBlock": 15093805
     },
     "CheapSwapRouterV3": {
-      "proxyAddress": "0xb5852e69Be43f4f71Fe656144485d2B2675bdb7A",
-      "implAddress": "0xb5852e69Be43f4f71Fe656144485d2B2675bdb7A",
+      "proxyAddress": "0xC6cDA723Dc643Cd44797634CCB2D0D74fd953b79",
+      "implAddress": "0xC6cDA723Dc643Cd44797634CCB2D0D74fd953b79",
       "version": "1.0.0",
       "contract": "CheapSwapRouterV3",
       "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
-      "fromBlock": 12534719
-    }
-  },
-  "4": {
-    "CheapSwapFactory": {
-      "proxyAddress": "0x41bC9BFf138aA0ab2127DC782e6e7ED5941FE78a",
-      "implAddress": "0x41bC9BFf138aA0ab2127DC782e6e7ED5941FE78a",
-      "version": "1.0.0",
-      "contract": "CheapSwapFactory",
-      "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
-      "fromBlock": 10975826
-    },
-    "CheapSwapRouterV3": {
-      "proxyAddress": "0xb5852e69Be43f4f71Fe656144485d2B2675bdb7A",
-      "implAddress": "0xb5852e69Be43f4f71Fe656144485d2B2675bdb7A",
-      "version": "1.0.0",
-      "contract": "CheapSwapRouterV3",
-      "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
-      "fromBlock": 10974728
+      "fromBlock": 15093813
     }
   },
   "97": {
