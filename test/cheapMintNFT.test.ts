@@ -1,5 +1,5 @@
-import {ethers, BigNumber} from 'ethers';
-import {getDeployment} from '../tasks';
+import { ethers, BigNumber } from 'ethers';
+import { getDeployment } from '../tasks';
 
 interface CheapMintNFTData {
   name: string;
@@ -37,21 +37,23 @@ async function main() {
     [chainId: number]: CheapMintNFTChainSet;
   } = {
     1: {
-      maxRunTime: 2,
-      deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
-      nftAddress: '0xBD14cFf6ed9A1a44d2B7028D2dA04aa009975A3c',
-      mintAmount: 2,
+      maxRunTime: 2, // 最大运行次数
+      deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60, // 截止日期
+      nftAddress: '0xBD14cFf6ed9A1a44d2B7028D2dA04aa009975A3c', // 需要 mint 的 nft 地址
+      mintAmount: 2, // mint 数量
       func: {
+        // 免费 mint
         safeMint: {
-          msgValue: ethers.utils.parseEther('0.004'),
-          value: ethers.utils.parseEther('0'),
-          selector: '0x31c864e8',
-          mintValue: ethers.utils.parseEther('0'),
+          msgValue: ethers.utils.parseEther('0.004'), // 交易所提现到账金额
+          value: ethers.utils.parseEther('0'), // 发送 value 的总量
+          selector: '0x31c864e8', // mint 方法的 selector
+          mintValue: ethers.utils.parseEther('0'), // 一次 mint 发送 value 的数量
         },
+        // 收费 mint
         priceMint: {
           msgValue: ethers.utils.parseEther('0.0041'),
-          selector: '0x0152b8c8',
           value: ethers.utils.parseEther('0.01'),
+          selector: '0x0152b8c8',
           mintValue: ethers.utils.parseEther('0.001'),
         },
       },

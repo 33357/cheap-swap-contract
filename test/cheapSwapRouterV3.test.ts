@@ -59,60 +59,60 @@ async function main() {
     [chainId: number]: CheapSwapRouterV3ChainSet;
   } = {
     1: {
-      maxRunTime: 2,
-      deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60,
+      maxRunTime: 2, // 最大运行次数
+      deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60, // 截止日期
       func: {
+        // 发送 value 执行 amountIn
         amountInValue: {
-          msgValue: ethers.utils.parseEther('0.0042'),
-          cheapSwapRouterV3Selector: amountInSelector,
-          value: ethers.utils.parseEther('0.001'),
-          amountIn: ethers.utils.parseEther('0'),
-          // amountOutMin
+          msgValue: ethers.utils.parseEther('0.0042'), // 交易所提现到账金额
+          cheapSwapRouterV3Selector: amountInSelector, // selector
+          value: ethers.utils.parseEther('0.001'), // value 值
+          amountIn: ethers.utils.parseEther('0'), // amountIn
           amountOut: BigNumber.from(100),
-          path: path[137].amountIn
+          path: path[137].amountIn // path
         },
+        // 发送 token 执行 amountIn
         amountInToken: {
           msgValue: ethers.utils.parseEther('0.0043'),
           cheapSwapRouterV3Selector: amountInSelector,
           value: ethers.utils.parseEther('0'),
           amountIn: ethers.utils.parseEther('0.001'),
-          // amountOutMin
-          amountOut: BigNumber.from(100),
+          amountOut: BigNumber.from(100), // amountOutMin
           path: path[137].amountIn
         },
+        // 发送 value 执行 perAmountIn
         perAmountInValueMax: {
           msgValue: ethers.utils.parseEther('0'),
           cheapSwapRouterV3Selector: perAmountInSelector,
           value: ethers.utils.parseEther('0'),
           amountIn: ethers.utils.parseEther('0'),
-          // amountOutMinPerAmountIn
-          amountOut: BigNumber.from(100).mul((10 ** 18).toString()).div(ethers.utils.parseEther('0.001')),
+          amountOut: BigNumber.from(100).mul((10 ** 18).toString()).div(ethers.utils.parseEther('0.001')), // amountOutMinPerAmountIn
           path: path[137].amountIn
         },
+        // 发送 token 执行 perAmountIn
         perAmountInTokenMax: {
           msgValue: ethers.utils.parseEther('0.0044'),
           cheapSwapRouterV3Selector: perAmountInSelector,
           value: ethers.utils.parseEther('0'),
           amountIn: ethers.utils.parseEther('0'),
-          // amountOutMinPerAmountIn
-          amountOut: BigNumber.from(100).mul((10 ** 18).toString()).div(ethers.utils.parseEther('0.001')),
+          amountOut: BigNumber.from(100).mul((10 ** 18).toString()).div(ethers.utils.parseEther('0.001')), // amountOutMinPerAmountIn
           path: path[137].amountIn
         },
+         // 发送 token 执行 amountOut
         amountOut_InValue: {
           msgValue: ethers.utils.parseEther('0.0045'),
           cheapSwapRouterV3Selector: amountOutSelector,
           value: ethers.utils.parseEther('0.001'),
-          // amountInMax
-          amountIn: ethers.utils.parseEther('0'),
+          amountIn: ethers.utils.parseEther('0'), // amountInMax
           amountOut: BigNumber.from(100),
           path: path[137].amountOut
         },
+        // 发送 token 执行 amountOut
         amountOut_InToken: {
           msgValue: ethers.utils.parseEther('0.0046'),
           cheapSwapRouterV3Selector: amountOutSelector,
           value: ethers.utils.parseEther('0'),
-          // amountInMax
-          amountIn: ethers.utils.parseEther('0.001'),
+          amountIn: ethers.utils.parseEther('0.001'), // amountInMax
           amountOut: BigNumber.from(100),
           path: path[137].amountOut
         },
