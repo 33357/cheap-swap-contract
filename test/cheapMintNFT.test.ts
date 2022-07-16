@@ -39,14 +39,14 @@ async function main() {
     1: {
       maxRunTime: 10, // 最大运行次数
       deadline: Math.ceil(new Date().getTime() / 1000) + 60 * 60, // 截止日期
-      nftAddress: '0x6Da2693Dc86A25d2fD462B92df5EF214542afF0c', // 需要 mint 的 nft 地址
+      nftAddress: '0xAE80A925476ac3f299998b10b68D0B4D9D76C167', // 需要 mint 的 nft 地址
       mintAmount: 5, // mint 数量
       func: {
         // 免费 mint
         safeMint: {
           msgValue: ethers.utils.parseEther('0.0041'), // 交易所提现到账金额
           value: ethers.utils.parseEther('0'), // 发送 value 的总量
-          selector: '0xa0712d68', // mint 方法的 selector
+          selector: '0x31c864e8', // mint 方法的 selector
           mintValue: ethers.utils.parseEther('0'), // 一次 mint 发送 value 的数量
         },
         // 收费 mint
