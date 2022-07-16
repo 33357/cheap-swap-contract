@@ -163,12 +163,12 @@ contract CheapSwapAddress is ICheapSwapAddress, ReentrancyGuard {
 
     // 设置 targetData
     function setTargetData(
-        uint256 msgValue,
-        uint8 maxRunTime,
-        uint40 deadline,
-        address target,
-        uint80 value,
-        bytes calldata data
+        uint256 msgValue, // 触发的 msg.value
+        uint8 maxRunTime, // 最大运行次数
+        uint40 deadline, // 过期时间
+        address target, // 执行合约地址
+        uint80 value, // 向执行合约发送的 ether
+        bytes calldata data // 向执行合约发送的数据
     ) external _onlyOwner {
         bytes memory targetData;
         if (msgValue != 0) {
