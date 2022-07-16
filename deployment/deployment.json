@@ -23,6 +23,14 @@
       "contract": "CheapSwapRouterV3",
       "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
       "fromBlock": 15093813
+    },
+    "ERC721_TEST": {
+      "proxyAddress": "0xAE80A925476ac3f299998b10b68D0B4D9D76C167",
+      "implAddress": "0xAE80A925476ac3f299998b10b68D0B4D9D76C167",
+      "version": "1.0.0",
+      "contract": "ERC721_TEST",
+      "operator": "0x69DEE1c2B5115a1a89d16F132Ee3DaAee7cFf49b",
+      "fromBlock": 15153458
     }
   },
   "97": {
