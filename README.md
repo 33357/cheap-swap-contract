@@ -117,7 +117,7 @@ yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:deploy --contract CheapS
 ```bash
 yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapSwapFactory --args [] --network $NETWORK_ID
 
-yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapSwapAddress --args [\"0x1f2479ee1b4aFE789e19D257D2D50810ac90fa59\"] --address 0xe793A4236769d66a885b7FFC480269f468098B34 --network $NETWORK_ID
+yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapSwapAddress --args [\"\"] --address 0xe793A4236769d66a885b7FFC480269f468098B34 --network $NETWORK_ID
 
 yarn run env-cmd -f $ENV_FILE yarn run hardhat contract:verify --contract CheapMintNFT --args [] --network $NETWORK_ID
 
